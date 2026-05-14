@@ -14,16 +14,340 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      alertas: {
+        Row: {
+          ativo_id: string | null
+          consumivel_id: string | null
+          created_at: string
+          id: string
+          mensagem: string | null
+          status: Database["public"]["Enums"]["alerta_status"]
+          tipo: Database["public"]["Enums"]["alerta_tipo"]
+          titulo: string
+        }
+        Insert: {
+          ativo_id?: string | null
+          consumivel_id?: string | null
+          created_at?: string
+          id?: string
+          mensagem?: string | null
+          status?: Database["public"]["Enums"]["alerta_status"]
+          tipo: Database["public"]["Enums"]["alerta_tipo"]
+          titulo: string
+        }
+        Update: {
+          ativo_id?: string | null
+          consumivel_id?: string | null
+          created_at?: string
+          id?: string
+          mensagem?: string | null
+          status?: Database["public"]["Enums"]["alerta_status"]
+          tipo?: Database["public"]["Enums"]["alerta_tipo"]
+          titulo?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "alertas_ativo_id_fkey"
+            columns: ["ativo_id"]
+            isOneToOne: false
+            referencedRelation: "ativos"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "alertas_consumivel_id_fkey"
+            columns: ["consumivel_id"]
+            isOneToOne: false
+            referencedRelation: "estoque_consumiveis"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      ativos: {
+        Row: {
+          categoria_id: string
+          codigo_unico: string
+          created_at: string
+          created_by: string | null
+          data_compra: string | null
+          foto_url: string | null
+          garantia_ate: string | null
+          id: string
+          localizacao: string | null
+          marca: string | null
+          modelo: string | null
+          nome: string
+          numero_serie: string | null
+          observacoes: string | null
+          responsavel: string | null
+          status: Database["public"]["Enums"]["ativo_status"]
+          updated_at: string
+        }
+        Insert: {
+          categoria_id: string
+          codigo_unico: string
+          created_at?: string
+          created_by?: string | null
+          data_compra?: string | null
+          foto_url?: string | null
+          garantia_ate?: string | null
+          id?: string
+          localizacao?: string | null
+          marca?: string | null
+          modelo?: string | null
+          nome: string
+          numero_serie?: string | null
+          observacoes?: string | null
+          responsavel?: string | null
+          status?: Database["public"]["Enums"]["ativo_status"]
+          updated_at?: string
+        }
+        Update: {
+          categoria_id?: string
+          codigo_unico?: string
+          created_at?: string
+          created_by?: string | null
+          data_compra?: string | null
+          foto_url?: string | null
+          garantia_ate?: string | null
+          id?: string
+          localizacao?: string | null
+          marca?: string | null
+          modelo?: string | null
+          nome?: string
+          numero_serie?: string | null
+          observacoes?: string | null
+          responsavel?: string | null
+          status?: Database["public"]["Enums"]["ativo_status"]
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ativos_categoria_id_fkey"
+            columns: ["categoria_id"]
+            isOneToOne: false
+            referencedRelation: "categorias"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      categorias: {
+        Row: {
+          codigo_prefixo: string
+          created_at: string
+          descricao: string | null
+          id: string
+          nome: string
+        }
+        Insert: {
+          codigo_prefixo: string
+          created_at?: string
+          descricao?: string | null
+          id?: string
+          nome: string
+        }
+        Update: {
+          codigo_prefixo?: string
+          created_at?: string
+          descricao?: string | null
+          id?: string
+          nome?: string
+        }
+        Relationships: []
+      }
+      codigo_sequencias: {
+        Row: {
+          ano: number
+          prefixo: string
+          ultimo_numero: number
+        }
+        Insert: {
+          ano: number
+          prefixo: string
+          ultimo_numero?: number
+        }
+        Update: {
+          ano?: number
+          prefixo?: string
+          ultimo_numero?: number
+        }
+        Relationships: []
+      }
+      estoque_consumiveis: {
+        Row: {
+          categoria: string | null
+          created_at: string
+          estoque_minimo: number
+          id: string
+          localizacao: string | null
+          nome: string
+          observacoes: string | null
+          quantidade: number
+          unidade: string
+          updated_at: string
+        }
+        Insert: {
+          categoria?: string | null
+          created_at?: string
+          estoque_minimo?: number
+          id?: string
+          localizacao?: string | null
+          nome: string
+          observacoes?: string | null
+          quantidade?: number
+          unidade?: string
+          updated_at?: string
+        }
+        Update: {
+          categoria?: string | null
+          created_at?: string
+          estoque_minimo?: number
+          id?: string
+          localizacao?: string | null
+          nome?: string
+          observacoes?: string | null
+          quantidade?: number
+          unidade?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      movimentacoes: {
+        Row: {
+          ativo_id: string
+          created_at: string
+          descricao: string | null
+          id: string
+          localizacao_anterior: string | null
+          localizacao_nova: string | null
+          responsavel_anterior: string | null
+          responsavel_novo: string | null
+          status_anterior: Database["public"]["Enums"]["ativo_status"] | null
+          status_novo: Database["public"]["Enums"]["ativo_status"] | null
+          tipo: Database["public"]["Enums"]["movimentacao_tipo"]
+          usuario_id: string | null
+        }
+        Insert: {
+          ativo_id: string
+          created_at?: string
+          descricao?: string | null
+          id?: string
+          localizacao_anterior?: string | null
+          localizacao_nova?: string | null
+          responsavel_anterior?: string | null
+          responsavel_novo?: string | null
+          status_anterior?: Database["public"]["Enums"]["ativo_status"] | null
+          status_novo?: Database["public"]["Enums"]["ativo_status"] | null
+          tipo: Database["public"]["Enums"]["movimentacao_tipo"]
+          usuario_id?: string | null
+        }
+        Update: {
+          ativo_id?: string
+          created_at?: string
+          descricao?: string | null
+          id?: string
+          localizacao_anterior?: string | null
+          localizacao_nova?: string | null
+          responsavel_anterior?: string | null
+          responsavel_novo?: string | null
+          status_anterior?: Database["public"]["Enums"]["ativo_status"] | null
+          status_novo?: Database["public"]["Enums"]["ativo_status"] | null
+          tipo?: Database["public"]["Enums"]["movimentacao_tipo"]
+          usuario_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "movimentacoes_ativo_id_fkey"
+            columns: ["ativo_id"]
+            isOneToOne: false
+            referencedRelation: "ativos"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      profiles: {
+        Row: {
+          avatar_url: string | null
+          created_at: string
+          email: string
+          id: string
+          nome: string
+          updated_at: string
+        }
+        Insert: {
+          avatar_url?: string | null
+          created_at?: string
+          email: string
+          id: string
+          nome: string
+          updated_at?: string
+        }
+        Update: {
+          avatar_url?: string | null
+          created_at?: string
+          email?: string
+          id?: string
+          nome?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      user_roles: {
+        Row: {
+          created_at: string
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      gerar_codigo_unico: { Args: { _categoria_id: string }; Returns: string }
+      has_role: {
+        Args: {
+          _role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
+        }
+        Returns: boolean
+      }
     }
     Enums: {
-      [_ in never]: never
+      alerta_status: "ativo" | "resolvido" | "ignorado"
+      alerta_tipo:
+        | "estoque_baixo"
+        | "garantia_vencendo"
+        | "manutencao_pendente"
+        | "obsoleto"
+      app_role: "admin" | "manager" | "viewer"
+      ativo_status:
+        | "disponivel"
+        | "em_uso"
+        | "em_manutencao"
+        | "danificado"
+        | "obsoleto"
+        | "baixado"
+      movimentacao_tipo:
+        | "cadastro"
+        | "transferencia"
+        | "mudanca_status"
+        | "manutencao"
+        | "baixa"
+        | "localizacao"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +474,31 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      alerta_status: ["ativo", "resolvido", "ignorado"],
+      alerta_tipo: [
+        "estoque_baixo",
+        "garantia_vencendo",
+        "manutencao_pendente",
+        "obsoleto",
+      ],
+      app_role: ["admin", "manager", "viewer"],
+      ativo_status: [
+        "disponivel",
+        "em_uso",
+        "em_manutencao",
+        "danificado",
+        "obsoleto",
+        "baixado",
+      ],
+      movimentacao_tipo: [
+        "cadastro",
+        "transferencia",
+        "mudanca_status",
+        "manutencao",
+        "baixa",
+        "localizacao",
+      ],
+    },
   },
 } as const
