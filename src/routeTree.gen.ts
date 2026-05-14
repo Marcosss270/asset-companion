@@ -9,38 +9,188 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as LoginRouteImport } from './routes/login'
+import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AuthenticatedUsuariosRouteImport } from './routes/_authenticated/usuarios'
+import { Route as AuthenticatedRelatoriosRouteImport } from './routes/_authenticated/relatorios'
+import { Route as AuthenticatedMovimentacoesRouteImport } from './routes/_authenticated/movimentacoes'
+import { Route as AuthenticatedManutencaoRouteImport } from './routes/_authenticated/manutencao'
+import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
+import { Route as AuthenticatedConsumiveisRouteImport } from './routes/_authenticated/consumiveis'
+import { Route as AuthenticatedAtivosIndexRouteImport } from './routes/_authenticated/ativos.index'
+import { Route as AuthenticatedAtivosNovoRouteImport } from './routes/_authenticated/ativos.novo'
+import { Route as AuthenticatedAtivosIdRouteImport } from './routes/_authenticated/ativos.$id'
 
+const LoginRoute = LoginRouteImport.update({
+  id: '/login',
+  path: '/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthenticatedRoute = AuthenticatedRouteImport.update({
+  id: '/_authenticated',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthenticatedUsuariosRoute = AuthenticatedUsuariosRouteImport.update({
+  id: '/usuarios',
+  path: '/usuarios',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
+const AuthenticatedRelatoriosRoute = AuthenticatedRelatoriosRouteImport.update({
+  id: '/relatorios',
+  path: '/relatorios',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
+const AuthenticatedMovimentacoesRoute =
+  AuthenticatedMovimentacoesRouteImport.update({
+    id: '/movimentacoes',
+    path: '/movimentacoes',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedManutencaoRoute = AuthenticatedManutencaoRouteImport.update({
+  id: '/manutencao',
+  path: '/manutencao',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
+const AuthenticatedDashboardRoute = AuthenticatedDashboardRouteImport.update({
+  id: '/dashboard',
+  path: '/dashboard',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
+const AuthenticatedConsumiveisRoute =
+  AuthenticatedConsumiveisRouteImport.update({
+    id: '/consumiveis',
+    path: '/consumiveis',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedAtivosIndexRoute =
+  AuthenticatedAtivosIndexRouteImport.update({
+    id: '/ativos/',
+    path: '/ativos/',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedAtivosNovoRoute = AuthenticatedAtivosNovoRouteImport.update({
+  id: '/ativos/novo',
+  path: '/ativos/novo',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
+const AuthenticatedAtivosIdRoute = AuthenticatedAtivosIdRouteImport.update({
+  id: '/ativos/$id',
+  path: '/ativos/$id',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/login': typeof LoginRoute
+  '/consumiveis': typeof AuthenticatedConsumiveisRoute
+  '/dashboard': typeof AuthenticatedDashboardRoute
+  '/manutencao': typeof AuthenticatedManutencaoRoute
+  '/movimentacoes': typeof AuthenticatedMovimentacoesRoute
+  '/relatorios': typeof AuthenticatedRelatoriosRoute
+  '/usuarios': typeof AuthenticatedUsuariosRoute
+  '/ativos/$id': typeof AuthenticatedAtivosIdRoute
+  '/ativos/novo': typeof AuthenticatedAtivosNovoRoute
+  '/ativos/': typeof AuthenticatedAtivosIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/login': typeof LoginRoute
+  '/consumiveis': typeof AuthenticatedConsumiveisRoute
+  '/dashboard': typeof AuthenticatedDashboardRoute
+  '/manutencao': typeof AuthenticatedManutencaoRoute
+  '/movimentacoes': typeof AuthenticatedMovimentacoesRoute
+  '/relatorios': typeof AuthenticatedRelatoriosRoute
+  '/usuarios': typeof AuthenticatedUsuariosRoute
+  '/ativos/$id': typeof AuthenticatedAtivosIdRoute
+  '/ativos/novo': typeof AuthenticatedAtivosNovoRoute
+  '/ativos': typeof AuthenticatedAtivosIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/_authenticated': typeof AuthenticatedRouteWithChildren
+  '/login': typeof LoginRoute
+  '/_authenticated/consumiveis': typeof AuthenticatedConsumiveisRoute
+  '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
+  '/_authenticated/manutencao': typeof AuthenticatedManutencaoRoute
+  '/_authenticated/movimentacoes': typeof AuthenticatedMovimentacoesRoute
+  '/_authenticated/relatorios': typeof AuthenticatedRelatoriosRoute
+  '/_authenticated/usuarios': typeof AuthenticatedUsuariosRoute
+  '/_authenticated/ativos/$id': typeof AuthenticatedAtivosIdRoute
+  '/_authenticated/ativos/novo': typeof AuthenticatedAtivosNovoRoute
+  '/_authenticated/ativos/': typeof AuthenticatedAtivosIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/login'
+    | '/consumiveis'
+    | '/dashboard'
+    | '/manutencao'
+    | '/movimentacoes'
+    | '/relatorios'
+    | '/usuarios'
+    | '/ativos/$id'
+    | '/ativos/novo'
+    | '/ativos/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/login'
+    | '/consumiveis'
+    | '/dashboard'
+    | '/manutencao'
+    | '/movimentacoes'
+    | '/relatorios'
+    | '/usuarios'
+    | '/ativos/$id'
+    | '/ativos/novo'
+    | '/ativos'
+  id:
+    | '__root__'
+    | '/'
+    | '/_authenticated'
+    | '/login'
+    | '/_authenticated/consumiveis'
+    | '/_authenticated/dashboard'
+    | '/_authenticated/manutencao'
+    | '/_authenticated/movimentacoes'
+    | '/_authenticated/relatorios'
+    | '/_authenticated/usuarios'
+    | '/_authenticated/ativos/$id'
+    | '/_authenticated/ativos/novo'
+    | '/_authenticated/ativos/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AuthenticatedRoute: typeof AuthenticatedRouteWithChildren
+  LoginRoute: typeof LoginRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/login': {
+      id: '/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof LoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated': {
+      id: '/_authenticated'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof AuthenticatedRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -48,12 +198,115 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated/usuarios': {
+      id: '/_authenticated/usuarios'
+      path: '/usuarios'
+      fullPath: '/usuarios'
+      preLoaderRoute: typeof AuthenticatedUsuariosRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/relatorios': {
+      id: '/_authenticated/relatorios'
+      path: '/relatorios'
+      fullPath: '/relatorios'
+      preLoaderRoute: typeof AuthenticatedRelatoriosRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/movimentacoes': {
+      id: '/_authenticated/movimentacoes'
+      path: '/movimentacoes'
+      fullPath: '/movimentacoes'
+      preLoaderRoute: typeof AuthenticatedMovimentacoesRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/manutencao': {
+      id: '/_authenticated/manutencao'
+      path: '/manutencao'
+      fullPath: '/manutencao'
+      preLoaderRoute: typeof AuthenticatedManutencaoRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/dashboard': {
+      id: '/_authenticated/dashboard'
+      path: '/dashboard'
+      fullPath: '/dashboard'
+      preLoaderRoute: typeof AuthenticatedDashboardRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/consumiveis': {
+      id: '/_authenticated/consumiveis'
+      path: '/consumiveis'
+      fullPath: '/consumiveis'
+      preLoaderRoute: typeof AuthenticatedConsumiveisRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/ativos/': {
+      id: '/_authenticated/ativos/'
+      path: '/ativos'
+      fullPath: '/ativos/'
+      preLoaderRoute: typeof AuthenticatedAtivosIndexRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/ativos/novo': {
+      id: '/_authenticated/ativos/novo'
+      path: '/ativos/novo'
+      fullPath: '/ativos/novo'
+      preLoaderRoute: typeof AuthenticatedAtivosNovoRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/ativos/$id': {
+      id: '/_authenticated/ativos/$id'
+      path: '/ativos/$id'
+      fullPath: '/ativos/$id'
+      preLoaderRoute: typeof AuthenticatedAtivosIdRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
   }
 }
 
+interface AuthenticatedRouteChildren {
+  AuthenticatedConsumiveisRoute: typeof AuthenticatedConsumiveisRoute
+  AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
+  AuthenticatedManutencaoRoute: typeof AuthenticatedManutencaoRoute
+  AuthenticatedMovimentacoesRoute: typeof AuthenticatedMovimentacoesRoute
+  AuthenticatedRelatoriosRoute: typeof AuthenticatedRelatoriosRoute
+  AuthenticatedUsuariosRoute: typeof AuthenticatedUsuariosRoute
+  AuthenticatedAtivosIdRoute: typeof AuthenticatedAtivosIdRoute
+  AuthenticatedAtivosNovoRoute: typeof AuthenticatedAtivosNovoRoute
+  AuthenticatedAtivosIndexRoute: typeof AuthenticatedAtivosIndexRoute
+}
+
+const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
+  AuthenticatedConsumiveisRoute: AuthenticatedConsumiveisRoute,
+  AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
+  AuthenticatedManutencaoRoute: AuthenticatedManutencaoRoute,
+  AuthenticatedMovimentacoesRoute: AuthenticatedMovimentacoesRoute,
+  AuthenticatedRelatoriosRoute: AuthenticatedRelatoriosRoute,
+  AuthenticatedUsuariosRoute: AuthenticatedUsuariosRoute,
+  AuthenticatedAtivosIdRoute: AuthenticatedAtivosIdRoute,
+  AuthenticatedAtivosNovoRoute: AuthenticatedAtivosNovoRoute,
+  AuthenticatedAtivosIndexRoute: AuthenticatedAtivosIndexRoute,
+}
+
+const AuthenticatedRouteWithChildren = AuthenticatedRoute._addFileChildren(
+  AuthenticatedRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AuthenticatedRoute: AuthenticatedRouteWithChildren,
+  LoginRoute: LoginRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
