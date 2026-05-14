@@ -10,12 +10,19 @@ function UsuariosPage() {
   const { data = [] } = useQuery({
     queryKey: ["profiles"],
     queryFn: async () => {
-      const { data, error } = await supabase
-        .from("profiles")
-        .select("id, nome, email, created_at, user_roles(role)")
-        .order("created_at");
-      if (error) throw error;
-      return data ?? [];
+      const [{ data: profiles, error: e1 }, { data: roles, error: e2 }] = await Promise.all([
+        supabase.from("profiles").select("id, nome, email, created_at").order("created_at"),
+        supabase.from("user_roles").select("user_id, role"),
+      ]);
+      if (e1) throw e1;
+      if (e2) throw e2;
+      const byUser = new Map<string, { role: string }[]>();
+      (roles ?? []).forEach((r) => {
+        const arr = byUser.get(r.user_id) ?? [];
+        arr.push({ role: r.role });
+        byUser.set(r.user_id, arr);
+      });
+      return (profiles ?? []).map((p) => ({ ...p, user_roles: byUser.get(p.id) ?? [] }));
     },
   });
 

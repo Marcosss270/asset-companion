@@ -51,6 +51,7 @@ function NovoAtivoPage() {
       const { data, error } = await supabase
         .from("ativos")
         .insert({
+          codigo_unico: "",
           nome: form.nome,
           categoria_id: form.categoria_id,
           marca: form.marca || null,
