@@ -211,6 +211,65 @@ export type Database = {
         }
         Relationships: []
       }
+      manutencoes: {
+        Row: {
+          ativo_id: string
+          created_at: string
+          created_by: string | null
+          custo: number | null
+          data_conclusao: string | null
+          data_inicio: string
+          descricao: string
+          fornecedor: string | null
+          id: string
+          observacoes: string | null
+          status: string
+          tecnico: string | null
+          tipo: string
+          updated_at: string
+        }
+        Insert: {
+          ativo_id: string
+          created_at?: string
+          created_by?: string | null
+          custo?: number | null
+          data_conclusao?: string | null
+          data_inicio?: string
+          descricao: string
+          fornecedor?: string | null
+          id?: string
+          observacoes?: string | null
+          status?: string
+          tecnico?: string | null
+          tipo?: string
+          updated_at?: string
+        }
+        Update: {
+          ativo_id?: string
+          created_at?: string
+          created_by?: string | null
+          custo?: number | null
+          data_conclusao?: string | null
+          data_inicio?: string
+          descricao?: string
+          fornecedor?: string | null
+          id?: string
+          observacoes?: string | null
+          status?: string
+          tecnico?: string | null
+          tipo?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "manutencoes_ativo_id_fkey"
+            columns: ["ativo_id"]
+            isOneToOne: false
+            referencedRelation: "ativos"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       movimentacoes: {
         Row: {
           ativo_id: string
