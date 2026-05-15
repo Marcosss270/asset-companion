@@ -9,6 +9,7 @@ import {
   Users,
   LogOut,
   Settings,
+  QrCode,
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { cn } from "@/lib/utils";
@@ -19,6 +20,7 @@ const navItems = [
   { to: "/consumiveis", label: "Consumíveis", icon: PackageOpen },
   { to: "/movimentacoes", label: "Movimentações", icon: ArrowLeftRight },
   { to: "/manutencao", label: "Manutenção", icon: Wrench },
+  { to: "/etiquetas", label: "Etiquetas QR", icon: QrCode },
   { to: "/relatorios", label: "Relatórios", icon: FileText },
   { to: "/usuarios", label: "Usuários", icon: Users },
 ] as const;

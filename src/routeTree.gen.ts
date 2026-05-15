@@ -16,6 +16,7 @@ import { Route as AuthenticatedUsuariosRouteImport } from './routes/_authenticat
 import { Route as AuthenticatedRelatoriosRouteImport } from './routes/_authenticated/relatorios'
 import { Route as AuthenticatedMovimentacoesRouteImport } from './routes/_authenticated/movimentacoes'
 import { Route as AuthenticatedManutencaoRouteImport } from './routes/_authenticated/manutencao'
+import { Route as AuthenticatedEtiquetasRouteImport } from './routes/_authenticated/etiquetas'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
 import { Route as AuthenticatedConsumiveisRouteImport } from './routes/_authenticated/consumiveis'
 import { Route as AuthenticatedAtivosIndexRouteImport } from './routes/_authenticated/ativos.index'
@@ -57,6 +58,11 @@ const AuthenticatedManutencaoRoute = AuthenticatedManutencaoRouteImport.update({
   path: '/manutencao',
   getParentRoute: () => AuthenticatedRoute,
 } as any)
+const AuthenticatedEtiquetasRoute = AuthenticatedEtiquetasRouteImport.update({
+  id: '/etiquetas',
+  path: '/etiquetas',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
 const AuthenticatedDashboardRoute = AuthenticatedDashboardRouteImport.update({
   id: '/dashboard',
   path: '/dashboard',
@@ -90,6 +96,7 @@ export interface FileRoutesByFullPath {
   '/login': typeof LoginRoute
   '/consumiveis': typeof AuthenticatedConsumiveisRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
+  '/etiquetas': typeof AuthenticatedEtiquetasRoute
   '/manutencao': typeof AuthenticatedManutencaoRoute
   '/movimentacoes': typeof AuthenticatedMovimentacoesRoute
   '/relatorios': typeof AuthenticatedRelatoriosRoute
@@ -103,6 +110,7 @@ export interface FileRoutesByTo {
   '/login': typeof LoginRoute
   '/consumiveis': typeof AuthenticatedConsumiveisRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
+  '/etiquetas': typeof AuthenticatedEtiquetasRoute
   '/manutencao': typeof AuthenticatedManutencaoRoute
   '/movimentacoes': typeof AuthenticatedMovimentacoesRoute
   '/relatorios': typeof AuthenticatedRelatoriosRoute
@@ -118,6 +126,7 @@ export interface FileRoutesById {
   '/login': typeof LoginRoute
   '/_authenticated/consumiveis': typeof AuthenticatedConsumiveisRoute
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
+  '/_authenticated/etiquetas': typeof AuthenticatedEtiquetasRoute
   '/_authenticated/manutencao': typeof AuthenticatedManutencaoRoute
   '/_authenticated/movimentacoes': typeof AuthenticatedMovimentacoesRoute
   '/_authenticated/relatorios': typeof AuthenticatedRelatoriosRoute
@@ -133,6 +142,7 @@ export interface FileRouteTypes {
     | '/login'
     | '/consumiveis'
     | '/dashboard'
+    | '/etiquetas'
     | '/manutencao'
     | '/movimentacoes'
     | '/relatorios'
@@ -146,6 +156,7 @@ export interface FileRouteTypes {
     | '/login'
     | '/consumiveis'
     | '/dashboard'
+    | '/etiquetas'
     | '/manutencao'
     | '/movimentacoes'
     | '/relatorios'
@@ -160,6 +171,7 @@ export interface FileRouteTypes {
     | '/login'
     | '/_authenticated/consumiveis'
     | '/_authenticated/dashboard'
+    | '/_authenticated/etiquetas'
     | '/_authenticated/manutencao'
     | '/_authenticated/movimentacoes'
     | '/_authenticated/relatorios'
@@ -226,6 +238,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedManutencaoRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/_authenticated/etiquetas': {
+      id: '/_authenticated/etiquetas'
+      path: '/etiquetas'
+      fullPath: '/etiquetas'
+      preLoaderRoute: typeof AuthenticatedEtiquetasRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
     '/_authenticated/dashboard': {
       id: '/_authenticated/dashboard'
       path: '/dashboard'
@@ -267,6 +286,7 @@ declare module '@tanstack/react-router' {
 interface AuthenticatedRouteChildren {
   AuthenticatedConsumiveisRoute: typeof AuthenticatedConsumiveisRoute
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
+  AuthenticatedEtiquetasRoute: typeof AuthenticatedEtiquetasRoute
   AuthenticatedManutencaoRoute: typeof AuthenticatedManutencaoRoute
   AuthenticatedMovimentacoesRoute: typeof AuthenticatedMovimentacoesRoute
   AuthenticatedRelatoriosRoute: typeof AuthenticatedRelatoriosRoute
@@ -279,6 +299,7 @@ interface AuthenticatedRouteChildren {
 const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedConsumiveisRoute: AuthenticatedConsumiveisRoute,
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
+  AuthenticatedEtiquetasRoute: AuthenticatedEtiquetasRoute,
   AuthenticatedManutencaoRoute: AuthenticatedManutencaoRoute,
   AuthenticatedMovimentacoesRoute: AuthenticatedMovimentacoesRoute,
   AuthenticatedRelatoriosRoute: AuthenticatedRelatoriosRoute,

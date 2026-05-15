@@ -151,3 +151,11 @@
     font-family: var(--font-mono);
   }
 }
+
+@media print {
+  body { background: white !important; }
+  aside, nav, .print\:hidden { display: none !important; }
+  main, .min-h-screen { display: block !important; padding: 0 !important; }
+  .print-sheet { padding: 8mm; }
+  @page { size: A4; margin: 10mm; }
+}
