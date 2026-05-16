@@ -10,18 +10,28 @@ import {
   LogOut,
   Settings,
   QrCode,
+  Bell,
+  Tag,
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { cn } from "@/lib/utils";
 
-const navItems = [
+const inventoryNav = [
   { to: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
   { to: "/ativos", label: "Ativos / Equipamentos", icon: Boxes },
   { to: "/consumiveis", label: "Consumíveis", icon: PackageOpen },
   { to: "/movimentacoes", label: "Movimentações", icon: ArrowLeftRight },
   { to: "/manutencao", label: "Manutenção", icon: Wrench },
+  { to: "/alertas", label: "Alertas", icon: Bell },
+] as const;
+
+const operacoesNav = [
   { to: "/etiquetas", label: "Etiquetas QR", icon: QrCode },
   { to: "/relatorios", label: "Relatórios", icon: FileText },
+] as const;
+
+const adminNav = [
+  { to: "/categorias", label: "Categorias", icon: Tag },
   { to: "/usuarios", label: "Usuários", icon: Users },
 ] as const;
 
