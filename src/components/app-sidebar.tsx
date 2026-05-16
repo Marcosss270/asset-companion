@@ -10,18 +10,28 @@ import {
   LogOut,
   Settings,
   QrCode,
+  Bell,
+  Tag,
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { cn } from "@/lib/utils";
 
-const navItems = [
+const inventoryNav = [
   { to: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
   { to: "/ativos", label: "Ativos / Equipamentos", icon: Boxes },
   { to: "/consumiveis", label: "Consumíveis", icon: PackageOpen },
   { to: "/movimentacoes", label: "Movimentações", icon: ArrowLeftRight },
   { to: "/manutencao", label: "Manutenção", icon: Wrench },
+  { to: "/alertas", label: "Alertas", icon: Bell },
+] as const;
+
+const operacoesNav = [
   { to: "/etiquetas", label: "Etiquetas QR", icon: QrCode },
   { to: "/relatorios", label: "Relatórios", icon: FileText },
+] as const;
+
+const adminNav = [
+  { to: "/categorias", label: "Categorias", icon: Tag },
   { to: "/usuarios", label: "Usuários", icon: Users },
 ] as const;
 
@@ -51,27 +61,9 @@ export function AppSidebar({ userName, userEmail }: { userName?: string | null; 
       </div>
 
       <nav className="flex-1 px-4 py-2 space-y-0.5 overflow-y-auto">
-        <p className="text-[10px] font-semibold text-sidebar-foreground/40 uppercase tracking-widest px-3 py-2 mt-2">
-          Inventário
-        </p>
-        {navItems.map(({ to, label, icon: Icon }) => {
-          const active = pathname === to || pathname.startsWith(to + "/");
-          return (
-            <Link
-              key={to}
-              to={to}
-              className={cn(
-                "flex items-center gap-3 px-3 py-2 rounded-md text-sm transition-colors",
-                active
-                  ? "bg-white/10 text-sidebar-foreground font-medium"
-                  : "text-sidebar-foreground/60 hover:text-sidebar-foreground hover:bg-white/5",
-              )}
-            >
-              <Icon className="size-4" />
-              {label}
-            </Link>
-          );
-        })}
+        <NavGroup label="Inventário" items={inventoryNav} pathname={pathname} />
+        <NavGroup label="Operações" items={operacoesNav} pathname={pathname} />
+        <NavGroup label="Administração" items={adminNav} pathname={pathname} />
       </nav>
 
       <div className="p-4 mt-auto border-t border-sidebar-border">
@@ -100,5 +92,35 @@ export function AppSidebar({ userName, userEmail }: { userName?: string | null; 
         </div>
       </div>
     </aside>
+  );
+}
+
+type NavItem = { to: string; label: string; icon: typeof LayoutDashboard };
+
+function NavGroup({ label, items, pathname }: { label: string; items: readonly NavItem[]; pathname: string }) {
+  return (
+    <>
+      <p className="text-[10px] font-semibold text-sidebar-foreground/40 uppercase tracking-widest px-3 py-2 mt-2">
+        {label}
+      </p>
+      {items.map(({ to, label, icon: Icon }) => {
+        const active = pathname === to || pathname.startsWith(to + "/");
+        return (
+          <Link
+            key={to}
+            to={to}
+            className={cn(
+              "flex items-center gap-3 px-3 py-2 rounded-md text-sm transition-colors",
+              active
+                ? "bg-white/10 text-sidebar-foreground font-medium"
+                : "text-sidebar-foreground/60 hover:text-sidebar-foreground hover:bg-white/5",
+            )}
+          >
+            <Icon className="size-4" />
+            {label}
+          </Link>
+        );
+      })}
+    </>
   );
 }

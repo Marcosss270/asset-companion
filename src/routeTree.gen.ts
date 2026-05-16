@@ -19,6 +19,8 @@ import { Route as AuthenticatedManutencaoRouteImport } from './routes/_authentic
 import { Route as AuthenticatedEtiquetasRouteImport } from './routes/_authenticated/etiquetas'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
 import { Route as AuthenticatedConsumiveisRouteImport } from './routes/_authenticated/consumiveis'
+import { Route as AuthenticatedCategoriasRouteImport } from './routes/_authenticated/categorias'
+import { Route as AuthenticatedAlertasRouteImport } from './routes/_authenticated/alertas'
 import { Route as AuthenticatedAtivosIndexRouteImport } from './routes/_authenticated/ativos.index'
 import { Route as AuthenticatedAtivosNovoRouteImport } from './routes/_authenticated/ativos.novo'
 import { Route as AuthenticatedAtivosIdRouteImport } from './routes/_authenticated/ativos.$id'
@@ -74,6 +76,16 @@ const AuthenticatedConsumiveisRoute =
     path: '/consumiveis',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
+const AuthenticatedCategoriasRoute = AuthenticatedCategoriasRouteImport.update({
+  id: '/categorias',
+  path: '/categorias',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
+const AuthenticatedAlertasRoute = AuthenticatedAlertasRouteImport.update({
+  id: '/alertas',
+  path: '/alertas',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
 const AuthenticatedAtivosIndexRoute =
   AuthenticatedAtivosIndexRouteImport.update({
     id: '/ativos/',
@@ -94,6 +106,8 @@ const AuthenticatedAtivosIdRoute = AuthenticatedAtivosIdRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/login': typeof LoginRoute
+  '/alertas': typeof AuthenticatedAlertasRoute
+  '/categorias': typeof AuthenticatedCategoriasRoute
   '/consumiveis': typeof AuthenticatedConsumiveisRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/etiquetas': typeof AuthenticatedEtiquetasRoute
@@ -108,6 +122,8 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/login': typeof LoginRoute
+  '/alertas': typeof AuthenticatedAlertasRoute
+  '/categorias': typeof AuthenticatedCategoriasRoute
   '/consumiveis': typeof AuthenticatedConsumiveisRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/etiquetas': typeof AuthenticatedEtiquetasRoute
@@ -124,6 +140,8 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/_authenticated': typeof AuthenticatedRouteWithChildren
   '/login': typeof LoginRoute
+  '/_authenticated/alertas': typeof AuthenticatedAlertasRoute
+  '/_authenticated/categorias': typeof AuthenticatedCategoriasRoute
   '/_authenticated/consumiveis': typeof AuthenticatedConsumiveisRoute
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
   '/_authenticated/etiquetas': typeof AuthenticatedEtiquetasRoute
@@ -140,6 +158,8 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/login'
+    | '/alertas'
+    | '/categorias'
     | '/consumiveis'
     | '/dashboard'
     | '/etiquetas'
@@ -154,6 +174,8 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/login'
+    | '/alertas'
+    | '/categorias'
     | '/consumiveis'
     | '/dashboard'
     | '/etiquetas'
@@ -169,6 +191,8 @@ export interface FileRouteTypes {
     | '/'
     | '/_authenticated'
     | '/login'
+    | '/_authenticated/alertas'
+    | '/_authenticated/categorias'
     | '/_authenticated/consumiveis'
     | '/_authenticated/dashboard'
     | '/_authenticated/etiquetas'
@@ -259,6 +283,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedConsumiveisRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/_authenticated/categorias': {
+      id: '/_authenticated/categorias'
+      path: '/categorias'
+      fullPath: '/categorias'
+      preLoaderRoute: typeof AuthenticatedCategoriasRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/alertas': {
+      id: '/_authenticated/alertas'
+      path: '/alertas'
+      fullPath: '/alertas'
+      preLoaderRoute: typeof AuthenticatedAlertasRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
     '/_authenticated/ativos/': {
       id: '/_authenticated/ativos/'
       path: '/ativos'
@@ -284,6 +322,8 @@ declare module '@tanstack/react-router' {
 }
 
 interface AuthenticatedRouteChildren {
+  AuthenticatedAlertasRoute: typeof AuthenticatedAlertasRoute
+  AuthenticatedCategoriasRoute: typeof AuthenticatedCategoriasRoute
   AuthenticatedConsumiveisRoute: typeof AuthenticatedConsumiveisRoute
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
   AuthenticatedEtiquetasRoute: typeof AuthenticatedEtiquetasRoute
@@ -297,6 +337,8 @@ interface AuthenticatedRouteChildren {
 }
 
 const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
+  AuthenticatedAlertasRoute: AuthenticatedAlertasRoute,
+  AuthenticatedCategoriasRoute: AuthenticatedCategoriasRoute,
   AuthenticatedConsumiveisRoute: AuthenticatedConsumiveisRoute,
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
   AuthenticatedEtiquetasRoute: AuthenticatedEtiquetasRoute,
