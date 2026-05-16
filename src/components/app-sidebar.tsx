@@ -94,3 +94,33 @@ export function AppSidebar({ userName, userEmail }: { userName?: string | null; 
     </aside>
   );
 }
+
+type NavItem = { to: string; label: string; icon: typeof LayoutDashboard };
+
+function NavGroup({ label, items, pathname }: { label: string; items: readonly NavItem[]; pathname: string }) {
+  return (
+    <>
+      <p className="text-[10px] font-semibold text-sidebar-foreground/40 uppercase tracking-widest px-3 py-2 mt-2">
+        {label}
+      </p>
+      {items.map(({ to, label, icon: Icon }) => {
+        const active = pathname === to || pathname.startsWith(to + "/");
+        return (
+          <Link
+            key={to}
+            to={to}
+            className={cn(
+              "flex items-center gap-3 px-3 py-2 rounded-md text-sm transition-colors",
+              active
+                ? "bg-white/10 text-sidebar-foreground font-medium"
+                : "text-sidebar-foreground/60 hover:text-sidebar-foreground hover:bg-white/5",
+            )}
+          >
+            <Icon className="size-4" />
+            {label}
+          </Link>
+        );
+      })}
+    </>
+  );
+}
