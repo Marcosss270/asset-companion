@@ -61,27 +61,9 @@ export function AppSidebar({ userName, userEmail }: { userName?: string | null; 
       </div>
 
       <nav className="flex-1 px-4 py-2 space-y-0.5 overflow-y-auto">
-        <p className="text-[10px] font-semibold text-sidebar-foreground/40 uppercase tracking-widest px-3 py-2 mt-2">
-          Inventário
-        </p>
-        {navItems.map(({ to, label, icon: Icon }) => {
-          const active = pathname === to || pathname.startsWith(to + "/");
-          return (
-            <Link
-              key={to}
-              to={to}
-              className={cn(
-                "flex items-center gap-3 px-3 py-2 rounded-md text-sm transition-colors",
-                active
-                  ? "bg-white/10 text-sidebar-foreground font-medium"
-                  : "text-sidebar-foreground/60 hover:text-sidebar-foreground hover:bg-white/5",
-              )}
-            >
-              <Icon className="size-4" />
-              {label}
-            </Link>
-          );
-        })}
+        <NavGroup label="Inventário" items={inventoryNav} pathname={pathname} />
+        <NavGroup label="Operações" items={operacoesNav} pathname={pathname} />
+        <NavGroup label="Administração" items={adminNav} pathname={pathname} />
       </nav>
 
       <div className="p-4 mt-auto border-t border-sidebar-border">

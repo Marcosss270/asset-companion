@@ -9,10 +9,10 @@ export const Route = createFileRoute("/_authenticated/usuarios")({
   component: UsuariosPage,
 });
 
-const ROLE_OPTIONS: AppRole[] = ["admin", "tecnico", "viewer"];
+const ROLE_OPTIONS: AppRole[] = ["admin", "manager", "viewer"];
 const ROLE_LABELS: Record<AppRole, string> = {
   admin: "Administrador",
-  tecnico: "Técnico",
+  manager: "Técnico / Gestor",
   viewer: "Visualizador",
 };
 
