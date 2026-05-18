@@ -15,6 +15,7 @@ function NovoAtivoPage() {
   const [saving, setSaving] = useState(false);
   const [form, setForm] = useState({
     nome: "",
+    empresa_id: "",
     categoria_id: "",
     marca: "",
     modelo: "",
@@ -22,6 +23,7 @@ function NovoAtivoPage() {
     status: "disponivel" as AtivoStatus,
     localizacao: "",
     responsavel: "",
+    custo: "",
     data_compra: "",
     garantia_ate: "",
     observacoes: "",
@@ -36,13 +38,22 @@ function NovoAtivoPage() {
     },
   });
 
+  const { data: empresas = [] } = useQuery({
+    queryKey: ["empresas"],
+    queryFn: async () => {
+      const { data, error } = await supabase.from("empresas").select("*").eq("status", "ativa").order("nome");
+      if (error) throw error;
+      return data ?? [];
+    },
+  });
+
   const update = <K extends keyof typeof form>(k: K, v: (typeof form)[K]) =>
     setForm((f) => ({ ...f, [k]: v }));
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!form.nome || !form.categoria_id) {
-      toast.error("Nome e categoria são obrigatórios");
+    if (!form.nome || !form.categoria_id || !form.empresa_id) {
+      toast.error("Nome, empresa e categoria são obrigatórios");
       return;
     }
     setSaving(true);
@@ -53,6 +64,7 @@ function NovoAtivoPage() {
         .insert({
           codigo_unico: "",
           nome: form.nome,
+          empresa_id: form.empresa_id,
           categoria_id: form.categoria_id,
           marca: form.marca || null,
           modelo: form.modelo || null,
@@ -60,6 +72,7 @@ function NovoAtivoPage() {
           status: form.status,
           localizacao: form.localizacao || null,
           responsavel: form.responsavel || null,
+          custo: form.custo ? Number(form.custo) : null,
           data_compra: form.data_compra || null,
           garantia_ate: form.garantia_ate || null,
           observacoes: form.observacoes || null,
@@ -87,7 +100,7 @@ function NovoAtivoPage() {
       </Link>
       <div className="mb-6">
         <h1 className="text-2xl font-bold tracking-tight">Novo Ativo</h1>
-        <p className="text-muted-foreground text-sm">O código único e o QR Code serão gerados automaticamente.</p>
+        <p className="text-muted-foreground text-sm">O código único e o QR Code serão gerados automaticamente no padrão [EMPRESA]-[TIPO]-[ANO]-[Nº].</p>
       </div>
 
       <form onSubmit={handleSubmit} className="bg-card border border-border rounded-xl p-6 shadow-card space-y-6">
@@ -95,6 +108,15 @@ function NovoAtivoPage() {
           <div className="md:col-span-2">
             <label className={labelCls}>Nome do ativo *</label>
             <input className={`${inputCls} mt-1.5`} required value={form.nome} onChange={(e) => update("nome", e.target.value)} placeholder="ex: MacBook Pro 16'' M3" />
+          </div>
+          <div>
+            <label className={labelCls}>Empresa *</label>
+            <select className={`${inputCls} mt-1.5 cursor-pointer`} required value={form.empresa_id} onChange={(e) => update("empresa_id", e.target.value)}>
+              <option value="">Selecione...</option>
+              {empresas.map((emp) => (
+                <option key={emp.id} value={emp.id}>{emp.nome} ({emp.sigla})</option>
+              ))}
+            </select>
           </div>
           <div>
             <label className={labelCls}>Categoria *</label>
@@ -110,6 +132,10 @@ function NovoAtivoPage() {
             <select className={`${inputCls} mt-1.5 cursor-pointer`} value={form.status} onChange={(e) => update("status", e.target.value as AtivoStatus)}>
               {STATUS_OPTIONS.map((s) => <option key={s} value={s}>{STATUS_LABELS[s]}</option>)}
             </select>
+          </div>
+          <div>
+            <label className={labelCls}>Custo (KZ)</label>
+            <input type="number" step="0.01" className={`${inputCls} mt-1.5`} value={form.custo} onChange={(e) => update("custo", e.target.value)} placeholder="0,00" />
           </div>
           <div>
             <label className={labelCls}>Marca</label>
