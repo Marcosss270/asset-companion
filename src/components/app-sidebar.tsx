@@ -12,6 +12,7 @@ import {
   QrCode,
   Bell,
   Tag,
+  Building2,
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { cn } from "@/lib/utils";
@@ -31,6 +32,7 @@ const operacoesNav = [
 ] as const;
 
 const adminNav = [
+  { to: "/empresas", label: "Empresas do Grupo", icon: Building2 },
   { to: "/categorias", label: "Categorias", icon: Tag },
   { to: "/usuarios", label: "Usuários", icon: Users },
 ] as const;
@@ -52,10 +54,10 @@ export function AppSidebar({ userName, userEmail }: { userName?: string | null; 
         </div>
         <div>
           <p className="text-base font-bold tracking-tight leading-none">
-            NEXUS <span className="font-light opacity-60">ASSET</span>
+            GRUPO <span className="font-light opacity-60">A3</span>
           </p>
           <p className="text-[10px] uppercase tracking-widest text-sidebar-foreground/40 mt-1">
-            Inventory Console
+            Asset Management
           </p>
         </div>
       </div>

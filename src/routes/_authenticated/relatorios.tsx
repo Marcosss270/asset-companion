@@ -23,7 +23,7 @@ function RelatoriosPage() {
   const exportAtivos = async () => {
     let q = supabase
       .from("ativos")
-      .select("codigo_unico, nome, marca, modelo, numero_serie, status, localizacao, responsavel, data_compra, garantia_ate, categorias(nome)")
+      .select("codigo_unico, nome, marca, modelo, numero_serie, status, localizacao, responsavel, custo, data_compra, garantia_ate, categorias(nome), empresas(nome, sigla)")
       .order("codigo_unico");
     if (statusFiltro !== "todos") q = q.eq("status", statusFiltro);
     if (categoriaFiltro !== "todas") q = q.eq("categoria_id", categoriaFiltro);
@@ -32,12 +32,14 @@ function RelatoriosPage() {
     if (!data?.length) return toast.error("Nenhum dado para exportar");
     const rows = data.map((a) => ({
       Codigo: a.codigo_unico,
+      Empresa: (a.empresas as { sigla: string } | null)?.sigla ?? "",
       Nome: a.nome,
       Marca: a.marca ?? "",
       Modelo: a.modelo ?? "",
       Serie: a.numero_serie ?? "",
       Categoria: (a.categorias as { nome: string } | null)?.nome ?? "",
       Status: STATUS_LABELS[a.status as AtivoStatus],
+      Custo_KZ: a.custo ?? "",
       Localizacao: a.localizacao ?? "",
       Responsavel: a.responsavel ?? "",
       Data_Compra: a.data_compra ?? "",

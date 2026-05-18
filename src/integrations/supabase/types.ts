@@ -68,7 +68,9 @@ export type Database = {
           codigo_unico: string
           created_at: string
           created_by: string | null
+          custo: number | null
           data_compra: string | null
+          empresa_id: string
           foto_url: string | null
           garantia_ate: string | null
           id: string
@@ -87,7 +89,9 @@ export type Database = {
           codigo_unico: string
           created_at?: string
           created_by?: string | null
+          custo?: number | null
           data_compra?: string | null
+          empresa_id: string
           foto_url?: string | null
           garantia_ate?: string | null
           id?: string
@@ -106,7 +110,9 @@ export type Database = {
           codigo_unico?: string
           created_at?: string
           created_by?: string | null
+          custo?: number | null
           data_compra?: string | null
+          empresa_id?: string
           foto_url?: string | null
           garantia_ate?: string | null
           id?: string
@@ -126,6 +132,13 @@ export type Database = {
             columns: ["categoria_id"]
             isOneToOne: false
             referencedRelation: "categorias"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "ativos_empresa_id_fkey"
+            columns: ["empresa_id"]
+            isOneToOne: false
+            referencedRelation: "empresas"
             referencedColumns: ["id"]
           },
         ]
@@ -157,18 +170,45 @@ export type Database = {
       codigo_sequencias: {
         Row: {
           ano: number
+          empresa_sigla: string
           prefixo: string
           ultimo_numero: number
         }
         Insert: {
           ano: number
+          empresa_sigla?: string
           prefixo: string
           ultimo_numero?: number
         }
         Update: {
           ano?: number
+          empresa_sigla?: string
           prefixo?: string
           ultimo_numero?: number
+        }
+        Relationships: []
+      }
+      empresas: {
+        Row: {
+          created_at: string
+          id: string
+          nome: string
+          sigla: string
+          status: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          nome: string
+          sigla: string
+          status?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          nome?: string
+          sigla?: string
+          status?: string
         }
         Relationships: []
       }
@@ -176,6 +216,7 @@ export type Database = {
         Row: {
           categoria: string | null
           created_at: string
+          empresa_id: string | null
           estoque_minimo: number
           id: string
           localizacao: string | null
@@ -188,6 +229,7 @@ export type Database = {
         Insert: {
           categoria?: string | null
           created_at?: string
+          empresa_id?: string | null
           estoque_minimo?: number
           id?: string
           localizacao?: string | null
@@ -200,6 +242,7 @@ export type Database = {
         Update: {
           categoria?: string | null
           created_at?: string
+          empresa_id?: string | null
           estoque_minimo?: number
           id?: string
           localizacao?: string | null
@@ -209,7 +252,15 @@ export type Database = {
           unidade?: string
           updated_at?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "estoque_consumiveis_empresa_id_fkey"
+            columns: ["empresa_id"]
+            isOneToOne: false
+            referencedRelation: "empresas"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       manutencoes: {
         Row: {
@@ -376,7 +427,10 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      gerar_codigo_unico: { Args: { _categoria_id: string }; Returns: string }
+      gerar_codigo_unico: {
+        Args: { _categoria_id: string; _empresa_id: string }
+        Returns: string
+      }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
@@ -399,7 +453,6 @@ export type Database = {
         | "em_manutencao"
         | "danificado"
         | "obsoleto"
-        | "baixado"
       movimentacao_tipo:
         | "cadastro"
         | "transferencia"
@@ -407,6 +460,7 @@ export type Database = {
         | "manutencao"
         | "baixa"
         | "localizacao"
+        | "edicao"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -548,7 +602,6 @@ export const Constants = {
         "em_manutencao",
         "danificado",
         "obsoleto",
-        "baixado",
       ],
       movimentacao_tipo: [
         "cadastro",
@@ -557,6 +610,7 @@ export const Constants = {
         "manutencao",
         "baixa",
         "localizacao",
+        "edicao",
       ],
     },
   },
