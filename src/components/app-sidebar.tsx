@@ -12,6 +12,7 @@ import {
   QrCode,
   Bell,
   Tag,
+  Building2,
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { cn } from "@/lib/utils";
@@ -31,6 +32,7 @@ const operacoesNav = [
 ] as const;
 
 const adminNav = [
+  { to: "/empresas", label: "Empresas do Grupo", icon: Building2 },
   { to: "/categorias", label: "Categorias", icon: Tag },
   { to: "/usuarios", label: "Usuários", icon: Users },
 ] as const;

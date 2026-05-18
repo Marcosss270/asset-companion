@@ -62,7 +62,7 @@ function ManutencaoPage() {
     { label: "Abertas", value: abertas, cls: "text-destructive" },
     { label: "Em Andamento", value: emAndamento, cls: "text-warning" },
     { label: "Concluídas", value: concluidas, cls: "text-success" },
-    { label: "Custo Total", value: `R$ ${totalCusto.toFixed(2)}`, cls: "text-foreground" },
+    { label: "Custo Total", value: formatKZ(totalCusto), cls: "text-foreground" },
   ];
 
   return (
@@ -136,7 +136,7 @@ function ManutencaoPage() {
                   <td className="px-6 py-3 text-xs capitalize">{m.tipo}</td>
                   <td className="px-6 py-3 text-sm max-w-xs truncate" title={m.descricao}>{m.descricao}</td>
                   <td className="px-6 py-3 text-sm text-muted-foreground">{m.tecnico ?? "—"}</td>
-                  <td className="px-6 py-3 text-sm font-mono">{m.custo ? `R$ ${Number(m.custo).toFixed(2)}` : "—"}</td>
+                  <td className="px-6 py-3 text-sm font-mono">{formatKZ(m.custo)}</td>
                   <td className="px-6 py-3">
                     <span className={`text-[10px] px-2 py-0.5 rounded-full font-semibold uppercase tracking-wider ${
                       m.status === "concluida" ? "bg-success/10 text-success" :
@@ -263,7 +263,7 @@ function NovaManutencaoForm({ onClose, onSaved }: { onClose: () => void; onSaved
             </div>
             <div><label className={lbl}>Técnico</label><input className={`${inp} mt-1.5`} value={form.tecnico} onChange={(e) => setForm({ ...form, tecnico: e.target.value })} /></div>
             <div><label className={lbl}>Fornecedor</label><input className={`${inp} mt-1.5`} value={form.fornecedor} onChange={(e) => setForm({ ...form, fornecedor: e.target.value })} /></div>
-            <div><label className={lbl}>Custo (R$)</label><input type="number" step="0.01" className={`${inp} mt-1.5`} value={form.custo} onChange={(e) => setForm({ ...form, custo: e.target.value })} /></div>
+            <div><label className={lbl}>Custo (KZ)</label><input type="number" step="0.01" className={`${inp} mt-1.5`} value={form.custo} onChange={(e) => setForm({ ...form, custo: e.target.value })} /></div>
             <div><label className={lbl}>Data de início</label><input type="date" className={`${inp} mt-1.5`} value={form.data_inicio} onChange={(e) => setForm({ ...form, data_inicio: e.target.value })} /></div>
             <div className="col-span-2"><label className={lbl}>Observações</label><textarea rows={2} className={`${inp} mt-1.5 resize-none`} value={form.observacoes} onChange={(e) => setForm({ ...form, observacoes: e.target.value })} /></div>
           </div>
