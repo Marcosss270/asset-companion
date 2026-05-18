@@ -8,7 +8,6 @@ export const STATUS_LABELS: Record<AtivoStatus, string> = {
   em_manutencao: "Em Manutenção",
   danificado: "Danificado",
   obsoleto: "Obsoleto",
-  baixado: "Baixado",
 };
 
 export const STATUS_OPTIONS: AtivoStatus[] = [
@@ -17,7 +16,6 @@ export const STATUS_OPTIONS: AtivoStatus[] = [
   "em_manutencao",
   "danificado",
   "obsoleto",
-  "baixado",
 ];
 
 export function statusBadgeClass(status: AtivoStatus): string {
@@ -29,7 +27,6 @@ export function statusBadgeClass(status: AtivoStatus): string {
     case "em_manutencao":
       return "bg-warning/15 text-warning border-warning/30";
     case "danificado":
-    case "baixado":
       return "bg-destructive/10 text-destructive border-destructive/20";
     case "obsoleto":
       return "bg-muted text-muted-foreground border-border";
