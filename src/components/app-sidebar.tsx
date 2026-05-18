@@ -54,10 +54,10 @@ export function AppSidebar({ userName, userEmail }: { userName?: string | null; 
         </div>
         <div>
           <p className="text-base font-bold tracking-tight leading-none">
-            NEXUS <span className="font-light opacity-60">ASSET</span>
+            GRUPO <span className="font-light opacity-60">A3</span>
           </p>
           <p className="text-[10px] uppercase tracking-widest text-sidebar-foreground/40 mt-1">
-            Inventory Console
+            Asset Management
           </p>
         </div>
       </div>
