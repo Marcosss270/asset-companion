@@ -5,6 +5,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { Plus, Wrench, Loader2, X, CheckCircle2 } from "lucide-react";
 import { toast } from "sonner";
 import { useAuth } from "@/hooks/use-auth";
+import { formatKZ } from "@/lib/format";
 
 export const Route = createFileRoute("/_authenticated/manutencao")({
   component: ManutencaoPage,
