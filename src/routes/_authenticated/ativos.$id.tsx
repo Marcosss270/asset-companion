@@ -8,6 +8,8 @@ import { supabase } from "@/integrations/supabase/client";
 import { StatusBadge } from "@/components/status-badge";
 import { STATUS_LABELS, STATUS_OPTIONS, type AtivoStatus } from "@/lib/asset-utils";
 import { formatKZ } from "@/lib/format";
+import { Timeline } from "@/components/timeline";
+import { fetchTimeline } from "@/lib/timeline";
 
 export const Route = createFileRoute("/_authenticated/ativos/$id")({
   component: AtivoDetailPage,
@@ -51,6 +53,11 @@ function AtivoDetailPage() {
       if (error) throw error;
       return data ?? [];
     },
+  });
+
+  const { data: timelineEvents = [] } = useQuery({
+    queryKey: ["timeline", id],
+    queryFn: () => fetchTimeline(id),
   });
 
   useEffect(() => {
