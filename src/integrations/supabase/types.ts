@@ -262,6 +262,98 @@ export type Database = {
           },
         ]
       }
+      impressora_leituras: {
+        Row: {
+          capturado_em: string
+          contador_impressoes: number | null
+          erros_hw: string | null
+          id: string
+          impressora_id: string
+          online: boolean
+          papel_pct: number | null
+          toner_amarelo: number | null
+          toner_ciano: number | null
+          toner_magenta: number | null
+          toner_preto: number | null
+        }
+        Insert: {
+          capturado_em?: string
+          contador_impressoes?: number | null
+          erros_hw?: string | null
+          id?: string
+          impressora_id: string
+          online?: boolean
+          papel_pct?: number | null
+          toner_amarelo?: number | null
+          toner_ciano?: number | null
+          toner_magenta?: number | null
+          toner_preto?: number | null
+        }
+        Update: {
+          capturado_em?: string
+          contador_impressoes?: number | null
+          erros_hw?: string | null
+          id?: string
+          impressora_id?: string
+          online?: boolean
+          papel_pct?: number | null
+          toner_amarelo?: number | null
+          toner_ciano?: number | null
+          toner_magenta?: number | null
+          toner_preto?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "impressora_leituras_impressora_id_fkey"
+            columns: ["impressora_id"]
+            isOneToOne: false
+            referencedRelation: "impressoras"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      impressoras: {
+        Row: {
+          ativo_id: string
+          comunidade_snmp: string
+          contador_inicial: number
+          created_at: string
+          id: string
+          ip: string
+          modelo: string | null
+          porta_snmp: number
+          status_online: boolean
+          ultima_leitura_em: string | null
+          updated_at: string
+        }
+        Insert: {
+          ativo_id: string
+          comunidade_snmp?: string
+          contador_inicial?: number
+          created_at?: string
+          id?: string
+          ip: string
+          modelo?: string | null
+          porta_snmp?: number
+          status_online?: boolean
+          ultima_leitura_em?: string | null
+          updated_at?: string
+        }
+        Update: {
+          ativo_id?: string
+          comunidade_snmp?: string
+          contador_inicial?: number
+          created_at?: string
+          id?: string
+          ip?: string
+          modelo?: string | null
+          porta_snmp?: number
+          status_online?: boolean
+          ultima_leitura_em?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
       manutencoes: {
         Row: {
           ativo_id: string
@@ -329,6 +421,7 @@ export type Database = {
           id: string
           localizacao_anterior: string | null
           localizacao_nova: string | null
+          metadata: Json | null
           responsavel_anterior: string | null
           responsavel_novo: string | null
           status_anterior: Database["public"]["Enums"]["ativo_status"] | null
@@ -343,6 +436,7 @@ export type Database = {
           id?: string
           localizacao_anterior?: string | null
           localizacao_nova?: string | null
+          metadata?: Json | null
           responsavel_anterior?: string | null
           responsavel_novo?: string | null
           status_anterior?: Database["public"]["Enums"]["ativo_status"] | null
@@ -357,6 +451,7 @@ export type Database = {
           id?: string
           localizacao_anterior?: string | null
           localizacao_nova?: string | null
+          metadata?: Json | null
           responsavel_anterior?: string | null
           responsavel_novo?: string | null
           status_anterior?: Database["public"]["Enums"]["ativo_status"] | null
@@ -400,6 +495,60 @@ export type Database = {
           updated_at?: string
         }
         Relationships: []
+      }
+      sugestoes_compra: {
+        Row: {
+          ativo_id: string | null
+          created_at: string
+          empresa_id: string | null
+          id: string
+          item: string
+          motivo: string | null
+          quantidade: number
+          status: string
+          updated_at: string
+          urgencia: string
+        }
+        Insert: {
+          ativo_id?: string | null
+          created_at?: string
+          empresa_id?: string | null
+          id?: string
+          item: string
+          motivo?: string | null
+          quantidade?: number
+          status?: string
+          updated_at?: string
+          urgencia?: string
+        }
+        Update: {
+          ativo_id?: string | null
+          created_at?: string
+          empresa_id?: string | null
+          id?: string
+          item?: string
+          motivo?: string | null
+          quantidade?: number
+          status?: string
+          updated_at?: string
+          urgencia?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "sugestoes_compra_ativo_id_fkey"
+            columns: ["ativo_id"]
+            isOneToOne: false
+            referencedRelation: "ativos"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "sugestoes_compra_empresa_id_fkey"
+            columns: ["empresa_id"]
+            isOneToOne: false
+            referencedRelation: "empresas"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       user_roles: {
         Row: {
@@ -446,6 +595,11 @@ export type Database = {
         | "garantia_vencendo"
         | "manutencao_pendente"
         | "obsoleto"
+        | "toner_baixo"
+        | "toner_critico"
+        | "papel_baixo"
+        | "impressora_offline"
+        | "consumo_anomalo"
       app_role: "admin" | "manager" | "viewer"
       ativo_status:
         | "disponivel"
@@ -461,6 +615,8 @@ export type Database = {
         | "baixa"
         | "localizacao"
         | "edicao"
+        | "alerta"
+        | "leitura_snmp"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -594,6 +750,11 @@ export const Constants = {
         "garantia_vencendo",
         "manutencao_pendente",
         "obsoleto",
+        "toner_baixo",
+        "toner_critico",
+        "papel_baixo",
+        "impressora_offline",
+        "consumo_anomalo",
       ],
       app_role: ["admin", "manager", "viewer"],
       ativo_status: [
@@ -611,6 +772,8 @@ export const Constants = {
         "baixa",
         "localizacao",
         "edicao",
+        "alerta",
+        "leitura_snmp",
       ],
     },
   },
