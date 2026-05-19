@@ -386,3 +386,14 @@ function DashboardPage() {
     </div>
   );
 }
+
+function Pill({ icon: Icon, label, value, color }: { icon: typeof Wifi; label: string; value: number; color: string }) {
+  return (
+    <div className="bg-secondary/40 rounded-lg p-2 text-center">
+      <Icon className={`size-3.5 mx-auto ${color}`} />
+      <p className="text-[9px] uppercase tracking-widest text-muted-foreground mt-1 font-semibold">{label}</p>
+      <p className={`text-lg font-bold tabular-nums ${color}`}>{value}</p>
+    </div>
+  );
+}
+
