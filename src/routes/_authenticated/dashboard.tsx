@@ -5,7 +5,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { StatusBadge } from "@/components/status-badge";
 import { STATUS_LABELS } from "@/lib/asset-utils";
 import { formatKZ } from "@/lib/format";
-import { AlertTriangle, Clock, Boxes, CheckCircle2, Wrench, PackageX, Building2, Coins } from "lucide-react";
+import { AlertTriangle, Clock, Boxes, CheckCircle2, Wrench, PackageX, Building2, Coins, Printer, Wifi, WifiOff, ShoppingCart, Activity } from "lucide-react";
 
 export const Route = createFileRoute("/_authenticated/dashboard")({
   component: DashboardPage,
@@ -46,6 +46,32 @@ function DashboardPage() {
       const { data, error } = await supabase.from("manutencoes").select("ativo_id, custo, status");
       if (error) throw error;
       return data ?? [];
+    },
+  });
+
+  const { data: impressoras = [] } = useQuery({
+    queryKey: ["impressoras-dash"],
+    queryFn: async () => {
+      const { data } = await supabase.from("impressoras" as never).select("id, ip, status_online, ativos(nome, empresa_id, empresas(sigla))");
+      return (data ?? []) as unknown as Array<{ id: string; ip: string; status_online: boolean; ativos: { nome: string; empresa_id: string; empresas: { sigla: string } | null } | null }>;
+    },
+    refetchInterval: 30000,
+  });
+
+  const { data: alertasAtivos = [] } = useQuery({
+    queryKey: ["alertas-ativos"],
+    queryFn: async () => {
+      const { data } = await supabase.from("alertas").select("*").eq("status", "ativo").order("created_at", { ascending: false }).limit(10);
+      return data ?? [];
+    },
+    refetchInterval: 30000,
+  });
+
+  const { data: sugestoesPendentes = [] } = useQuery({
+    queryKey: ["sugestoes-pendentes"],
+    queryFn: async () => {
+      const { data } = await supabase.from("sugestoes_compra" as never).select("id, item, urgencia").eq("status", "pendente");
+      return (data ?? []) as unknown as Array<{ id: string; item: string; urgencia: string }>;
     },
   });
 
