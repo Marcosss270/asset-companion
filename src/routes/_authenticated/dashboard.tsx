@@ -5,7 +5,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { StatusBadge } from "@/components/status-badge";
 import { STATUS_LABELS } from "@/lib/asset-utils";
 import { formatKZ } from "@/lib/format";
-import { AlertTriangle, Clock, Boxes, CheckCircle2, Wrench, PackageX, Building2, Coins } from "lucide-react";
+import { AlertTriangle, Clock, Boxes, CheckCircle2, Wrench, PackageX, Building2, Coins, Printer, Wifi, WifiOff, ShoppingCart, Activity } from "lucide-react";
 
 export const Route = createFileRoute("/_authenticated/dashboard")({
   component: DashboardPage,
@@ -46,6 +46,32 @@ function DashboardPage() {
       const { data, error } = await supabase.from("manutencoes").select("ativo_id, custo, status");
       if (error) throw error;
       return data ?? [];
+    },
+  });
+
+  const { data: impressoras = [] } = useQuery({
+    queryKey: ["impressoras-dash"],
+    queryFn: async () => {
+      const { data } = await supabase.from("impressoras" as never).select("id, ip, status_online, ativos(nome, empresa_id, empresas(sigla))");
+      return (data ?? []) as unknown as Array<{ id: string; ip: string; status_online: boolean; ativos: { nome: string; empresa_id: string; empresas: { sigla: string } | null } | null }>;
+    },
+    refetchInterval: 30000,
+  });
+
+  const { data: alertasAtivos = [] } = useQuery({
+    queryKey: ["alertas-ativos"],
+    queryFn: async () => {
+      const { data } = await supabase.from("alertas").select("*").eq("status", "ativo").order("created_at", { ascending: false }).limit(10);
+      return data ?? [];
+    },
+    refetchInterval: 30000,
+  });
+
+  const { data: sugestoesPendentes = [] } = useQuery({
+    queryKey: ["sugestoes-pendentes"],
+    queryFn: async () => {
+      const { data } = await supabase.from("sugestoes_compra" as never).select("id, item, urgencia").eq("status", "pendente");
+      return (data ?? []) as unknown as Array<{ id: string; item: string; urgencia: string }>;
     },
   });
 
@@ -166,7 +192,80 @@ function DashboardPage() {
         </div>
       </div>
 
+      {/* Painel de impressoras + alertas críticos + sugestões */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
+        <div className="bg-card border border-border rounded-xl p-6 shadow-card">
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="font-bold flex items-center gap-2"><Printer className="size-4 text-accent" /> Impressoras</h2>
+            <Link to="/impressoras" className="text-accent text-xs font-medium hover:underline">Ver todas →</Link>
+          </div>
+          {impressoras.length === 0 ? (
+            <p className="text-sm text-muted-foreground py-4 text-center">Nenhuma cadastrada.</p>
+          ) : (
+            <>
+              <div className="grid grid-cols-2 gap-2 mb-3">
+                <Pill icon={Wifi} label="Online" value={impressoras.filter((p) => p.status_online).length} color="text-success" />
+                <Pill icon={WifiOff} label="Offline" value={impressoras.filter((p) => !p.status_online).length} color="text-destructive" />
+              </div>
+              <ul className="space-y-1.5 max-h-40 overflow-y-auto">
+                {impressoras.slice(0, 5).map((p) => (
+                  <li key={p.id} className="flex items-center justify-between text-xs">
+                    <span className="truncate">{p.ativos?.nome ?? p.ip}</span>
+                    <span className={`size-2 rounded-full ${p.status_online ? "bg-success" : "bg-destructive"}`} />
+                  </li>
+                ))}
+              </ul>
+            </>
+          )}
+        </div>
+
+        <div className="bg-card border border-border rounded-xl p-6 shadow-card">
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="font-bold flex items-center gap-2"><Activity className="size-4 text-destructive" /> Alertas Ativos</h2>
+            <Link to="/alertas" className="text-accent text-xs font-medium hover:underline">Ver →</Link>
+          </div>
+          {alertasAtivos.length === 0 ? (
+            <p className="text-sm text-muted-foreground py-4 text-center">Tudo sob controle.</p>
+          ) : (
+            <ul className="space-y-2 max-h-48 overflow-y-auto">
+              {alertasAtivos.map((a) => (
+                <li key={a.id} className="text-xs flex items-start gap-2 p-2 bg-destructive/5 border border-destructive/15 rounded">
+                  <AlertTriangle className="size-3 text-destructive mt-0.5 shrink-0" />
+                  <div className="min-w-0">
+                    <p className="font-semibold truncate">{a.titulo}</p>
+                    <p className="text-muted-foreground truncate">{a.mensagem}</p>
+                  </div>
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
+
+        <div className="bg-card border border-border rounded-xl p-6 shadow-card">
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="font-bold flex items-center gap-2"><ShoppingCart className="size-4 text-accent" /> Sugestões de Compra</h2>
+            <Link to="/sugestoes-compra" className="text-accent text-xs font-medium hover:underline">Ver →</Link>
+          </div>
+          {sugestoesPendentes.length === 0 ? (
+            <p className="text-sm text-muted-foreground py-4 text-center">Nenhuma pendente.</p>
+          ) : (
+            <>
+              <p className="text-3xl font-bold tabular-nums mb-2">{sugestoesPendentes.length}</p>
+              <p className="text-xs text-muted-foreground mb-3">item(ns) pendente(s) de aprovação.</p>
+              <div className="flex flex-wrap gap-1">
+                {["critica", "alta", "media", "baixa"].map((u) => {
+                  const n = sugestoesPendentes.filter((s) => s.urgencia === u).length;
+                  if (n === 0) return null;
+                  return <span key={u} className="text-[10px] font-bold px-1.5 py-0.5 rounded bg-secondary uppercase">{u}: {n}</span>;
+                })}
+              </div>
+            </>
+          )}
+        </div>
+      </div>
+
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+
         <div className="lg:col-span-2 bg-card border border-border rounded-xl overflow-hidden shadow-card">
           <div className="px-6 py-4 border-b border-border flex items-center justify-between">
             <h2 className="font-bold">Ativos Recentes</h2>
@@ -287,3 +386,14 @@ function DashboardPage() {
     </div>
   );
 }
+
+function Pill({ icon: Icon, label, value, color }: { icon: typeof Wifi; label: string; value: number; color: string }) {
+  return (
+    <div className="bg-secondary/40 rounded-lg p-2 text-center">
+      <Icon className={`size-3.5 mx-auto ${color}`} />
+      <p className="text-[9px] uppercase tracking-widest text-muted-foreground mt-1 font-semibold">{label}</p>
+      <p className={`text-lg font-bold tabular-nums ${color}`}>{value}</p>
+    </div>
+  );
+}
+
