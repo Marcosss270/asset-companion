@@ -13,6 +13,7 @@ import { Route as LoginRouteImport } from './routes/login'
 import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthenticatedUsuariosRouteImport } from './routes/_authenticated/usuarios'
+import { Route as AuthenticatedSugestoesCompraRouteImport } from './routes/_authenticated/sugestoes-compra'
 import { Route as AuthenticatedRelatoriosRouteImport } from './routes/_authenticated/relatorios'
 import { Route as AuthenticatedMovimentacoesRouteImport } from './routes/_authenticated/movimentacoes'
 import { Route as AuthenticatedManutencaoRouteImport } from './routes/_authenticated/manutencao'
@@ -22,9 +23,13 @@ import { Route as AuthenticatedDashboardRouteImport } from './routes/_authentica
 import { Route as AuthenticatedConsumiveisRouteImport } from './routes/_authenticated/consumiveis'
 import { Route as AuthenticatedCategoriasRouteImport } from './routes/_authenticated/categorias'
 import { Route as AuthenticatedAlertasRouteImport } from './routes/_authenticated/alertas'
+import { Route as AuthenticatedImpressorasIndexRouteImport } from './routes/_authenticated/impressoras.index'
 import { Route as AuthenticatedAtivosIndexRouteImport } from './routes/_authenticated/ativos.index'
+import { Route as AuthenticatedImpressorasNovoRouteImport } from './routes/_authenticated/impressoras.novo'
+import { Route as AuthenticatedImpressorasIdRouteImport } from './routes/_authenticated/impressoras.$id'
 import { Route as AuthenticatedAtivosNovoRouteImport } from './routes/_authenticated/ativos.novo'
 import { Route as AuthenticatedAtivosIdRouteImport } from './routes/_authenticated/ativos.$id'
+import { Route as ApiPublicPrintersIngestRouteImport } from './routes/api/public/printers/ingest'
 
 const LoginRoute = LoginRouteImport.update({
   id: '/login',
@@ -45,6 +50,12 @@ const AuthenticatedUsuariosRoute = AuthenticatedUsuariosRouteImport.update({
   path: '/usuarios',
   getParentRoute: () => AuthenticatedRoute,
 } as any)
+const AuthenticatedSugestoesCompraRoute =
+  AuthenticatedSugestoesCompraRouteImport.update({
+    id: '/sugestoes-compra',
+    path: '/sugestoes-compra',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
 const AuthenticatedRelatoriosRoute = AuthenticatedRelatoriosRouteImport.update({
   id: '/relatorios',
   path: '/relatorios',
@@ -92,10 +103,28 @@ const AuthenticatedAlertasRoute = AuthenticatedAlertasRouteImport.update({
   path: '/alertas',
   getParentRoute: () => AuthenticatedRoute,
 } as any)
+const AuthenticatedImpressorasIndexRoute =
+  AuthenticatedImpressorasIndexRouteImport.update({
+    id: '/impressoras/',
+    path: '/impressoras/',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
 const AuthenticatedAtivosIndexRoute =
   AuthenticatedAtivosIndexRouteImport.update({
     id: '/ativos/',
     path: '/ativos/',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedImpressorasNovoRoute =
+  AuthenticatedImpressorasNovoRouteImport.update({
+    id: '/impressoras/novo',
+    path: '/impressoras/novo',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedImpressorasIdRoute =
+  AuthenticatedImpressorasIdRouteImport.update({
+    id: '/impressoras/$id',
+    path: '/impressoras/$id',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
 const AuthenticatedAtivosNovoRoute = AuthenticatedAtivosNovoRouteImport.update({
@@ -107,6 +136,11 @@ const AuthenticatedAtivosIdRoute = AuthenticatedAtivosIdRouteImport.update({
   id: '/ativos/$id',
   path: '/ativos/$id',
   getParentRoute: () => AuthenticatedRoute,
+} as any)
+const ApiPublicPrintersIngestRoute = ApiPublicPrintersIngestRouteImport.update({
+  id: '/api/public/printers/ingest',
+  path: '/api/public/printers/ingest',
+  getParentRoute: () => rootRouteImport,
 } as any)
 
 export interface FileRoutesByFullPath {
@@ -121,10 +155,15 @@ export interface FileRoutesByFullPath {
   '/manutencao': typeof AuthenticatedManutencaoRoute
   '/movimentacoes': typeof AuthenticatedMovimentacoesRoute
   '/relatorios': typeof AuthenticatedRelatoriosRoute
+  '/sugestoes-compra': typeof AuthenticatedSugestoesCompraRoute
   '/usuarios': typeof AuthenticatedUsuariosRoute
   '/ativos/$id': typeof AuthenticatedAtivosIdRoute
   '/ativos/novo': typeof AuthenticatedAtivosNovoRoute
+  '/impressoras/$id': typeof AuthenticatedImpressorasIdRoute
+  '/impressoras/novo': typeof AuthenticatedImpressorasNovoRoute
   '/ativos/': typeof AuthenticatedAtivosIndexRoute
+  '/impressoras/': typeof AuthenticatedImpressorasIndexRoute
+  '/api/public/printers/ingest': typeof ApiPublicPrintersIngestRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -138,10 +177,15 @@ export interface FileRoutesByTo {
   '/manutencao': typeof AuthenticatedManutencaoRoute
   '/movimentacoes': typeof AuthenticatedMovimentacoesRoute
   '/relatorios': typeof AuthenticatedRelatoriosRoute
+  '/sugestoes-compra': typeof AuthenticatedSugestoesCompraRoute
   '/usuarios': typeof AuthenticatedUsuariosRoute
   '/ativos/$id': typeof AuthenticatedAtivosIdRoute
   '/ativos/novo': typeof AuthenticatedAtivosNovoRoute
+  '/impressoras/$id': typeof AuthenticatedImpressorasIdRoute
+  '/impressoras/novo': typeof AuthenticatedImpressorasNovoRoute
   '/ativos': typeof AuthenticatedAtivosIndexRoute
+  '/impressoras': typeof AuthenticatedImpressorasIndexRoute
+  '/api/public/printers/ingest': typeof ApiPublicPrintersIngestRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -157,10 +201,15 @@ export interface FileRoutesById {
   '/_authenticated/manutencao': typeof AuthenticatedManutencaoRoute
   '/_authenticated/movimentacoes': typeof AuthenticatedMovimentacoesRoute
   '/_authenticated/relatorios': typeof AuthenticatedRelatoriosRoute
+  '/_authenticated/sugestoes-compra': typeof AuthenticatedSugestoesCompraRoute
   '/_authenticated/usuarios': typeof AuthenticatedUsuariosRoute
   '/_authenticated/ativos/$id': typeof AuthenticatedAtivosIdRoute
   '/_authenticated/ativos/novo': typeof AuthenticatedAtivosNovoRoute
+  '/_authenticated/impressoras/$id': typeof AuthenticatedImpressorasIdRoute
+  '/_authenticated/impressoras/novo': typeof AuthenticatedImpressorasNovoRoute
   '/_authenticated/ativos/': typeof AuthenticatedAtivosIndexRoute
+  '/_authenticated/impressoras/': typeof AuthenticatedImpressorasIndexRoute
+  '/api/public/printers/ingest': typeof ApiPublicPrintersIngestRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -176,10 +225,15 @@ export interface FileRouteTypes {
     | '/manutencao'
     | '/movimentacoes'
     | '/relatorios'
+    | '/sugestoes-compra'
     | '/usuarios'
     | '/ativos/$id'
     | '/ativos/novo'
+    | '/impressoras/$id'
+    | '/impressoras/novo'
     | '/ativos/'
+    | '/impressoras/'
+    | '/api/public/printers/ingest'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -193,10 +247,15 @@ export interface FileRouteTypes {
     | '/manutencao'
     | '/movimentacoes'
     | '/relatorios'
+    | '/sugestoes-compra'
     | '/usuarios'
     | '/ativos/$id'
     | '/ativos/novo'
+    | '/impressoras/$id'
+    | '/impressoras/novo'
     | '/ativos'
+    | '/impressoras'
+    | '/api/public/printers/ingest'
   id:
     | '__root__'
     | '/'
@@ -211,16 +270,22 @@ export interface FileRouteTypes {
     | '/_authenticated/manutencao'
     | '/_authenticated/movimentacoes'
     | '/_authenticated/relatorios'
+    | '/_authenticated/sugestoes-compra'
     | '/_authenticated/usuarios'
     | '/_authenticated/ativos/$id'
     | '/_authenticated/ativos/novo'
+    | '/_authenticated/impressoras/$id'
+    | '/_authenticated/impressoras/novo'
     | '/_authenticated/ativos/'
+    | '/_authenticated/impressoras/'
+    | '/api/public/printers/ingest'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthenticatedRoute: typeof AuthenticatedRouteWithChildren
   LoginRoute: typeof LoginRoute
+  ApiPublicPrintersIngestRoute: typeof ApiPublicPrintersIngestRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -251,6 +316,13 @@ declare module '@tanstack/react-router' {
       path: '/usuarios'
       fullPath: '/usuarios'
       preLoaderRoute: typeof AuthenticatedUsuariosRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/sugestoes-compra': {
+      id: '/_authenticated/sugestoes-compra'
+      path: '/sugestoes-compra'
+      fullPath: '/sugestoes-compra'
+      preLoaderRoute: typeof AuthenticatedSugestoesCompraRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
     '/_authenticated/relatorios': {
@@ -316,11 +388,32 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAlertasRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/_authenticated/impressoras/': {
+      id: '/_authenticated/impressoras/'
+      path: '/impressoras'
+      fullPath: '/impressoras/'
+      preLoaderRoute: typeof AuthenticatedImpressorasIndexRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
     '/_authenticated/ativos/': {
       id: '/_authenticated/ativos/'
       path: '/ativos'
       fullPath: '/ativos/'
       preLoaderRoute: typeof AuthenticatedAtivosIndexRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/impressoras/novo': {
+      id: '/_authenticated/impressoras/novo'
+      path: '/impressoras/novo'
+      fullPath: '/impressoras/novo'
+      preLoaderRoute: typeof AuthenticatedImpressorasNovoRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/impressoras/$id': {
+      id: '/_authenticated/impressoras/$id'
+      path: '/impressoras/$id'
+      fullPath: '/impressoras/$id'
+      preLoaderRoute: typeof AuthenticatedImpressorasIdRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
     '/_authenticated/ativos/novo': {
@@ -337,6 +430,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAtivosIdRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/api/public/printers/ingest': {
+      id: '/api/public/printers/ingest'
+      path: '/api/public/printers/ingest'
+      fullPath: '/api/public/printers/ingest'
+      preLoaderRoute: typeof ApiPublicPrintersIngestRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -350,10 +450,14 @@ interface AuthenticatedRouteChildren {
   AuthenticatedManutencaoRoute: typeof AuthenticatedManutencaoRoute
   AuthenticatedMovimentacoesRoute: typeof AuthenticatedMovimentacoesRoute
   AuthenticatedRelatoriosRoute: typeof AuthenticatedRelatoriosRoute
+  AuthenticatedSugestoesCompraRoute: typeof AuthenticatedSugestoesCompraRoute
   AuthenticatedUsuariosRoute: typeof AuthenticatedUsuariosRoute
   AuthenticatedAtivosIdRoute: typeof AuthenticatedAtivosIdRoute
   AuthenticatedAtivosNovoRoute: typeof AuthenticatedAtivosNovoRoute
+  AuthenticatedImpressorasIdRoute: typeof AuthenticatedImpressorasIdRoute
+  AuthenticatedImpressorasNovoRoute: typeof AuthenticatedImpressorasNovoRoute
   AuthenticatedAtivosIndexRoute: typeof AuthenticatedAtivosIndexRoute
+  AuthenticatedImpressorasIndexRoute: typeof AuthenticatedImpressorasIndexRoute
 }
 
 const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
@@ -366,10 +470,14 @@ const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedManutencaoRoute: AuthenticatedManutencaoRoute,
   AuthenticatedMovimentacoesRoute: AuthenticatedMovimentacoesRoute,
   AuthenticatedRelatoriosRoute: AuthenticatedRelatoriosRoute,
+  AuthenticatedSugestoesCompraRoute: AuthenticatedSugestoesCompraRoute,
   AuthenticatedUsuariosRoute: AuthenticatedUsuariosRoute,
   AuthenticatedAtivosIdRoute: AuthenticatedAtivosIdRoute,
   AuthenticatedAtivosNovoRoute: AuthenticatedAtivosNovoRoute,
+  AuthenticatedImpressorasIdRoute: AuthenticatedImpressorasIdRoute,
+  AuthenticatedImpressorasNovoRoute: AuthenticatedImpressorasNovoRoute,
   AuthenticatedAtivosIndexRoute: AuthenticatedAtivosIndexRoute,
+  AuthenticatedImpressorasIndexRoute: AuthenticatedImpressorasIndexRoute,
 }
 
 const AuthenticatedRouteWithChildren = AuthenticatedRoute._addFileChildren(
@@ -380,17 +488,8 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthenticatedRoute: AuthenticatedRouteWithChildren,
   LoginRoute: LoginRoute,
+  ApiPublicPrintersIngestRoute: ApiPublicPrintersIngestRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}

@@ -32,7 +32,9 @@ function NovaImpressoraPage() {
     }
     setSaving(true);
     try {
-      const { error } = await supabase.from("impressoras" as never).insert(form);
+      const { error } = await (supabase.from("impressoras" as never) as unknown as {
+        insert: (v: Record<string, unknown>) => Promise<{ error: { message: string } | null }>;
+      }).insert(form);
       if (error) throw error;
       toast.success("Impressora cadastrada!");
       navigate({ to: "/impressoras" });

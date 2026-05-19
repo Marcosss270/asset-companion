@@ -48,10 +48,9 @@ export const Route = createFileRoute("/api/public/printers/ingest")({
         }
         if (!pid) return json(404, { error: "Impressora não encontrada" });
 
-        const { error } = await supabaseAdmin.from("impressora_leituras" as never).insert({
-          impressora_id: pid,
-          ...leitura,
-        });
+        const { error } = await (supabaseAdmin.from("impressora_leituras" as never) as unknown as {
+          insert: (v: Record<string, unknown>) => Promise<{ error: { message: string } | null }>;
+        }).insert({ impressora_id: pid, ...leitura });
         if (error) return json(500, { error: error.message });
 
         return json(200, { ok: true });

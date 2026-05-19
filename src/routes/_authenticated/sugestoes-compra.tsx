@@ -50,7 +50,9 @@ function SugestoesPage() {
   });
 
   const updateStatus = async (id: string, status: Sugestao["status"]) => {
-    const { error } = await supabase.from("sugestoes_compra" as never).update({ status }).eq("id", id);
+    const { error } = await (supabase.from("sugestoes_compra" as never) as unknown as {
+      update: (v: Record<string, unknown>) => { eq: (c: string, v: string) => Promise<{ error: { message: string } | null }> };
+    }).update({ status }).eq("id", id);
     if (error) toast.error(error.message);
     else { toast.success("Atualizado"); qc.invalidateQueries({ queryKey: ["sugestoes"] }); }
   };
