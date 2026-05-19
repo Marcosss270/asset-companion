@@ -211,43 +211,10 @@ function AtivoDetailPage() {
 
           <div className="bg-card border border-border rounded-xl shadow-card overflow-hidden">
             <div className="px-6 py-4 border-b border-border">
-              <h2 className="font-bold">Histórico de Movimentações ({movimentacoes.length})</h2>
+              <h2 className="font-bold">Timeline do Ativo</h2>
+              <p className="text-xs text-muted-foreground mt-0.5">Histórico completo: cadastros, movimentações, manutenções e alertas.</p>
             </div>
-            {movimentacoes.length === 0 ? (
-              <p className="text-sm text-muted-foreground p-6 text-center">Sem movimentações registradas.</p>
-            ) : (
-              <ul className="divide-y divide-border">
-                {movimentacoes.map((m) => (
-                  <li key={m.id} className="px-6 py-3 flex items-start gap-4">
-                    <div className="size-2 rounded-full bg-accent mt-2 shrink-0" />
-                    <div className="flex-1">
-                      <div className="flex items-center justify-between gap-4">
-                        <p className="text-sm font-semibold capitalize">{m.tipo.replace("_", " ")}</p>
-                        <p className="text-xs text-muted-foreground font-mono">{new Date(m.created_at).toLocaleString("pt-PT")}</p>
-                      </div>
-                      <p className="text-xs text-muted-foreground mt-1">{m.descricao}</p>
-                      {m.status_anterior && m.status_novo && (
-                        <p className="text-xs mt-1">
-                          <span className="text-muted-foreground">{STATUS_LABELS[m.status_anterior]}</span>
-                          <span className="mx-2">→</span>
-                          <span className="font-medium">{STATUS_LABELS[m.status_novo]}</span>
-                        </p>
-                      )}
-                      {m.responsavel_novo && (
-                        <p className="text-xs mt-1 text-muted-foreground">
-                          Responsável: <span className="text-foreground">{m.responsavel_anterior ?? "—"}</span> → <span className="text-foreground font-medium">{m.responsavel_novo}</span>
-                        </p>
-                      )}
-                      {m.localizacao_nova && (
-                        <p className="text-xs mt-1 text-muted-foreground">
-                          Local: <span className="text-foreground">{m.localizacao_anterior ?? "—"}</span> → <span className="text-foreground font-medium">{m.localizacao_nova}</span>
-                        </p>
-                      )}
-                    </div>
-                  </li>
-                ))}
-              </ul>
-            )}
+            <Timeline events={timelineEvents} />
           </div>
         </div>
 
