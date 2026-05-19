@@ -42,19 +42,6 @@ function AtivoDetailPage() {
     },
   });
 
-  const { data: movimentacoes = [] } = useQuery({
-    queryKey: ["movimentacoes", id],
-    queryFn: async () => {
-      const { data, error } = await supabase
-        .from("movimentacoes")
-        .select("*")
-        .eq("ativo_id", id)
-        .order("created_at", { ascending: false });
-      if (error) throw error;
-      return data ?? [];
-    },
-  });
-
   const { data: timelineEvents = [] } = useQuery({
     queryKey: ["timeline", id],
     queryFn: () => fetchTimeline(id),
