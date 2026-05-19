@@ -13,6 +13,8 @@ import {
   Bell,
   Tag,
   Building2,
+  Printer,
+  ShoppingCart,
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { cn } from "@/lib/utils";
@@ -20,10 +22,12 @@ import { cn } from "@/lib/utils";
 const inventoryNav = [
   { to: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
   { to: "/ativos", label: "Ativos / Equipamentos", icon: Boxes },
+  { to: "/impressoras", label: "Impressoras", icon: Printer },
   { to: "/consumiveis", label: "Consumíveis", icon: PackageOpen },
   { to: "/movimentacoes", label: "Movimentações", icon: ArrowLeftRight },
   { to: "/manutencao", label: "Manutenção", icon: Wrench },
   { to: "/alertas", label: "Alertas", icon: Bell },
+  { to: "/sugestoes-compra", label: "Sugestões de Compra", icon: ShoppingCart },
 ] as const;
 
 const operacoesNav = [
