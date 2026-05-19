@@ -192,7 +192,80 @@ function DashboardPage() {
         </div>
       </div>
 
+      {/* Painel de impressoras + alertas críticos + sugestões */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
+        <div className="bg-card border border-border rounded-xl p-6 shadow-card">
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="font-bold flex items-center gap-2"><Printer className="size-4 text-accent" /> Impressoras</h2>
+            <Link to="/impressoras" className="text-accent text-xs font-medium hover:underline">Ver todas →</Link>
+          </div>
+          {impressoras.length === 0 ? (
+            <p className="text-sm text-muted-foreground py-4 text-center">Nenhuma cadastrada.</p>
+          ) : (
+            <>
+              <div className="grid grid-cols-2 gap-2 mb-3">
+                <Pill icon={Wifi} label="Online" value={impressoras.filter((p) => p.status_online).length} color="text-success" />
+                <Pill icon={WifiOff} label="Offline" value={impressoras.filter((p) => !p.status_online).length} color="text-destructive" />
+              </div>
+              <ul className="space-y-1.5 max-h-40 overflow-y-auto">
+                {impressoras.slice(0, 5).map((p) => (
+                  <li key={p.id} className="flex items-center justify-between text-xs">
+                    <span className="truncate">{p.ativos?.nome ?? p.ip}</span>
+                    <span className={`size-2 rounded-full ${p.status_online ? "bg-success" : "bg-destructive"}`} />
+                  </li>
+                ))}
+              </ul>
+            </>
+          )}
+        </div>
+
+        <div className="bg-card border border-border rounded-xl p-6 shadow-card">
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="font-bold flex items-center gap-2"><Activity className="size-4 text-destructive" /> Alertas Ativos</h2>
+            <Link to="/alertas" className="text-accent text-xs font-medium hover:underline">Ver →</Link>
+          </div>
+          {alertasAtivos.length === 0 ? (
+            <p className="text-sm text-muted-foreground py-4 text-center">Tudo sob controle.</p>
+          ) : (
+            <ul className="space-y-2 max-h-48 overflow-y-auto">
+              {alertasAtivos.map((a) => (
+                <li key={a.id} className="text-xs flex items-start gap-2 p-2 bg-destructive/5 border border-destructive/15 rounded">
+                  <AlertTriangle className="size-3 text-destructive mt-0.5 shrink-0" />
+                  <div className="min-w-0">
+                    <p className="font-semibold truncate">{a.titulo}</p>
+                    <p className="text-muted-foreground truncate">{a.mensagem}</p>
+                  </div>
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
+
+        <div className="bg-card border border-border rounded-xl p-6 shadow-card">
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="font-bold flex items-center gap-2"><ShoppingCart className="size-4 text-accent" /> Sugestões de Compra</h2>
+            <Link to="/sugestoes-compra" className="text-accent text-xs font-medium hover:underline">Ver →</Link>
+          </div>
+          {sugestoesPendentes.length === 0 ? (
+            <p className="text-sm text-muted-foreground py-4 text-center">Nenhuma pendente.</p>
+          ) : (
+            <>
+              <p className="text-3xl font-bold tabular-nums mb-2">{sugestoesPendentes.length}</p>
+              <p className="text-xs text-muted-foreground mb-3">item(ns) pendente(s) de aprovação.</p>
+              <div className="flex flex-wrap gap-1">
+                {["critica", "alta", "media", "baixa"].map((u) => {
+                  const n = sugestoesPendentes.filter((s) => s.urgencia === u).length;
+                  if (n === 0) return null;
+                  return <span key={u} className="text-[10px] font-bold px-1.5 py-0.5 rounded bg-secondary uppercase">{u}: {n}</span>;
+                })}
+              </div>
+            </>
+          )}
+        </div>
+      </div>
+
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+
         <div className="lg:col-span-2 bg-card border border-border rounded-xl overflow-hidden shadow-card">
           <div className="px-6 py-4 border-b border-border flex items-center justify-between">
             <h2 className="font-bold">Ativos Recentes</h2>
