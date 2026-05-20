@@ -10,6 +10,7 @@ import { STATUS_LABELS, STATUS_OPTIONS, type AtivoStatus } from "@/lib/asset-uti
 import { formatKZ } from "@/lib/format";
 import { Timeline } from "@/components/timeline";
 import { fetchTimeline } from "@/lib/timeline";
+import { FornecedoresProduto } from "@/components/fornecedores-produto";
 
 export const Route = createFileRoute("/_authenticated/ativos/$id")({
   component: AtivoDetailPage,
