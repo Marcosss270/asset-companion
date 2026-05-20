@@ -55,7 +55,9 @@ function FornecedoresPage() {
   const { data = [], isLoading } = useQuery({
     queryKey: ["fornecedores"],
     queryFn: async () => {
-      const { data, error } = await supabase.from(F_TABLE).select("*").order("nome_empresa");
+      const { data, error } = await (supabase.from(F_TABLE) as unknown as {
+        select: (q: string) => { order: (c: string) => Promise<{ data: unknown; error: { message: string } | null }> };
+      }).select("*").order("nome_empresa");
       if (error) throw error;
       return (data ?? []) as unknown as Fornecedor[];
     },
