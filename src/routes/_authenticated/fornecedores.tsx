@@ -276,8 +276,9 @@ function ProdutosManager({ fornecedor, onClose }: { fornecedor: Fornecedor; onCl
   const { data: links = [] } = useQuery({
     queryKey: ["fp", fornecedor.id],
     queryFn: async () => {
-      const { data } = await supabase
-        .from(FP_TABLE)
+      const { data } = await (supabase.from(FP_TABLE) as unknown as {
+        select: (q: string) => { eq: (c: string, v: string) => Promise<{ data: unknown }> };
+      })
         .select("*, estoque_consumiveis(id, nome, unidade), ativos(id, codigo_unico, nome)")
         .eq("fornecedor_id", fornecedor.id);
       return (data ?? []) as unknown as Link[];
