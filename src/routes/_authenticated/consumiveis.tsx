@@ -138,6 +138,13 @@ function ConsumiveisPage() {
                         <ArrowDown className="size-4" />
                       </button>
                       <button
+                        onClick={() => setSuppliers(c)}
+                        className={`inline-flex items-center justify-center size-7 rounded ${baixo ? "bg-destructive/10 text-destructive hover:bg-destructive/20 animate-pulse" : "hover:bg-accent/10 text-accent"}`}
+                        title="Fornecedores deste item"
+                      >
+                        <Truck className="size-3.5" />
+                      </button>
+                      <button
                         onClick={() => { setEditing(c); setOpenForm(true); }}
                         className="inline-flex items-center justify-center size-7 rounded hover:bg-secondary"
                         title="Editar"
