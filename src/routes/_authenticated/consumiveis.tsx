@@ -175,6 +175,11 @@ function ConsumiveisPage() {
           onSaved={() => { setAdjust(null); refresh(); }}
         />
       )}
+      {suppliers && (
+        <Modal title={`Fornecedores — ${suppliers.nome}`} onClose={() => setSuppliers(null)}>
+          <FornecedoresProduto consumivelId={suppliers.id} produtoNome={suppliers.nome} />
+        </Modal>
+      )}
     </div>
   );
 }
