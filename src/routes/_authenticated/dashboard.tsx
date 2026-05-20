@@ -75,6 +75,22 @@ function DashboardPage() {
     },
   });
 
+  const { data: fornecedores = [] } = useQuery({
+    queryKey: ["fornecedores-dash"],
+    queryFn: async () => {
+      const { data } = await supabase.from("fornecedores" as never).select("id, nome_empresa, status");
+      return (data ?? []) as unknown as Array<{ id: string; nome_empresa: string; status: string }>;
+    },
+  });
+
+  const { data: fornecedorProdutos = [] } = useQuery({
+    queryKey: ["fp-dash"],
+    queryFn: async () => {
+      const { data } = await supabase.from("fornecedor_produtos" as never).select("fornecedor_id, consumivel_id, ativo_id");
+      return (data ?? []) as unknown as Array<{ fornecedor_id: string; consumivel_id: string | null; ativo_id: string | null }>;
+    },
+  });
+
   const ativosFiltrados = empresaFiltro === "todas" ? ativos : ativos.filter((a) => a.empresa_id === empresaFiltro);
 
   const total = ativosFiltrados.length;
