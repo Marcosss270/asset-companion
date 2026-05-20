@@ -2,8 +2,9 @@ import { useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
-import { AlertTriangle, Plus, Pencil, Loader2, X, Minus, ArrowUp, ArrowDown } from "lucide-react";
+import { AlertTriangle, Plus, Pencil, Loader2, X, Minus, ArrowUp, ArrowDown, Truck } from "lucide-react";
 import { toast } from "sonner";
+import { FornecedoresProduto } from "@/components/fornecedores-produto";
 
 export const Route = createFileRoute("/_authenticated/consumiveis")({
   component: ConsumiveisPage,
