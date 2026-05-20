@@ -262,6 +262,115 @@ export type Database = {
           },
         ]
       }
+      fornecedor_produtos: {
+        Row: {
+          ativo_id: string | null
+          consumivel_id: string | null
+          created_at: string
+          fornecedor_id: string
+          fornecedor_preferencial: boolean
+          id: string
+          observacoes: string | null
+          prazo_entrega_dias: number | null
+          preco_medio: number | null
+          updated_at: string
+        }
+        Insert: {
+          ativo_id?: string | null
+          consumivel_id?: string | null
+          created_at?: string
+          fornecedor_id: string
+          fornecedor_preferencial?: boolean
+          id?: string
+          observacoes?: string | null
+          prazo_entrega_dias?: number | null
+          preco_medio?: number | null
+          updated_at?: string
+        }
+        Update: {
+          ativo_id?: string | null
+          consumivel_id?: string | null
+          created_at?: string
+          fornecedor_id?: string
+          fornecedor_preferencial?: boolean
+          id?: string
+          observacoes?: string | null
+          prazo_entrega_dias?: number | null
+          preco_medio?: number | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "fornecedor_produtos_ativo_id_fkey"
+            columns: ["ativo_id"]
+            isOneToOne: false
+            referencedRelation: "ativos"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "fornecedor_produtos_consumivel_id_fkey"
+            columns: ["consumivel_id"]
+            isOneToOne: false
+            referencedRelation: "estoque_consumiveis"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "fornecedor_produtos_fornecedor_id_fkey"
+            columns: ["fornecedor_id"]
+            isOneToOne: false
+            referencedRelation: "fornecedores"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      fornecedores: {
+        Row: {
+          created_at: string
+          email: string | null
+          endereco: string | null
+          id: string
+          nif: string | null
+          nome_empresa: string
+          observacoes: string | null
+          pessoa_contacto: string | null
+          status: string
+          telefone: string | null
+          updated_at: string
+          website: string | null
+          whatsapp: string | null
+        }
+        Insert: {
+          created_at?: string
+          email?: string | null
+          endereco?: string | null
+          id?: string
+          nif?: string | null
+          nome_empresa: string
+          observacoes?: string | null
+          pessoa_contacto?: string | null
+          status?: string
+          telefone?: string | null
+          updated_at?: string
+          website?: string | null
+          whatsapp?: string | null
+        }
+        Update: {
+          created_at?: string
+          email?: string | null
+          endereco?: string | null
+          id?: string
+          nif?: string | null
+          nome_empresa?: string
+          observacoes?: string | null
+          pessoa_contacto?: string | null
+          status?: string
+          telefone?: string | null
+          updated_at?: string
+          website?: string | null
+          whatsapp?: string | null
+        }
+        Relationships: []
+      }
       impressora_leituras: {
         Row: {
           capturado_em: string
