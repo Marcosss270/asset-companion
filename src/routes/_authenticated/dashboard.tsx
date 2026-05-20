@@ -466,3 +466,12 @@ function Pill({ icon: Icon, label, value, color }: { icon: typeof Wifi; label: s
   );
 }
 
+function KPI({ label, value, color }: { label: string; value: number | string; color: string }) {
+  return (
+    <div className="bg-secondary/40 rounded-lg p-3">
+      <p className="text-[9px] uppercase tracking-widest text-muted-foreground font-semibold">{label}</p>
+      <p className={`text-xl font-bold tabular-nums ${color}`}>{value}</p>
+    </div>
+  );
+}
+
