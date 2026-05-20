@@ -17,6 +17,7 @@ import { Route as AuthenticatedSugestoesCompraRouteImport } from './routes/_auth
 import { Route as AuthenticatedRelatoriosRouteImport } from './routes/_authenticated/relatorios'
 import { Route as AuthenticatedMovimentacoesRouteImport } from './routes/_authenticated/movimentacoes'
 import { Route as AuthenticatedManutencaoRouteImport } from './routes/_authenticated/manutencao'
+import { Route as AuthenticatedFornecedoresRouteImport } from './routes/_authenticated/fornecedores'
 import { Route as AuthenticatedEtiquetasRouteImport } from './routes/_authenticated/etiquetas'
 import { Route as AuthenticatedEmpresasRouteImport } from './routes/_authenticated/empresas'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
@@ -72,6 +73,12 @@ const AuthenticatedManutencaoRoute = AuthenticatedManutencaoRouteImport.update({
   path: '/manutencao',
   getParentRoute: () => AuthenticatedRoute,
 } as any)
+const AuthenticatedFornecedoresRoute =
+  AuthenticatedFornecedoresRouteImport.update({
+    id: '/fornecedores',
+    path: '/fornecedores',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
 const AuthenticatedEtiquetasRoute = AuthenticatedEtiquetasRouteImport.update({
   id: '/etiquetas',
   path: '/etiquetas',
@@ -152,6 +159,7 @@ export interface FileRoutesByFullPath {
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/empresas': typeof AuthenticatedEmpresasRoute
   '/etiquetas': typeof AuthenticatedEtiquetasRoute
+  '/fornecedores': typeof AuthenticatedFornecedoresRoute
   '/manutencao': typeof AuthenticatedManutencaoRoute
   '/movimentacoes': typeof AuthenticatedMovimentacoesRoute
   '/relatorios': typeof AuthenticatedRelatoriosRoute
@@ -174,6 +182,7 @@ export interface FileRoutesByTo {
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/empresas': typeof AuthenticatedEmpresasRoute
   '/etiquetas': typeof AuthenticatedEtiquetasRoute
+  '/fornecedores': typeof AuthenticatedFornecedoresRoute
   '/manutencao': typeof AuthenticatedManutencaoRoute
   '/movimentacoes': typeof AuthenticatedMovimentacoesRoute
   '/relatorios': typeof AuthenticatedRelatoriosRoute
@@ -198,6 +207,7 @@ export interface FileRoutesById {
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
   '/_authenticated/empresas': typeof AuthenticatedEmpresasRoute
   '/_authenticated/etiquetas': typeof AuthenticatedEtiquetasRoute
+  '/_authenticated/fornecedores': typeof AuthenticatedFornecedoresRoute
   '/_authenticated/manutencao': typeof AuthenticatedManutencaoRoute
   '/_authenticated/movimentacoes': typeof AuthenticatedMovimentacoesRoute
   '/_authenticated/relatorios': typeof AuthenticatedRelatoriosRoute
@@ -222,6 +232,7 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/empresas'
     | '/etiquetas'
+    | '/fornecedores'
     | '/manutencao'
     | '/movimentacoes'
     | '/relatorios'
@@ -244,6 +255,7 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/empresas'
     | '/etiquetas'
+    | '/fornecedores'
     | '/manutencao'
     | '/movimentacoes'
     | '/relatorios'
@@ -267,6 +279,7 @@ export interface FileRouteTypes {
     | '/_authenticated/dashboard'
     | '/_authenticated/empresas'
     | '/_authenticated/etiquetas'
+    | '/_authenticated/fornecedores'
     | '/_authenticated/manutencao'
     | '/_authenticated/movimentacoes'
     | '/_authenticated/relatorios'
@@ -344,6 +357,13 @@ declare module '@tanstack/react-router' {
       path: '/manutencao'
       fullPath: '/manutencao'
       preLoaderRoute: typeof AuthenticatedManutencaoRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/fornecedores': {
+      id: '/_authenticated/fornecedores'
+      path: '/fornecedores'
+      fullPath: '/fornecedores'
+      preLoaderRoute: typeof AuthenticatedFornecedoresRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
     '/_authenticated/etiquetas': {
@@ -447,6 +467,7 @@ interface AuthenticatedRouteChildren {
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
   AuthenticatedEmpresasRoute: typeof AuthenticatedEmpresasRoute
   AuthenticatedEtiquetasRoute: typeof AuthenticatedEtiquetasRoute
+  AuthenticatedFornecedoresRoute: typeof AuthenticatedFornecedoresRoute
   AuthenticatedManutencaoRoute: typeof AuthenticatedManutencaoRoute
   AuthenticatedMovimentacoesRoute: typeof AuthenticatedMovimentacoesRoute
   AuthenticatedRelatoriosRoute: typeof AuthenticatedRelatoriosRoute
@@ -467,6 +488,7 @@ const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
   AuthenticatedEmpresasRoute: AuthenticatedEmpresasRoute,
   AuthenticatedEtiquetasRoute: AuthenticatedEtiquetasRoute,
+  AuthenticatedFornecedoresRoute: AuthenticatedFornecedoresRoute,
   AuthenticatedManutencaoRoute: AuthenticatedManutencaoRoute,
   AuthenticatedMovimentacoesRoute: AuthenticatedMovimentacoesRoute,
   AuthenticatedRelatoriosRoute: AuthenticatedRelatoriosRoute,
