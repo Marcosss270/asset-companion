@@ -216,6 +216,11 @@ function AtivoDetailPage() {
             </div>
           </div>
 
+          <div className="bg-card border border-border rounded-xl p-6 shadow-card">
+            <h2 className="font-bold mb-4">Fornecedores Disponíveis</h2>
+            <FornecedoresProduto ativoId={ativo.id} produtoNome={ativo.nome} compact />
+          </div>
+
           <div className="bg-card border border-border rounded-xl p-6 shadow-card text-center">
             <h2 className="font-bold mb-4">QR Code do Ativo</h2>
             <div className="bg-white p-4 rounded-lg inline-block border border-border">
