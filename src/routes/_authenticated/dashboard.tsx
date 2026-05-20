@@ -5,7 +5,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { StatusBadge } from "@/components/status-badge";
 import { STATUS_LABELS } from "@/lib/asset-utils";
 import { formatKZ } from "@/lib/format";
-import { AlertTriangle, Clock, Boxes, CheckCircle2, Wrench, PackageX, Building2, Coins, Printer, Wifi, WifiOff, ShoppingCart, Activity } from "lucide-react";
+import { AlertTriangle, Clock, Boxes, CheckCircle2, Wrench, PackageX, Building2, Coins, Printer, Wifi, WifiOff, ShoppingCart, Activity, Truck } from "lucide-react";
 
 export const Route = createFileRoute("/_authenticated/dashboard")({
   component: DashboardPage,
@@ -72,6 +72,22 @@ function DashboardPage() {
     queryFn: async () => {
       const { data } = await supabase.from("sugestoes_compra" as never).select("id, item, urgencia").eq("status", "pendente");
       return (data ?? []) as unknown as Array<{ id: string; item: string; urgencia: string }>;
+    },
+  });
+
+  const { data: fornecedores = [] } = useQuery({
+    queryKey: ["fornecedores-dash"],
+    queryFn: async () => {
+      const { data } = await supabase.from("fornecedores" as never).select("id, nome_empresa, status");
+      return (data ?? []) as unknown as Array<{ id: string; nome_empresa: string; status: string }>;
+    },
+  });
+
+  const { data: fornecedorProdutos = [] } = useQuery({
+    queryKey: ["fp-dash"],
+    queryFn: async () => {
+      const { data } = await supabase.from("fornecedor_produtos" as never).select("fornecedor_id, consumivel_id, ativo_id");
+      return (data ?? []) as unknown as Array<{ fornecedor_id: string; consumivel_id: string | null; ativo_id: string | null }>;
     },
   });
 
@@ -264,6 +280,59 @@ function DashboardPage() {
         </div>
       </div>
 
+      {/* Painel de fornecedores */}
+      <div className="bg-card border border-border rounded-xl p-6 shadow-card mb-6">
+        <div className="flex items-center justify-between mb-4">
+          <h2 className="font-bold flex items-center gap-2"><Truck className="size-4 text-accent" /> Fornecedores</h2>
+          <Link to="/fornecedores" className="text-accent text-xs font-medium hover:underline">Gerir →</Link>
+        </div>
+        {(() => {
+          const ativos = fornecedores.filter((f) => f.status === "ativo").length;
+          const idsCobertos = new Set(fornecedorProdutos.map((fp) => fp.consumivel_id).filter(Boolean));
+          const semFornecedor = consumiveis.filter((c) => !idsCobertos.has(c.id)).length;
+          const ranking = new Map<string, number>();
+          fornecedorProdutos.forEach((fp) => ranking.set(fp.fornecedor_id, (ranking.get(fp.fornecedor_id) ?? 0) + 1));
+          const top = Array.from(ranking.entries())
+            .sort((a, b) => b[1] - a[1]).slice(0, 5)
+            .map(([id, n]) => ({ nome: fornecedores.find((f) => f.id === id)?.nome_empresa ?? "—", n }));
+          return (
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div className="grid grid-cols-2 gap-3 md:col-span-1">
+                <KPI label="Ativos" value={ativos} color="text-success" />
+                <KPI label="Total" value={fornecedores.length} color="text-foreground" />
+                <KPI label="Críticos sem fornec." value={semFornecedor} color="text-destructive" />
+                <KPI label="Vínculos" value={fornecedorProdutos.length} color="text-info" />
+              </div>
+              <div className="md:col-span-2">
+                <p className="text-[10px] uppercase tracking-widest text-muted-foreground font-bold mb-2">Mais utilizados</p>
+                {top.length === 0 ? (
+                  <p className="text-xs text-muted-foreground py-3 text-center">Nenhum vínculo registrado ainda.</p>
+                ) : (
+                  <ul className="space-y-2">
+                    {top.map((t, i) => {
+                      const max = top[0].n || 1;
+                      const pct = Math.round((t.n / max) * 100);
+                      return (
+                        <li key={t.nome + i}>
+                          <div className="flex justify-between text-xs font-medium mb-1">
+                            <span>{t.nome}</span>
+                            <span className="font-mono text-muted-foreground">{t.n} produto(s)</span>
+                          </div>
+                          <div className="w-full h-1.5 bg-secondary rounded-full overflow-hidden">
+                            <div className="bg-accent h-full" style={{ width: `${pct}%` }} />
+                          </div>
+                        </li>
+                      );
+                    })}
+                  </ul>
+                )}
+              </div>
+            </div>
+          );
+        })()}
+      </div>
+
+
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
 
         <div className="lg:col-span-2 bg-card border border-border rounded-xl overflow-hidden shadow-card">
@@ -393,6 +462,15 @@ function Pill({ icon: Icon, label, value, color }: { icon: typeof Wifi; label: s
       <Icon className={`size-3.5 mx-auto ${color}`} />
       <p className="text-[9px] uppercase tracking-widest text-muted-foreground mt-1 font-semibold">{label}</p>
       <p className={`text-lg font-bold tabular-nums ${color}`}>{value}</p>
+    </div>
+  );
+}
+
+function KPI({ label, value, color }: { label: string; value: number | string; color: string }) {
+  return (
+    <div className="bg-secondary/40 rounded-lg p-3">
+      <p className="text-[9px] uppercase tracking-widest text-muted-foreground font-semibold">{label}</p>
+      <p className={`text-xl font-bold tabular-nums ${color}`}>{value}</p>
     </div>
   );
 }

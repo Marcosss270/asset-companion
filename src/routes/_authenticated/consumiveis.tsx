@@ -2,8 +2,9 @@ import { useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
-import { AlertTriangle, Plus, Pencil, Loader2, X, Minus, ArrowUp, ArrowDown } from "lucide-react";
+import { AlertTriangle, Plus, Pencil, Loader2, X, Minus, ArrowUp, ArrowDown, Truck } from "lucide-react";
 import { toast } from "sonner";
+import { FornecedoresProduto } from "@/components/fornecedores-produto";
 
 export const Route = createFileRoute("/_authenticated/consumiveis")({
   component: ConsumiveisPage,
@@ -26,6 +27,7 @@ function ConsumiveisPage() {
   const [openForm, setOpenForm] = useState(false);
   const [editing, setEditing] = useState<Consumivel | null>(null);
   const [adjust, setAdjust] = useState<{ item: Consumivel; delta: number } | null>(null);
+  const [suppliers, setSuppliers] = useState<Consumivel | null>(null);
 
   const { data = [], isLoading } = useQuery({
     queryKey: ["consumiveis"],
@@ -136,6 +138,13 @@ function ConsumiveisPage() {
                         <ArrowDown className="size-4" />
                       </button>
                       <button
+                        onClick={() => setSuppliers(c)}
+                        className={`inline-flex items-center justify-center size-7 rounded ${baixo ? "bg-destructive/10 text-destructive hover:bg-destructive/20 animate-pulse" : "hover:bg-accent/10 text-accent"}`}
+                        title="Fornecedores deste item"
+                      >
+                        <Truck className="size-3.5" />
+                      </button>
+                      <button
                         onClick={() => { setEditing(c); setOpenForm(true); }}
                         className="inline-flex items-center justify-center size-7 rounded hover:bg-secondary"
                         title="Editar"
@@ -165,6 +174,11 @@ function ConsumiveisPage() {
           onClose={() => setAdjust(null)}
           onSaved={() => { setAdjust(null); refresh(); }}
         />
+      )}
+      {suppliers && (
+        <Modal title={`Fornecedores — ${suppliers.nome}`} onClose={() => setSuppliers(null)}>
+          <FornecedoresProduto consumivelId={suppliers.id} produtoNome={suppliers.nome} />
+        </Modal>
       )}
     </div>
   );

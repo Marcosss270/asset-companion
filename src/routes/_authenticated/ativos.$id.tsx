@@ -10,6 +10,7 @@ import { STATUS_LABELS, STATUS_OPTIONS, type AtivoStatus } from "@/lib/asset-uti
 import { formatKZ } from "@/lib/format";
 import { Timeline } from "@/components/timeline";
 import { fetchTimeline } from "@/lib/timeline";
+import { FornecedoresProduto } from "@/components/fornecedores-produto";
 
 export const Route = createFileRoute("/_authenticated/ativos/$id")({
   component: AtivoDetailPage,
@@ -213,6 +214,11 @@ function AtivoDetailPage() {
               <div className="flex justify-between"><span className="text-muted-foreground">Empresa</span><span className="font-semibold">{empresa?.sigla ?? "—"}</span></div>
               <div className="flex justify-between"><span className="text-muted-foreground">Categoria</span><span className="font-semibold">{categoria?.nome ?? "—"}</span></div>
             </div>
+          </div>
+
+          <div className="bg-card border border-border rounded-xl p-6 shadow-card">
+            <h2 className="font-bold mb-4">Fornecedores Disponíveis</h2>
+            <FornecedoresProduto ativoId={ativo.id} produtoNome={ativo.nome} compact />
           </div>
 
           <div className="bg-card border border-border rounded-xl p-6 shadow-card text-center">

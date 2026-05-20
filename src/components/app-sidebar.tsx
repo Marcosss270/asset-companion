@@ -15,6 +15,7 @@ import {
   Building2,
   Printer,
   ShoppingCart,
+  Truck,
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { cn } from "@/lib/utils";
@@ -28,6 +29,7 @@ const inventoryNav = [
   { to: "/manutencao", label: "Manutenção", icon: Wrench },
   { to: "/alertas", label: "Alertas", icon: Bell },
   { to: "/sugestoes-compra", label: "Sugestões de Compra", icon: ShoppingCart },
+  { to: "/fornecedores", label: "Fornecedores", icon: Truck },
 ] as const;
 
 const operacoesNav = [
