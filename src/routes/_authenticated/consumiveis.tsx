@@ -27,6 +27,7 @@ function ConsumiveisPage() {
   const [openForm, setOpenForm] = useState(false);
   const [editing, setEditing] = useState<Consumivel | null>(null);
   const [adjust, setAdjust] = useState<{ item: Consumivel; delta: number } | null>(null);
+  const [suppliers, setSuppliers] = useState<Consumivel | null>(null);
 
   const { data = [], isLoading } = useQuery({
     queryKey: ["consumiveis"],
