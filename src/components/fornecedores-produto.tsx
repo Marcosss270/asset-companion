@@ -35,13 +35,18 @@ export function FornecedoresProduto({ consumivelId, ativoId, produtoNome, compac
     queryKey: ["fp-produto", key],
     enabled: !!(consumivelId || ativoId),
     queryFn: async () => {
-      let q = supabase
-        .from(FP)
+      const base = (supabase.from(FP) as unknown as {
+        select: (q: string) => {
+          order: (c: string, o: { ascending: boolean }) => {
+            eq: (c: string, v: string) => Promise<{ data: unknown }>;
+          };
+        };
+      })
         .select("id, preco_medio, prazo_entrega_dias, fornecedor_preferencial, fornecedores(id, nome_empresa, telefone, whatsapp, email)")
         .order("fornecedor_preferencial", { ascending: false });
-      if (consumivelId) q = q.eq("consumivel_id", consumivelId);
-      if (ativoId) q = q.eq("ativo_id", ativoId);
-      const { data } = await q;
+      const col = consumivelId ? "consumivel_id" : "ativo_id";
+      const val = (consumivelId ?? ativoId) as string;
+      const { data } = await base.eq(col, val);
       return (data ?? []) as unknown as Link[];
     },
   });
