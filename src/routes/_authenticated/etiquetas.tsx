@@ -16,8 +16,8 @@ export const Route = createFileRoute("/_authenticated/etiquetas")({
 
 function EtiquetasPage() {
   const { ids: idsParam, autoprint } = useSearch({ from: "/_authenticated/etiquetas" });
-  const preselected = useMemo(
-    () => new Set((idsParam ?? "").split(",").map((s) => s.trim()).filter(Boolean)),
+  const preselected = useMemo<Set<string>>(
+    () => new Set((idsParam ?? "").split(",").map((s: string) => s.trim()).filter(Boolean)),
     [idsParam],
   );
   const [selected, setSelected] = useState<Set<string>>(preselected);

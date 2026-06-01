@@ -40,7 +40,7 @@ function ConfiguracoesPage() {
   const save = async (chave: string, valor: Record<string, unknown>) => {
     const { error } = await supabase
       .from("configuracoes")
-      .upsert({ chave, valor }, { onConflict: "chave" });
+      .upsert({ chave, valor: valor as never }, { onConflict: "chave" });
     if (error) throw error;
     qc.invalidateQueries({ queryKey: ["configuracoes"] });
   };

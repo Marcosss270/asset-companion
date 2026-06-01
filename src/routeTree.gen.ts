@@ -22,6 +22,7 @@ import { Route as AuthenticatedEtiquetasRouteImport } from './routes/_authentica
 import { Route as AuthenticatedEmpresasRouteImport } from './routes/_authenticated/empresas'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
 import { Route as AuthenticatedConsumiveisRouteImport } from './routes/_authenticated/consumiveis'
+import { Route as AuthenticatedConfiguracoesRouteImport } from './routes/_authenticated/configuracoes'
 import { Route as AuthenticatedCategoriasRouteImport } from './routes/_authenticated/categorias'
 import { Route as AuthenticatedAlertasRouteImport } from './routes/_authenticated/alertas'
 import { Route as AuthenticatedImpressorasIndexRouteImport } from './routes/_authenticated/impressoras.index'
@@ -100,6 +101,12 @@ const AuthenticatedConsumiveisRoute =
     path: '/consumiveis',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
+const AuthenticatedConfiguracoesRoute =
+  AuthenticatedConfiguracoesRouteImport.update({
+    id: '/configuracoes',
+    path: '/configuracoes',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
 const AuthenticatedCategoriasRoute = AuthenticatedCategoriasRouteImport.update({
   id: '/categorias',
   path: '/categorias',
@@ -155,6 +162,7 @@ export interface FileRoutesByFullPath {
   '/login': typeof LoginRoute
   '/alertas': typeof AuthenticatedAlertasRoute
   '/categorias': typeof AuthenticatedCategoriasRoute
+  '/configuracoes': typeof AuthenticatedConfiguracoesRoute
   '/consumiveis': typeof AuthenticatedConsumiveisRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/empresas': typeof AuthenticatedEmpresasRoute
@@ -178,6 +186,7 @@ export interface FileRoutesByTo {
   '/login': typeof LoginRoute
   '/alertas': typeof AuthenticatedAlertasRoute
   '/categorias': typeof AuthenticatedCategoriasRoute
+  '/configuracoes': typeof AuthenticatedConfiguracoesRoute
   '/consumiveis': typeof AuthenticatedConsumiveisRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/empresas': typeof AuthenticatedEmpresasRoute
@@ -203,6 +212,7 @@ export interface FileRoutesById {
   '/login': typeof LoginRoute
   '/_authenticated/alertas': typeof AuthenticatedAlertasRoute
   '/_authenticated/categorias': typeof AuthenticatedCategoriasRoute
+  '/_authenticated/configuracoes': typeof AuthenticatedConfiguracoesRoute
   '/_authenticated/consumiveis': typeof AuthenticatedConsumiveisRoute
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
   '/_authenticated/empresas': typeof AuthenticatedEmpresasRoute
@@ -228,6 +238,7 @@ export interface FileRouteTypes {
     | '/login'
     | '/alertas'
     | '/categorias'
+    | '/configuracoes'
     | '/consumiveis'
     | '/dashboard'
     | '/empresas'
@@ -251,6 +262,7 @@ export interface FileRouteTypes {
     | '/login'
     | '/alertas'
     | '/categorias'
+    | '/configuracoes'
     | '/consumiveis'
     | '/dashboard'
     | '/empresas'
@@ -275,6 +287,7 @@ export interface FileRouteTypes {
     | '/login'
     | '/_authenticated/alertas'
     | '/_authenticated/categorias'
+    | '/_authenticated/configuracoes'
     | '/_authenticated/consumiveis'
     | '/_authenticated/dashboard'
     | '/_authenticated/empresas'
@@ -394,6 +407,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedConsumiveisRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/_authenticated/configuracoes': {
+      id: '/_authenticated/configuracoes'
+      path: '/configuracoes'
+      fullPath: '/configuracoes'
+      preLoaderRoute: typeof AuthenticatedConfiguracoesRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
     '/_authenticated/categorias': {
       id: '/_authenticated/categorias'
       path: '/categorias'
@@ -463,6 +483,7 @@ declare module '@tanstack/react-router' {
 interface AuthenticatedRouteChildren {
   AuthenticatedAlertasRoute: typeof AuthenticatedAlertasRoute
   AuthenticatedCategoriasRoute: typeof AuthenticatedCategoriasRoute
+  AuthenticatedConfiguracoesRoute: typeof AuthenticatedConfiguracoesRoute
   AuthenticatedConsumiveisRoute: typeof AuthenticatedConsumiveisRoute
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
   AuthenticatedEmpresasRoute: typeof AuthenticatedEmpresasRoute
@@ -484,6 +505,7 @@ interface AuthenticatedRouteChildren {
 const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedAlertasRoute: AuthenticatedAlertasRoute,
   AuthenticatedCategoriasRoute: AuthenticatedCategoriasRoute,
+  AuthenticatedConfiguracoesRoute: AuthenticatedConfiguracoesRoute,
   AuthenticatedConsumiveisRoute: AuthenticatedConsumiveisRoute,
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
   AuthenticatedEmpresasRoute: AuthenticatedEmpresasRoute,
