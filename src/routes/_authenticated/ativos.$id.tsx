@@ -109,7 +109,7 @@ function AtivoDetailPage() {
     }
   };
 
-  const qrValue = JSON.stringify({ codigo: ativo.codigo_unico, id: ativo.id });
+  const qrValue = typeof window !== "undefined" ? `${window.location.origin}/ativos/${ativo.id}` : `/ativos/${ativo.id}`;
   const inputCls = "w-full px-3 py-2 bg-card border border-input rounded-lg text-sm focus:ring-2 focus:ring-accent/30 outline-none";
   const inputDisabled = "w-full px-3 py-2 bg-secondary/40 border border-border rounded-lg text-sm text-muted-foreground";
   const labelCls = "text-xs font-semibold text-foreground uppercase tracking-wider";
