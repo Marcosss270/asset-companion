@@ -188,6 +188,27 @@ export type Database = {
         }
         Relationships: []
       }
+      configuracoes: {
+        Row: {
+          chave: string
+          updated_at: string
+          updated_by: string | null
+          valor: Json
+        }
+        Insert: {
+          chave: string
+          updated_at?: string
+          updated_by?: string | null
+          valor?: Json
+        }
+        Update: {
+          chave?: string
+          updated_at?: string
+          updated_by?: string | null
+          valor?: Json
+        }
+        Relationships: []
+      }
       empresas: {
         Row: {
           created_at: string
@@ -580,6 +601,7 @@ export type Database = {
       }
       profiles: {
         Row: {
+          ativo: boolean
           avatar_url: string | null
           created_at: string
           email: string
@@ -588,6 +610,7 @@ export type Database = {
           updated_at: string
         }
         Insert: {
+          ativo?: boolean
           avatar_url?: string | null
           created_at?: string
           email: string
@@ -596,6 +619,7 @@ export type Database = {
           updated_at?: string
         }
         Update: {
+          ativo?: boolean
           avatar_url?: string | null
           created_at?: string
           email?: string

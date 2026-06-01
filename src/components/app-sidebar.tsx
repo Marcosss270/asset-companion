@@ -16,6 +16,7 @@ import {
   Printer,
   ShoppingCart,
   Truck,
+  X,
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { cn } from "@/lib/utils";
@@ -41,9 +42,17 @@ const adminNav = [
   { to: "/empresas", label: "Empresas do Grupo", icon: Building2 },
   { to: "/categorias", label: "Categorias", icon: Tag },
   { to: "/usuarios", label: "Usuários", icon: Users },
+  { to: "/configuracoes", label: "Configurações", icon: Settings },
 ] as const;
 
-export function AppSidebar({ userName, userEmail }: { userName?: string | null; userEmail?: string | null }) {
+interface AppSidebarProps {
+  userName?: string | null;
+  userEmail?: string | null;
+  mobileOpen?: boolean;
+  onMobileClose?: () => void;
+}
+
+export function AppSidebar({ userName, userEmail, mobileOpen, onMobileClose }: AppSidebarProps) {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   const navigate = useNavigate();
 
@@ -52,13 +61,13 @@ export function AppSidebar({ userName, userEmail }: { userName?: string | null; 
     navigate({ to: "/login" });
   };
 
-  return (
-    <aside className="hidden md:flex w-64 bg-sidebar text-sidebar-foreground flex-shrink-0 flex-col h-screen sticky top-0">
-      <div className="p-6 flex items-center gap-3">
+  const content = (
+    <>
+      <div className="p-6 flex items-center gap-3 print:hidden">
         <div className="size-9 bg-accent rounded-lg flex items-center justify-center font-bold text-accent-foreground italic text-xl shadow-md">
-          N
+          A
         </div>
-        <div>
+        <div className="flex-1 min-w-0">
           <p className="text-base font-bold tracking-tight leading-none">
             GRUPO <span className="font-light opacity-60">A3</span>
           </p>
@@ -66,6 +75,11 @@ export function AppSidebar({ userName, userEmail }: { userName?: string | null; 
             Asset Management
           </p>
         </div>
+        {onMobileClose && (
+          <button onClick={onMobileClose} className="md:hidden text-sidebar-foreground/60 hover:text-sidebar-foreground">
+            <X className="size-5" />
+          </button>
+        )}
       </div>
 
       <nav className="flex-1 px-4 py-2 space-y-0.5 overflow-y-auto">
@@ -86,20 +100,37 @@ export function AppSidebar({ userName, userEmail }: { userName?: string | null; 
             </p>
           </div>
         </div>
-        <div className="flex gap-1">
-          <button className="flex-1 flex items-center justify-center gap-2 px-3 py-1.5 text-xs rounded-md text-sidebar-foreground/60 hover:bg-white/5 transition-colors">
-            <Settings className="size-3.5" />
-          </button>
-          <button
-            onClick={handleLogout}
-            className="flex-1 flex items-center justify-center gap-2 px-3 py-1.5 text-xs rounded-md text-sidebar-foreground/60 hover:bg-destructive/20 hover:text-destructive transition-colors"
-          >
-            <LogOut className="size-3.5" />
-            Sair
-          </button>
-        </div>
+        <button
+          onClick={handleLogout}
+          className="w-full flex items-center justify-center gap-2 px-3 py-1.5 text-xs rounded-md text-sidebar-foreground/60 hover:bg-destructive/20 hover:text-destructive transition-colors"
+        >
+          <LogOut className="size-3.5" />
+          Sair
+        </button>
       </div>
-    </aside>
+    </>
+  );
+
+  return (
+    <>
+      {/* Desktop sidebar */}
+      <aside className="hidden md:flex w-64 bg-sidebar text-sidebar-foreground flex-shrink-0 flex-col h-screen sticky top-0 print:hidden">
+        {content}
+      </aside>
+
+      {/* Mobile drawer */}
+      {mobileOpen && (
+        <div className="fixed inset-0 z-50 md:hidden print:hidden">
+          <div
+            className="absolute inset-0 bg-black/60 backdrop-blur-sm"
+            onClick={onMobileClose}
+          />
+          <aside className="absolute left-0 top-0 bottom-0 w-72 max-w-[85vw] bg-sidebar text-sidebar-foreground flex flex-col shadow-2xl animate-in slide-in-from-left">
+            {content}
+          </aside>
+        </div>
+      )}
+    </>
   );
 }
 
