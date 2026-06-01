@@ -227,12 +227,13 @@ function AtivoDetailPage() {
               <QRCodeSVG value={qrValue} size={180} level="M" />
             </div>
             <p className="font-mono text-xs text-muted-foreground mt-4">{ativo.codigo_unico}</p>
-            <button
-              onClick={() => window.print()}
+            <Link
+              to="/etiquetas"
+              search={{ ids: ativo.id, autoprint: true }}
               className="w-full mt-4 border border-border bg-secondary text-sm font-semibold py-2 rounded-lg flex items-center justify-center gap-2 hover:bg-secondary/70"
             >
-              <Printer className="size-4" /> Imprimir Etiqueta
-            </button>
+              <Printer className="size-4" /> Imprimir Etiqueta PDF
+            </Link>
           </div>
         </div>
       </div>
