@@ -14,6 +14,26 @@ async function assertAdmin(userId: string) {
   if (!data) throw new Error("Apenas administradores podem executar esta ação.");
 }
 
+async function audit(params: {
+  targetUserId: string;
+  actorUserId: string;
+  action: string;
+  details?: Record<string, unknown>;
+}) {
+  const { data: actor } = await supabaseAdmin
+    .from("profiles")
+    .select("email")
+    .eq("id", params.actorUserId)
+    .maybeSingle();
+  await supabaseAdmin.from("user_audit_log").insert({
+    target_user_id: params.targetUserId,
+    actor_user_id: params.actorUserId,
+    actor_email: actor?.email ?? null,
+    action: params.action,
+    details: params.details ?? null,
+  });
+}
+
 export const listUsersAdmin = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
   .handler(async ({ context }) => {
@@ -47,10 +67,15 @@ export const createUserAdmin = createServerFn({ method: "POST" })
       user_metadata: { nome: data.nome },
     });
     if (error) throw new Error(error.message);
-    // handle_new_user trigger creates profile + viewer role; override role:
     await supabaseAdmin.from("user_roles").delete().eq("user_id", created.user.id);
     await supabaseAdmin.from("user_roles").insert({ user_id: created.user.id, role: data.role });
     await supabaseAdmin.from("profiles").update({ nome: data.nome }).eq("id", created.user.id);
+    await audit({
+      targetUserId: created.user.id,
+      actorUserId: context.userId,
+      action: "criacao",
+      details: { email: data.email, nome: data.nome, role: data.role },
+    });
     return { id: created.user.id };
   });
 
@@ -74,6 +99,12 @@ export const updateUserAdmin = createServerFn({ method: "POST" })
       const { error } = await supabaseAdmin.from("user_roles").insert({ user_id: data.id, role: data.role });
       if (error) throw new Error(error.message);
     }
+    await audit({
+      targetUserId: data.id,
+      actorUserId: context.userId,
+      action: "edicao",
+      details: { nome: data.nome, role: data.role },
+    });
     return { ok: true };
   });
 
@@ -89,6 +120,11 @@ export const setUserAtivoAdmin = createServerFn({ method: "POST" })
     });
     if (error) throw new Error(error.message);
     await supabaseAdmin.from("profiles").update({ ativo: data.ativo }).eq("id", data.id);
+    await audit({
+      targetUserId: data.id,
+      actorUserId: context.userId,
+      action: data.ativo ? "reativacao" : "desativacao",
+    });
     return { ok: true };
   });
 
@@ -101,5 +137,27 @@ export const setUserPasswordAdmin = createServerFn({ method: "POST" })
     await assertAdmin(context.userId);
     const { error } = await supabaseAdmin.auth.admin.updateUserById(data.id, { password: data.password });
     if (error) throw new Error(error.message);
+    await audit({
+      targetUserId: data.id,
+      actorUserId: context.userId,
+      action: "alteracao_senha",
+    });
     return { ok: true };
+  });
+
+const historySchema = z.object({ id: z.string().uuid() });
+
+export const getUserAuditLog = createServerFn({ method: "GET" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((d: unknown) => historySchema.parse(d))
+  .handler(async ({ data, context }) => {
+    await assertAdmin(context.userId);
+    const { data: rows, error } = await supabaseAdmin
+      .from("user_audit_log")
+      .select("id, action, actor_email, details, created_at")
+      .eq("target_user_id", data.id)
+      .order("created_at", { ascending: false })
+      .limit(100);
+    if (error) throw new Error(error.message);
+    return rows ?? [];
   });
