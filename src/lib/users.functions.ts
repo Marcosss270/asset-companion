@@ -30,7 +30,7 @@ async function audit(params: {
     actor_user_id: params.actorUserId,
     actor_email: actor?.email ?? null,
     action: params.action,
-    details: params.details ?? null,
+    details: (params.details ?? null) as never,
   });
 }
 
