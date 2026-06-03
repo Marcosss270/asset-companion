@@ -24,13 +24,13 @@ export function ReportViewer({ load, onClose }: { load: () => Promise<ReportSpec
         <div className="flex items-center justify-between px-6 py-4 border-b border-border">
           <h3 className="font-bold">{spec?.titulo ?? "Carregando relatório..."}</h3>
           <div className="flex items-center gap-2">
-            <button disabled={!spec || !!busy} onClick={() => wrap("pdf", async () => spec && downloadReportPDF(spec))} className="text-xs font-semibold px-3 py-1.5 rounded-md bg-foreground text-background flex items-center gap-1.5 disabled:opacity-50">
+            <button disabled={!spec || !!busy} onClick={() => wrap("pdf", async () => { if (spec) await downloadReportPDF(spec); })} className="text-xs font-semibold px-3 py-1.5 rounded-md bg-foreground text-background flex items-center gap-1.5 disabled:opacity-50">
               {busy === "pdf" ? <Loader2 className="size-3.5 animate-spin" /> : <FileText className="size-3.5" />} PDF
             </button>
-            <button disabled={!spec || !!busy} onClick={() => wrap("xlsx", () => spec && downloadReportXLSX(spec))} className="text-xs font-semibold px-3 py-1.5 rounded-md bg-success text-success-foreground flex items-center gap-1.5 disabled:opacity-50">
+            <button disabled={!spec || !!busy} onClick={() => wrap("xlsx", () => { if (spec) downloadReportXLSX(spec); })} className="text-xs font-semibold px-3 py-1.5 rounded-md bg-success text-success-foreground flex items-center gap-1.5 disabled:opacity-50">
               <FileSpreadsheet className="size-3.5" /> Excel
             </button>
-            <button disabled={!spec || !!busy} onClick={() => wrap("print", async () => spec && printReport(spec, await loadOrgInfo()))} className="text-xs font-semibold px-3 py-1.5 rounded-md border border-border flex items-center gap-1.5 disabled:opacity-50">
+            <button disabled={!spec || !!busy} onClick={() => wrap("print", async () => { if (spec) printReport(spec, await loadOrgInfo()); })} className="text-xs font-semibold px-3 py-1.5 rounded-md border border-border flex items-center gap-1.5 disabled:opacity-50">
               <Printer className="size-3.5" /> Imprimir
             </button>
             <button onClick={onClose} className="size-8 rounded hover:bg-secondary flex items-center justify-center"><X className="size-4" /></button>
