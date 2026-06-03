@@ -11,6 +11,7 @@ import { formatKZ } from "@/lib/format";
 import { Timeline } from "@/components/timeline";
 import { fetchTimeline } from "@/lib/timeline";
 import { FornecedoresProduto } from "@/components/fornecedores-produto";
+import { GarantiaSection } from "@/components/garantia-section";
 
 export const Route = createFileRoute("/_authenticated/ativos/$id")({
   component: AtivoDetailPage,
@@ -196,6 +197,8 @@ function AtivoDetailPage() {
               </button>
             </div>
           </div>
+          <GarantiaSection ativoId={ativo.id} />
+
 
           <div className="bg-card border border-border rounded-xl shadow-card overflow-hidden">
             <div className="px-6 py-4 border-b border-border">
