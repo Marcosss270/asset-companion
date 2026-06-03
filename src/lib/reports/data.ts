@@ -186,12 +186,18 @@ export async function reportCustosPorCategoria(): Promise<ReportSpec> {
 }
 
 export async function reportGarantiasVencimento(): Promise<ReportSpec> {
-  const { data } = await supabase.from("ativo_garantias").select("data_inicio, data_fim, tipo, ativos(codigo_unico, nome, empresas(sigla))").gte("data_fim", new Date().toISOString().slice(0, 10)).order("data_fim");
+  const today = new Date().toISOString().slice(0, 10);
+  const { data: gs } = await supabase.from("ativo_garantias").select("ativo_id, data_inicio, data_fim, tipo").gte("data_fim", today).order("data_fim");
+  const ids = Array.from(new Set((gs ?? []).map((g) => g.ativo_id)));
+  const { data: ats } = ids.length
+    ? await supabase.from("ativos").select("id, codigo_unico, nome, empresas(sigla)").in("id", ids)
+    : { data: [] as Array<{ id: string; codigo_unico: string; nome: string; empresas: { sigla: string } | null }> };
+  const map = new Map((ats ?? []).map((a) => [a.id, a]));
   return {
     titulo: "Garantias Próximas do Vencimento",
     colunas: ["Empresa", "Código", "Ativo", "Início", "Fim", "Tipo"],
-    linhas: (data ?? []).map((g) => {
-      const a = g.ativos as { codigo_unico: string; nome: string; empresas: { sigla: string } | null } | null;
+    linhas: (gs ?? []).map((g) => {
+      const a = map.get(g.ativo_id);
       return [a?.empresas?.sigla ?? "", a?.codigo_unico ?? "", a?.nome ?? "", g.data_inicio, g.data_fim, g.tipo];
     }),
   };
