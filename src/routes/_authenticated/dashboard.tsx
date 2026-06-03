@@ -285,8 +285,34 @@ function DashboardPage() {
         </div>
       </div>
 
+      {/* Garantias */}
+      {(() => {
+        const today = new Date();
+        const in90 = new Date(today.getTime() + 90 * 86400000);
+        const ativosIds = new Set(ativosFiltrados.map((a) => a.id));
+        const gs = garantias.filter((g) => ativosIds.has(g.ativo_id));
+        const ativos90 = gs.filter((g) => { const d = new Date(g.data_fim); return d >= today && d <= in90; }).length;
+        const expiradas = gs.filter((g) => new Date(g.data_fim) < today).length;
+        const idsComGarantia = new Set(gs.map((g) => g.ativo_id));
+        const semGarantia = ativosFiltrados.filter((a) => !idsComGarantia.has(a.id)).length;
+        return (
+          <div className="bg-card border border-border rounded-xl p-6 shadow-card mb-6">
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="font-bold flex items-center gap-2"><AlertTriangle className="size-4 text-warning" /> Garantias & Ciclo de Vida</h2>
+              <Link to="/relatorios" className="text-accent text-xs font-medium hover:underline">Relatórios →</Link>
+            </div>
+            <div className="grid grid-cols-3 gap-3">
+              <KPI label="Vencem em 90 dias" value={ativos90} color="text-warning" />
+              <KPI label="Expiradas" value={expiradas} color="text-destructive" />
+              <KPI label="Sem garantia" value={semGarantia} color="text-muted-foreground" />
+            </div>
+          </div>
+        );
+      })()}
+
       {/* Painel de fornecedores */}
       <div className="bg-card border border-border rounded-xl p-6 shadow-card mb-6">
+
         <div className="flex items-center justify-between mb-4">
           <h2 className="font-bold flex items-center gap-2"><Truck className="size-4 text-accent" /> Fornecedores</h2>
           <Link to="/fornecedores" className="text-accent text-xs font-medium hover:underline">Gerir →</Link>
