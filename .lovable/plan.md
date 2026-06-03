@@ -1,82 +1,93 @@
-## Sprint de Consolidação — Asset Companion (Grupo A3)
 
-Objetivo: elevar o sistema para uso interno robusto sem adicionar módulos novos. Foco em estabilidade, responsividade e UX.
+# Plano — Sprints 3, 4 e 5
 
----
-
-### 1. Gestão completa de utilizadores (`/usuarios`)
-
-Reescrever a página atual para incluir:
-- **Listagem** com nome, email, papel, status (ativo/inativo) e último acesso.
-- **Criar utilizador** (modal): nome, email, senha temporária, papel. Usa `supabase.auth.admin.createUser` via server function com `supabaseAdmin` + `requireSupabaseAuth` (verifica papel admin).
-- **Editar utilizador**: nome e papel.
-- **Desativar / Reativar**: usa `supabase.auth.admin.updateUserById({ ban_duration })`. Adicionar coluna `ativo` em `profiles` para refletir status na UI.
-- **Alterar senha**: admin define nova senha via server function (`updateUserById`).
-- **Último acesso**: ler `last_sign_in_at` do auth via server function admin (retorna mapa userId→timestamp).
-
-Server functions em `src/lib/users.functions.ts`, todas protegidas e validando `has_role(uid,'admin')` no handler.
-
-### 2. Responsividade total
-
-- `AppSidebar`: já usa shadcn — confirmar `collapsible="icon"` em tablet e `offcanvas` em mobile.
-- `Topbar`: adicionar `<SidebarTrigger />` sempre visível (hamburger em mobile).
-- `_authenticated.tsx`: envolver em `SidebarProvider` com `defaultOpen` responsivo; remover layout flex manual conflitante.
-- Formulários (`ativos.novo`, `impressoras.novo`, `fornecedores`, etc.): grids `grid-cols-1 md:grid-cols-2`, inputs `w-full`, modais `max-w-[95vw]`.
-- Tabelas: wrapper `overflow-x-auto` em todas as listas.
-
-### 3. QR Code funcional
-
-- Etiqueta gera QR apontando para `${origin}/ativos/{id}` (já é rota existente).
-- Garantir rota pública de leitura: ao escanear, se logado abre detalhes; se não, redireciona para login com `redirect` param.
-- Adicionar botão "Imprimir etiqueta PDF" em `/ativos/$id` que abre `/etiquetas?ids=<id>` em modo print (window.print com CSS print).
-- CSS print já existente em `etiquetas.tsx` — adicionar `@media print` para esconder sidebar/topbar.
-
-### 4. Layout fixo
-
-- `_authenticated.tsx`: usar `h-screen overflow-hidden` no container; sidebar `fixed` em desktop via shadcn; main com `flex-1 overflow-hidden flex flex-col`; conteúdo com `flex-1 overflow-y-auto`.
-- Topbar `sticky top-0 z-40` com `border-b bg-background`.
-- Remover paddings/rolagens duplicadas.
-
-### 5. Configurações funcionais
-
-Criar `/configuracoes` (tabs):
-- **Organização**: nome do grupo (config simples em tabela `configuracoes` k/v) e tema.
-- **Empresas**: link para `/empresas`.
-- **Inventário**: estoque mínimo padrão, prefixos.
-- **Alertas**: thresholds toner crítico/baixo, papel baixo (persistidos em `configuracoes`).
-- **Impressoras**: intervalo SNMP, comunidade padrão.
-
-Nova tabela `configuracoes (chave text pk, valor jsonb, updated_at)` com RLS (admin escreve, autenticado lê).
-
-### 6. UX
-
-- Substituir todas as listas "vazias" por componente `<EmptyState icon title description action />`.
-- Skeletons em vez de "Carregando..." (usar `<Skeleton />` shadcn).
-- Toasts padronizados (`toast.success`, `toast.error` com mensagem do backend).
-- Botões com estado `loading` (spinner + disabled).
-- Mensagens de erro de Supabase traduzidas para PT quando comuns.
+Três sprints encadeadas. Vou executar nesta ordem porque uma alimenta a outra: as Configurações guardam dados que os Relatórios usam no cabeçalho; o ciclo de vida usa thresholds das Configurações.
 
 ---
 
-### Arquivos principais a criar/editar
+## Sprint 3 — Configurações Funcionais
 
-**Novos:**
-- `src/lib/users.functions.ts` — server fns admin.
-- `src/components/empty-state.tsx`
-- `src/routes/_authenticated/configuracoes.tsx`
-- Migração: coluna `profiles.ativo` (bool default true), tabela `configuracoes`.
+### Banco
+Migração única acrescentando:
+- `empresas.padrao boolean default false` + índice único parcial (apenas uma padrão).
+- Seeds das 6 empresas (PR, ARQA3, ACADA3, LQ, PV, MG) — INSERT idempotente.
+- Tabela `ativo_estados (id, nome, cor, ordem)` editável (hoje é enum fixo) — opcional; se ficar muito invasivo, mantenho enum e apenas exponho leitura na UI. **Decisão**: manter enum (não quebrar triggers existentes) e gerir só rótulos/cores via `configuracoes.estados`.
+- Bucket `branding` para logotipo da organização.
 
-**Editar:**
-- `src/routes/_authenticated.tsx` — layout fixo + SidebarProvider corretamente.
-- `src/components/topbar.tsx` — SidebarTrigger + sticky.
-- `src/components/app-sidebar.tsx` — confirmar collapsible responsivo.
-- `src/routes/_authenticated/usuarios.tsx` — CRUD completo.
-- `src/routes/_authenticated/ativos.$id.tsx` — botão imprimir etiqueta + ajustes mobile.
-- `src/routes/_authenticated/etiquetas.tsx` — CSS print, leitura de `?ids=`.
-- `src/components/app-sidebar.tsx` — link "Configurações".
+### Front
+Reescrever `/configuracoes` com 4 abas (mantém estrutura atual, expande):
+- **Organização**: nome, logo (upload), email, telefone, endereço — persistidos em `configuracoes.organizacao`.
+- **Empresas**: lista inline com criar/editar/desativar + botão "Definir padrão" (estrela).
+- **Inventário**: preview do formato de código `[EMPRESA]-[TIPO]-[ANO]-[NÚMERO]` (somente leitura, é fixo no trigger), link p/ gestão de categorias, estoque mínimo padrão, gestão de rótulos/cores de estados.
+- **Alertas**: thresholds toner/papel (já existe) + estoque crítico + manutenção preventiva (dias) + garantia próxima (dias — 30/60/90).
 
-### Observações técnicas
+Salvamento automático com debounce + toast discreto.
 
-- Server fns admin requerem `attachSupabaseAuth` (já configurado) + verificação `has_role('admin')` no handler antes de usar `supabaseAdmin`.
-- QR já é gerado por `qrcode` em `etiquetas.tsx` — apenas garantir URL correta.
-- Não criar novos módulos de negócio.
+---
+
+## Sprint 4 — Central de Relatórios
+
+### Front
+Reescrever `/relatorios` como hub com cards por categoria:
+- **Ativos**: geral, por empresa, por categoria, por estado.
+- **Consumíveis**: estoque atual, consumo por período, movimentações, críticos.
+- **Financeiros**: valor patrimonial por empresa, total, custos de manutenção, custos por categoria.
+
+Cada relatório abre num drawer/modal com:
+- Filtros (empresa, período, categoria, estado conforme aplicável).
+- Pré-visualização tabular.
+- Botões: Exportar PDF, Exportar Excel, Imprimir.
+
+### Exportação
+- **PDF**: `jspdf` + `jspdf-autotable` com cabeçalho usando dados da organização (logo, nome, contactos) e rodapé com data/paginação.
+- **Excel**: `xlsx` (SheetJS) — gera workbook formatado.
+- **Impressão**: rota dedicada com `@media print` (reusa padrão de `/etiquetas`).
+
+Arquivos:
+- `src/lib/reports/queries.ts` — funções de agregação (server fns onde necessário).
+- `src/lib/reports/pdf.ts`, `src/lib/reports/excel.ts` — geradores.
+- `src/components/report-viewer.tsx` — preview + ações.
+
+### Dependências
+`bun add jspdf jspdf-autotable xlsx`.
+
+---
+
+## Sprint 5 — Garantias e Ciclo de Vida
+
+### Banco
+- Tabela `ativo_garantias (id, ativo_id, data_inicio, data_fim, fornecedor_id, nota, created_at)` — múltiplas garantias por ativo (renovações).
+- Função `saude_ativo(ativo_id)` retornando `'novo'|'bom'|'regular'|'critico'` baseada em idade, nº manutenções, status, garantia.
+- Job de geração de alertas de garantia (90/60/30 dias) — implementado como server fn invocada manualmente + ao abrir o dashboard (sem cron por enquanto).
+
+### Front
+- `/ativos/$id`: nova secção **Garantia & Ciclo de Vida**:
+  - Cards: data compra, início garantia, fim garantia, fornecedor.
+  - Badge de saúde (Novo/Bom/Regular/Crítico) com cor.
+  - Timeline de garantia (inicial + renovações + trocas).
+  - Botão "Renovar garantia" / "Registar substituição".
+- `/dashboard`: novo bloco **Garantias** com 3 contadores (próximas 90d, expiradas, sem garantia) — clicável para `/relatorios` filtrado.
+- `/alertas`: integração já existente, apenas novos tipos `garantia_90`, `garantia_60`, `garantia_30`, `garantia_expirada`.
+
+### Arquivos
+- Migração nova.
+- `src/lib/lifecycle.ts` — cálculo de saúde + geração de alertas.
+- `src/components/asset-health-badge.tsx`.
+- `src/components/garantia-timeline.tsx`.
+- Edição de `ativos.$id.tsx`, `dashboard.tsx`.
+
+---
+
+## Ordem de execução
+
+1. Migração Sprint 3 (empresas.padrao + seeds + bucket branding).
+2. Migração Sprint 5 (ativo_garantias + função saude_ativo).
+3. Code: Sprint 3 → Sprint 4 → Sprint 5.
+4. Verificar build.
+
+## NÃO incluído (conforme pedido)
+- Multiempresa SaaS, permissões avançadas, integrações externas.
+- BI/dashboards analíticos complexos.
+- Depreciação/amortização contabilística.
+
+Confirma para eu começar?
