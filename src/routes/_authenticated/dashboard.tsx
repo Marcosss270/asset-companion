@@ -91,6 +91,11 @@ function DashboardPage() {
     },
   });
 
+  const { data: garantias = [] } = useQuery({
+    queryKey: ["garantias-dash"],
+    queryFn: async () => (await supabase.from("ativo_garantias").select("ativo_id, data_fim")).data ?? [],
+  });
+
   const ativosFiltrados = empresaFiltro === "todas" ? ativos : ativos.filter((a) => a.empresa_id === empresaFiltro);
 
   const total = ativosFiltrados.length;
