@@ -62,6 +62,42 @@ export type Database = {
           },
         ]
       }
+      ativo_garantias: {
+        Row: {
+          ativo_id: string
+          created_at: string
+          created_by: string | null
+          data_fim: string
+          data_inicio: string
+          fornecedor_id: string | null
+          id: string
+          nota: string | null
+          tipo: string
+        }
+        Insert: {
+          ativo_id: string
+          created_at?: string
+          created_by?: string | null
+          data_fim: string
+          data_inicio: string
+          fornecedor_id?: string | null
+          id?: string
+          nota?: string | null
+          tipo?: string
+        }
+        Update: {
+          ativo_id?: string
+          created_at?: string
+          created_by?: string | null
+          data_fim?: string
+          data_inicio?: string
+          fornecedor_id?: string | null
+          id?: string
+          nota?: string | null
+          tipo?: string
+        }
+        Relationships: []
+      }
       ativos: {
         Row: {
           categoria_id: string
@@ -214,6 +250,7 @@ export type Database = {
           created_at: string
           id: string
           nome: string
+          padrao: boolean
           sigla: string
           status: string
         }
@@ -221,6 +258,7 @@ export type Database = {
           created_at?: string
           id?: string
           nome: string
+          padrao?: boolean
           sigla: string
           status?: string
         }
@@ -228,6 +266,7 @@ export type Database = {
           created_at?: string
           id?: string
           nome?: string
+          padrao?: boolean
           sigla?: string
           status?: string
         }
@@ -750,6 +789,7 @@ export type Database = {
         }
         Returns: boolean
       }
+      saude_ativo: { Args: { _ativo_id: string }; Returns: string }
     }
     Enums: {
       alerta_status: "ativo" | "resolvido" | "ignorado"
