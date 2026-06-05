@@ -1,93 +1,82 @@
+# Plano — Sprints 6, 7 e 8
 
-# Plano — Sprints 3, 4 e 5
+Três módulos novos + reforço do monitor de impressoras. Execução sequencial: migração única → tipos → UI módulo a módulo.
 
-Três sprints encadeadas. Vou executar nesta ordem porque uma alimenta a outra: as Configurações guardam dados que os Relatórios usam no cabeçalho; o ciclo de vida usa thresholds das Configurações.
+## Sprint 6 — Licenças de Software
 
----
+### Base de dados (migração)
+- `licencas_software`
+  - `nome`, `fabricante`, `tipo` (perpetua/subscricao/oem/volume/freeware), `chave` (texto, opcional)
+  - `quantidade_total` (int), `data_aquisicao`, `data_validade`, `valor`, `fornecedor_id` → `fornecedores`
+  - `notas`, `empresa_id` → `empresas`
+- `licenca_atribuicoes`
+  - `licenca_id`, `tipo_alvo` (`utilizador`|`ativo`|`empresa`), `alvo_id` (uuid),
+    `atribuido_em`, `revogado_em` (null = ativa), `notas`
+  - Trigger garante `quantidade_atribuida_ativa <= quantidade_total` (RAISE EXCEPTION).
+- Função `licenca_utilizadas(_id)` → contagem de atribuições ativas.
+- RLS: leitura para `authenticated`; escrita só `admin`/`manager` via `has_role`.
+- Histórico em `movimentacoes` não aplica; manter histórico próprio em `licenca_atribuicoes` (revoga = soft).
 
-## Sprint 3 — Configurações Funcionais
+### Frontend
+- `/licencas` — listagem (cards/tabela), busca, filtro por estado (ativa/expirada/expirando) e fabricante.
+- `/licencas/nova` e edição inline (drawer).
+- Detalhe: aba **Atribuições** (adicionar/revogar a utilizador/ativo/empresa), aba **Histórico**.
+- Sidebar: novo item “Licenças”.
+- Alertas:
+  - Gerados via função SQL `gerar_alertas_licencas()` chamada por server fn manual + botão no dashboard.
+  - Tipos novos do enum `alerta_tipo`: `licenca_90d`, `licenca_60d`, `licenca_30d`, `licenca_expirada`, `licenca_excedida`.
+- Dashboard: novo bloco com 4 KPIs (total, ativas, expiradas, próximas).
 
-### Banco
-Migração única acrescentando:
-- `empresas.padrao boolean default false` + índice único parcial (apenas uma padrão).
-- Seeds das 6 empresas (PR, ARQA3, ACADA3, LQ, PV, MG) — INSERT idempotente.
-- Tabela `ativo_estados (id, nome, cor, ordem)` editável (hoje é enum fixo) — opcional; se ficar muito invasivo, mantenho enum e apenas exponho leitura na UI. **Decisão**: manter enum (não quebrar triggers existentes) e gerir só rótulos/cores via `configuracoes.estados`.
-- Bucket `branding` para logotipo da organização.
+## Sprint 7 — Contratos e Serviços
 
-### Front
-Reescrever `/configuracoes` com 4 abas (mantém estrutura atual, expande):
-- **Organização**: nome, logo (upload), email, telefone, endereço — persistidos em `configuracoes.organizacao`.
-- **Empresas**: lista inline com criar/editar/desativar + botão "Definir padrão" (estrela).
-- **Inventário**: preview do formato de código `[EMPRESA]-[TIPO]-[ANO]-[NÚMERO]` (somente leitura, é fixo no trigger), link p/ gestão de categorias, estoque mínimo padrão, gestão de rótulos/cores de estados.
-- **Alertas**: thresholds toner/papel (já existe) + estoque crítico + manutenção preventiva (dias) + garantia próxima (dias — 30/60/90).
+### Base de dados
+- `contratos`
+  - `nome`, `fornecedor_id`, `categoria` (enum: internet, impressoras, manutencao, software, seguranca, outros),
+    `tipo_servico`, `valor` (numeric), `moeda` (default `'AOA'`),
+    `periodicidade` (mensal/trimestral/anual/unico),
+    `data_inicio`, `data_vencimento`, `renovacao_automatica` (bool),
+    `empresa_id`, `notas`
+- `contrato_documentos`
+  - `contrato_id`, `versao` (int), `path` (storage), `nome_ficheiro`, `tamanho`, `mime`, `enviado_por`, `created_at`
+  - Bucket privado `contratos` (criar via tool).
+- Enum `alerta_tipo` ganha: `contrato_90d|60d|30d|expirado`.
+- RLS idêntica a licenças. GRANTs completos.
 
-Salvamento automático com debounce + toast discreto.
+### Frontend
+- `/contratos` — tabela com filtros (categoria, fornecedor, estado), busca.
+- Drawer de cadastro/edição; upload de PDF (versionado: cada upload novo cria nova versão).
+- Detalhe: aba Geral, aba Documentos (lista versões + download via signed URL), aba Histórico.
+- Dashboard novo bloco: contratos ativos, próximos vencimento, **custo mensal** (soma normalizada por periodicidade) e **custo anual**.
+- Sidebar: “Contratos”.
 
----
+## Sprint 8 — Monitoramento de Impressoras
 
-## Sprint 4 — Central de Relatórios
+Refinar o que já existe (`impressoras`, `impressora_leituras`, agente local, alertas via trigger). Sem mudanças de schema relevantes — só ajustes finos.
 
-### Front
-Reescrever `/relatorios` como hub com cards por categoria:
-- **Ativos**: geral, por empresa, por categoria, por estado.
-- **Consumíveis**: estoque atual, consumo por período, movimentações, críticos.
-- **Financeiros**: valor patrimonial por empresa, total, custos de manutenção, custos por categoria.
+### Backend
+- Server fn `testarConectividadeImpressora(id)`:
+  - admin only; usa `supabaseAdmin` para registar tentativa em `movimentacoes` (tipo `diagnostico`).
+  - Marca `status_online` conforme retorno; tenta `fetch` simples ao IP (HTTP 80/443) — SNMP real fica no agente.
+- Server fn `diagnosticoSNMP(id)`: retorna últimas 5 leituras + cálculo de gaps (>15min sem leitura = alerta).
+- Endpoint `/api/public/printers/ingest` já existe — adicionar:
+  - Logs detalhados de erro (gravar em nova coluna `ultimo_erro` em `impressoras` quando ingest falha por validação).
+  - Migração mínima: `ALTER TABLE impressoras ADD COLUMN ultimo_erro text, ultimo_erro_em timestamptz`.
 
-Cada relatório abre num drawer/modal com:
-- Filtros (empresa, período, categoria, estado conforme aplicável).
-- Pré-visualização tabular.
-- Botões: Exportar PDF, Exportar Excel, Imprimir.
-
-### Exportação
-- **PDF**: `jspdf` + `jspdf-autotable` com cabeçalho usando dados da organização (logo, nome, contactos) e rodapé com data/paginação.
-- **Excel**: `xlsx` (SheetJS) — gera workbook formatado.
-- **Impressão**: rota dedicada com `@media print` (reusa padrão de `/etiquetas`).
-
-Arquivos:
-- `src/lib/reports/queries.ts` — funções de agregação (server fns onde necessário).
-- `src/lib/reports/pdf.ts`, `src/lib/reports/excel.ts` — geradores.
-- `src/components/report-viewer.tsx` — preview + ações.
-
-### Dependências
-`bun add jspdf jspdf-autotable xlsx`.
-
----
-
-## Sprint 5 — Garantias e Ciclo de Vida
-
-### Banco
-- Tabela `ativo_garantias (id, ativo_id, data_inicio, data_fim, fornecedor_id, nota, created_at)` — múltiplas garantias por ativo (renovações).
-- Função `saude_ativo(ativo_id)` retornando `'novo'|'bom'|'regular'|'critico'` baseada em idade, nº manutenções, status, garantia.
-- Job de geração de alertas de garantia (90/60/30 dias) — implementado como server fn invocada manualmente + ao abrir o dashboard (sem cron por enquanto).
-
-### Front
-- `/ativos/$id`: nova secção **Garantia & Ciclo de Vida**:
-  - Cards: data compra, início garantia, fim garantia, fornecedor.
-  - Badge de saúde (Novo/Bom/Regular/Crítico) com cor.
-  - Timeline de garantia (inicial + renovações + trocas).
-  - Botão "Renovar garantia" / "Registar substituição".
-- `/dashboard`: novo bloco **Garantias** com 3 contadores (próximas 90d, expiradas, sem garantia) — clicável para `/relatorios` filtrado.
-- `/alertas`: integração já existente, apenas novos tipos `garantia_90`, `garantia_60`, `garantia_30`, `garantia_expirada`.
-
-### Arquivos
-- Migração nova.
-- `src/lib/lifecycle.ts` — cálculo de saúde + geração de alertas.
-- `src/components/asset-health-badge.tsx`.
-- `src/components/garantia-timeline.tsx`.
-- Edição de `ativos.$id.tsx`, `dashboard.tsx`.
-
----
+### Frontend
+- `/impressoras/$id`: já tem KPIs + toner + previsão.
+  - Adicionar botão **Testar conectividade** (admin), botão **Diagnóstico SNMP** (modal com gaps), card **Último erro**.
+  - Linha temporal de eventos (online/offline + alertas gerados) lendo `movimentacoes` tipo `leitura_snmp` + `alertas`.
+- `/impressoras` index: refresh automático 30s (já parcial), badges KPI no topo:
+  - online, offline, consumíveis críticos (toner<20% OR papel<25%), top 5 mais utilizadas (por `contador_impressoes` Δ últimos 30d).
+- Threshold já no trigger SQL (`<20` crítico, `<40` baixo, papel `<25`). Confirmar e expor em Configurações → Alertas como **somente leitura** (já está editável; manter).
 
 ## Ordem de execução
+1. Migração única cobrindo Sprints 6+7+8 (tabelas, enums, funções, bucket, RLS, GRANTs).
+2. Esperar regen de `types.ts`.
+3. UI Sprint 6 → Sprint 7 → Sprint 8.
+4. Sidebar + Dashboard atualizados ao final.
 
-1. Migração Sprint 3 (empresas.padrao + seeds + bucket branding).
-2. Migração Sprint 5 (ativo_garantias + função saude_ativo).
-3. Code: Sprint 3 → Sprint 4 → Sprint 5.
-4. Verificar build.
-
-## NÃO incluído (conforme pedido)
-- Multiempresa SaaS, permissões avançadas, integrações externas.
-- BI/dashboards analíticos complexos.
-- Depreciação/amortização contabilística.
-
-Confirma para eu começar?
+## Fora de escopo (confirmado pelo pedido)
+- Integração Microsoft 365 / SSO de licenças.
+- Assinatura eletrónica, fluxo de aprovação de contratos.
+- Monitoramento de PCs/switches, descoberta automática de impressoras.

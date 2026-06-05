@@ -16,6 +16,8 @@ import {
   Printer,
   ShoppingCart,
   Truck,
+  KeyRound,
+  FileSignature,
   X,
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
@@ -26,6 +28,8 @@ const inventoryNav = [
   { to: "/ativos", label: "Ativos / Equipamentos", icon: Boxes },
   { to: "/impressoras", label: "Impressoras", icon: Printer },
   { to: "/consumiveis", label: "Consumíveis", icon: PackageOpen },
+  { to: "/licencas", label: "Licenças", icon: KeyRound },
+  { to: "/contratos", label: "Contratos", icon: FileSignature },
   { to: "/movimentacoes", label: "Movimentações", icon: ArrowLeftRight },
   { to: "/manutencao", label: "Manutenção", icon: Wrench },
   { to: "/alertas", label: "Alertas", icon: Bell },
@@ -37,6 +41,7 @@ const operacoesNav = [
   { to: "/etiquetas", label: "Etiquetas QR", icon: QrCode },
   { to: "/relatorios", label: "Relatórios", icon: FileText },
 ] as const;
+
 
 const adminNav = [
   { to: "/empresas", label: "Empresas do Grupo", icon: Building2 },

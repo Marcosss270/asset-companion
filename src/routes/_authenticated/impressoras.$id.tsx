@@ -34,11 +34,13 @@ function ImpressoraDetailPage() {
       return data as unknown as {
         id: string; ativo_id: string; ip: string; porta_snmp: number; comunidade_snmp: string;
         modelo: string | null; status_online: boolean; ultima_leitura_em: string | null;
+        ultimo_erro: string | null; ultimo_erro_em: string | null;
         ativos: { id: string; nome: string; codigo_unico: string; empresas: { nome: string; sigla: string } | null } | null;
       } | null;
     },
     refetchInterval: 30000,
   });
+
 
   const { data: leituras = [] } = useQuery({
     queryKey: ["leituras", id],
@@ -86,6 +88,15 @@ function ImpressoraDetailPage() {
         <KPI icon={FileWarning} label="Papel" value={last?.papel_pct != null ? `${last.papel_pct}%` : "—"} color={last?.papel_pct == null ? "text-muted-foreground" : last.papel_pct < 25 ? "text-warning" : "text-success"} />
         <KPI icon={PrinterIcon} label="Contador" value={last?.contador_impressoes != null ? last.contador_impressoes.toLocaleString("pt-PT") : "—"} color="text-foreground" />
       </div>
+
+      {impressora.ultimo_erro && (
+        <div className="bg-destructive/5 border border-destructive/30 rounded-xl p-4 mb-6">
+          <p className="text-xs font-bold uppercase tracking-widest text-destructive mb-1">Último erro do agente SNMP</p>
+          <p className="text-sm font-mono">{impressora.ultimo_erro}</p>
+          {impressora.ultimo_erro_em && <p className="text-xs text-muted-foreground mt-1">{new Date(impressora.ultimo_erro_em).toLocaleString("pt-PT")}</p>}
+        </div>
+      )}
+
 
       {last && (
         <div className="bg-card border border-border rounded-xl p-6 shadow-card mb-6">

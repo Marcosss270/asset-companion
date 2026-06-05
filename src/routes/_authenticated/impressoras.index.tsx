@@ -85,6 +85,29 @@ function ImpressorasPage() {
         </Link>
       </div>
 
+      {impressoras.length > 0 && (() => {
+        const online = impressoras.filter((p) => p.status_online).length;
+        const offline = impressoras.length - online;
+        const criticos = impressoras.filter((p) => {
+          const l = latestByPrinter.get(p.id);
+          const t = minToner(l);
+          return (t != null && t < 20) || (l?.papel_pct != null && l.papel_pct < 25);
+        }).length;
+        const topUso = [...impressoras]
+          .map((p) => ({ p, c: latestByPrinter.get(p.id)?.papel_pct != null ? Number(latestByPrinter.get(p.id)?.toner_preto ?? 0) : 0 }))
+          .sort((a, b) => b.c - a.c).slice(0, 1)[0];
+        return (
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6">
+            <Kpi icon={Wifi} label="Online" value={online} color="text-success" />
+            <Kpi icon={WifiOff} label="Offline" value={offline} color="text-destructive" />
+            <Kpi icon={Droplet} label="Consumíveis críticos" value={criticos} color="text-warning" />
+            <Kpi icon={Printer} label="Total" value={impressoras.length} color="text-foreground" />
+          </div>
+        );
+      })()}
+
+
+
       {isLoading ? (
         <div className="text-center py-12 text-sm text-muted-foreground">Carregando...</div>
       ) : impressoras.length === 0 ? (
@@ -154,3 +177,16 @@ function Metric({ icon: Icon, label, value, accent }: { icon: typeof Wifi; label
     </div>
   );
 }
+
+function Kpi({ icon: Icon, label, value, color }: { icon: typeof Wifi; label: string; value: number; color: string }) {
+  return (
+    <div className="bg-card border border-border rounded-xl p-4 shadow-card">
+      <div className="flex items-center justify-between mb-2">
+        <p className="text-[10px] uppercase tracking-widest text-muted-foreground font-bold">{label}</p>
+        <Icon className={`size-4 ${color}`} />
+      </div>
+      <p className={`text-2xl font-bold tabular-nums ${color}`}>{value}</p>
+    </div>
+  );
+}
+

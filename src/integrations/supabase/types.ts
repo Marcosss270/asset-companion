@@ -245,6 +245,122 @@ export type Database = {
         }
         Relationships: []
       }
+      contrato_documentos: {
+        Row: {
+          contrato_id: string
+          created_at: string
+          enviado_por: string | null
+          id: string
+          mime: string | null
+          nome_ficheiro: string
+          path: string
+          tamanho: number | null
+          versao: number
+        }
+        Insert: {
+          contrato_id: string
+          created_at?: string
+          enviado_por?: string | null
+          id?: string
+          mime?: string | null
+          nome_ficheiro: string
+          path: string
+          tamanho?: number | null
+          versao: number
+        }
+        Update: {
+          contrato_id?: string
+          created_at?: string
+          enviado_por?: string | null
+          id?: string
+          mime?: string | null
+          nome_ficheiro?: string
+          path?: string
+          tamanho?: number | null
+          versao?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "contrato_documentos_contrato_id_fkey"
+            columns: ["contrato_id"]
+            isOneToOne: false
+            referencedRelation: "contratos"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      contratos: {
+        Row: {
+          categoria: Database["public"]["Enums"]["contrato_categoria"]
+          created_at: string
+          created_by: string | null
+          data_inicio: string | null
+          data_vencimento: string | null
+          empresa_id: string | null
+          fornecedor_id: string | null
+          id: string
+          moeda: string
+          nome: string
+          notas: string | null
+          periodicidade: Database["public"]["Enums"]["contrato_periodicidade"]
+          renovacao_automatica: boolean
+          tipo_servico: string | null
+          updated_at: string
+          valor: number
+        }
+        Insert: {
+          categoria?: Database["public"]["Enums"]["contrato_categoria"]
+          created_at?: string
+          created_by?: string | null
+          data_inicio?: string | null
+          data_vencimento?: string | null
+          empresa_id?: string | null
+          fornecedor_id?: string | null
+          id?: string
+          moeda?: string
+          nome: string
+          notas?: string | null
+          periodicidade?: Database["public"]["Enums"]["contrato_periodicidade"]
+          renovacao_automatica?: boolean
+          tipo_servico?: string | null
+          updated_at?: string
+          valor?: number
+        }
+        Update: {
+          categoria?: Database["public"]["Enums"]["contrato_categoria"]
+          created_at?: string
+          created_by?: string | null
+          data_inicio?: string | null
+          data_vencimento?: string | null
+          empresa_id?: string | null
+          fornecedor_id?: string | null
+          id?: string
+          moeda?: string
+          nome?: string
+          notas?: string | null
+          periodicidade?: Database["public"]["Enums"]["contrato_periodicidade"]
+          renovacao_automatica?: boolean
+          tipo_servico?: string | null
+          updated_at?: string
+          valor?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "contratos_empresa_id_fkey"
+            columns: ["empresa_id"]
+            isOneToOne: false
+            referencedRelation: "empresas"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "contratos_fornecedor_id_fkey"
+            columns: ["fornecedor_id"]
+            isOneToOne: false
+            referencedRelation: "fornecedores"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       empresas: {
         Row: {
           created_at: string
@@ -493,6 +609,8 @@ export type Database = {
           porta_snmp: number
           status_online: boolean
           ultima_leitura_em: string | null
+          ultimo_erro: string | null
+          ultimo_erro_em: string | null
           updated_at: string
         }
         Insert: {
@@ -506,6 +624,8 @@ export type Database = {
           porta_snmp?: number
           status_online?: boolean
           ultima_leitura_em?: string | null
+          ultimo_erro?: string | null
+          ultimo_erro_em?: string | null
           updated_at?: string
         }
         Update: {
@@ -519,9 +639,133 @@ export type Database = {
           porta_snmp?: number
           status_online?: boolean
           ultima_leitura_em?: string | null
+          ultimo_erro?: string | null
+          ultimo_erro_em?: string | null
           updated_at?: string
         }
         Relationships: []
+      }
+      licenca_atribuicoes: {
+        Row: {
+          alvo_id: string
+          alvo_label: string | null
+          atribuido_em: string
+          atribuido_por: string | null
+          created_at: string
+          id: string
+          licenca_id: string
+          notas: string | null
+          revogado_em: string | null
+          revogado_por: string | null
+          tipo_alvo: Database["public"]["Enums"]["licenca_alvo"]
+        }
+        Insert: {
+          alvo_id: string
+          alvo_label?: string | null
+          atribuido_em?: string
+          atribuido_por?: string | null
+          created_at?: string
+          id?: string
+          licenca_id: string
+          notas?: string | null
+          revogado_em?: string | null
+          revogado_por?: string | null
+          tipo_alvo: Database["public"]["Enums"]["licenca_alvo"]
+        }
+        Update: {
+          alvo_id?: string
+          alvo_label?: string | null
+          atribuido_em?: string
+          atribuido_por?: string | null
+          created_at?: string
+          id?: string
+          licenca_id?: string
+          notas?: string | null
+          revogado_em?: string | null
+          revogado_por?: string | null
+          tipo_alvo?: Database["public"]["Enums"]["licenca_alvo"]
+        }
+        Relationships: [
+          {
+            foreignKeyName: "licenca_atribuicoes_licenca_id_fkey"
+            columns: ["licenca_id"]
+            isOneToOne: false
+            referencedRelation: "licencas_software"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      licencas_software: {
+        Row: {
+          chave: string | null
+          created_at: string
+          created_by: string | null
+          data_aquisicao: string | null
+          data_validade: string | null
+          empresa_id: string | null
+          fabricante: string | null
+          fornecedor_id: string | null
+          id: string
+          moeda: string
+          nome: string
+          notas: string | null
+          quantidade_total: number
+          tipo: Database["public"]["Enums"]["licenca_tipo"]
+          updated_at: string
+          valor: number | null
+        }
+        Insert: {
+          chave?: string | null
+          created_at?: string
+          created_by?: string | null
+          data_aquisicao?: string | null
+          data_validade?: string | null
+          empresa_id?: string | null
+          fabricante?: string | null
+          fornecedor_id?: string | null
+          id?: string
+          moeda?: string
+          nome: string
+          notas?: string | null
+          quantidade_total?: number
+          tipo?: Database["public"]["Enums"]["licenca_tipo"]
+          updated_at?: string
+          valor?: number | null
+        }
+        Update: {
+          chave?: string | null
+          created_at?: string
+          created_by?: string | null
+          data_aquisicao?: string | null
+          data_validade?: string | null
+          empresa_id?: string | null
+          fabricante?: string | null
+          fornecedor_id?: string | null
+          id?: string
+          moeda?: string
+          nome?: string
+          notas?: string | null
+          quantidade_total?: number
+          tipo?: Database["public"]["Enums"]["licenca_tipo"]
+          updated_at?: string
+          valor?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "licencas_software_empresa_id_fkey"
+            columns: ["empresa_id"]
+            isOneToOne: false
+            referencedRelation: "empresas"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "licencas_software_fornecedor_id_fkey"
+            columns: ["fornecedor_id"]
+            isOneToOne: false
+            referencedRelation: "fornecedores"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       manutencoes: {
         Row: {
@@ -778,6 +1022,7 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      gerar_alertas_licencas_contratos: { Args: never; Returns: number }
       gerar_codigo_unico: {
         Args: { _categoria_id: string; _empresa_id: string }
         Returns: string
@@ -789,6 +1034,7 @@ export type Database = {
         }
         Returns: boolean
       }
+      licenca_utilizadas: { Args: { _id: string }; Returns: number }
       saude_ativo: { Args: { _ativo_id: string }; Returns: string }
     }
     Enums: {
@@ -803,6 +1049,15 @@ export type Database = {
         | "papel_baixo"
         | "impressora_offline"
         | "consumo_anomalo"
+        | "licenca_90d"
+        | "licenca_60d"
+        | "licenca_30d"
+        | "licenca_expirada"
+        | "licenca_excedida"
+        | "contrato_90d"
+        | "contrato_60d"
+        | "contrato_30d"
+        | "contrato_expirado"
       app_role: "admin" | "manager" | "viewer"
       ativo_status:
         | "disponivel"
@@ -810,6 +1065,27 @@ export type Database = {
         | "em_manutencao"
         | "danificado"
         | "obsoleto"
+      contrato_categoria:
+        | "internet"
+        | "impressoras"
+        | "manutencao"
+        | "software"
+        | "seguranca"
+        | "outros"
+      contrato_periodicidade:
+        | "mensal"
+        | "trimestral"
+        | "semestral"
+        | "anual"
+        | "unico"
+      licenca_alvo: "utilizador" | "ativo" | "empresa"
+      licenca_tipo:
+        | "perpetua"
+        | "subscricao"
+        | "oem"
+        | "volume"
+        | "freeware"
+        | "outra"
       movimentacao_tipo:
         | "cadastro"
         | "transferencia"
@@ -820,6 +1096,7 @@ export type Database = {
         | "edicao"
         | "alerta"
         | "leitura_snmp"
+        | "diagnostico"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -958,6 +1235,15 @@ export const Constants = {
         "papel_baixo",
         "impressora_offline",
         "consumo_anomalo",
+        "licenca_90d",
+        "licenca_60d",
+        "licenca_30d",
+        "licenca_expirada",
+        "licenca_excedida",
+        "contrato_90d",
+        "contrato_60d",
+        "contrato_30d",
+        "contrato_expirado",
       ],
       app_role: ["admin", "manager", "viewer"],
       ativo_status: [
@@ -966,6 +1252,30 @@ export const Constants = {
         "em_manutencao",
         "danificado",
         "obsoleto",
+      ],
+      contrato_categoria: [
+        "internet",
+        "impressoras",
+        "manutencao",
+        "software",
+        "seguranca",
+        "outros",
+      ],
+      contrato_periodicidade: [
+        "mensal",
+        "trimestral",
+        "semestral",
+        "anual",
+        "unico",
+      ],
+      licenca_alvo: ["utilizador", "ativo", "empresa"],
+      licenca_tipo: [
+        "perpetua",
+        "subscricao",
+        "oem",
+        "volume",
+        "freeware",
+        "outra",
       ],
       movimentacao_tipo: [
         "cadastro",
@@ -977,6 +1287,7 @@ export const Constants = {
         "edicao",
         "alerta",
         "leitura_snmp",
+        "diagnostico",
       ],
     },
   },
