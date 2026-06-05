@@ -299,6 +299,63 @@ function DashboardPage() {
         </div>
       </div>
 
+      {/* Licenças & Contratos */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+        {(() => {
+          const usadasMap = new Map<string, number>();
+          atribAtivas.forEach((a) => usadasMap.set(a.licenca_id, (usadasMap.get(a.licenca_id) ?? 0) + 1));
+          const today = new Date();
+          let ativas = 0, expiradas = 0, vence90 = 0;
+          licencas.forEach((l) => {
+            const d = l.data_validade ? Math.floor((new Date(l.data_validade).getTime() - today.getTime())/86400000) : null;
+            if (d != null && d < 0) expiradas++; else { ativas++; if (d != null && d <= 90) vence90++; }
+          });
+          return (
+            <div className="bg-card border border-border rounded-xl p-6 shadow-card">
+              <div className="flex items-center justify-between mb-4">
+                <h2 className="font-bold flex items-center gap-2"><KeyRound className="size-4 text-accent" /> Licenças de Software</h2>
+                <Link to="/licencas" className="text-accent text-xs font-medium hover:underline">Gerir →</Link>
+              </div>
+              <div className="grid grid-cols-2 gap-3">
+                <KPI label="Total" value={licencas.length} color="text-foreground" />
+                <KPI label="Ativas" value={ativas} color="text-success" />
+                <KPI label="Próx. 90 dias" value={vence90} color="text-warning" />
+                <KPI label="Expiradas" value={expiradas} color="text-destructive" />
+              </div>
+            </div>
+          );
+        })()}
+        {(() => {
+          const today = new Date();
+          const meses: Record<string, number> = { mensal:1, trimestral:3, semestral:6, anual:12, unico:0 };
+          let ativos = 0, vence90 = 0, expirados = 0, mensal = 0;
+          contratos.forEach((c) => {
+            const d = c.data_vencimento ? Math.floor((new Date(c.data_vencimento).getTime() - today.getTime())/86400000) : null;
+            if (d != null && d < 0) expirados++; else {
+              ativos++;
+              if (d != null && d <= 90) vence90++;
+              const m = meses[c.periodicidade as string] ?? 0;
+              if (m > 0) mensal += Number(c.valor) / m;
+            }
+          });
+          return (
+            <div className="bg-card border border-border rounded-xl p-6 shadow-card">
+              <div className="flex items-center justify-between mb-4">
+                <h2 className="font-bold flex items-center gap-2"><FileSignature className="size-4 text-accent" /> Contratos & Serviços</h2>
+                <Link to="/contratos" className="text-accent text-xs font-medium hover:underline">Gerir →</Link>
+              </div>
+              <div className="grid grid-cols-2 gap-3">
+                <KPI label="Ativos" value={ativos} color="text-success" />
+                <KPI label="Próx. 90 dias" value={vence90} color="text-warning" />
+                <KPI label="Expirados" value={expirados} color="text-destructive" />
+                <KPI label="Custo mensal" value={formatKZ(mensal)} color="text-foreground" />
+              </div>
+            </div>
+          );
+        })()}
+      </div>
+
+
       {/* Garantias */}
       {(() => {
         const today = new Date();
