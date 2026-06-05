@@ -34,11 +34,13 @@ function ImpressoraDetailPage() {
       return data as unknown as {
         id: string; ativo_id: string; ip: string; porta_snmp: number; comunidade_snmp: string;
         modelo: string | null; status_online: boolean; ultima_leitura_em: string | null;
+        ultimo_erro: string | null; ultimo_erro_em: string | null;
         ativos: { id: string; nome: string; codigo_unico: string; empresas: { nome: string; sigla: string } | null } | null;
       } | null;
     },
     refetchInterval: 30000,
   });
+
 
   const { data: leituras = [] } = useQuery({
     queryKey: ["leituras", id],
