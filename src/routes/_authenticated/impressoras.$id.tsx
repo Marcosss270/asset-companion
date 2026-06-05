@@ -89,6 +89,15 @@ function ImpressoraDetailPage() {
         <KPI icon={PrinterIcon} label="Contador" value={last?.contador_impressoes != null ? last.contador_impressoes.toLocaleString("pt-PT") : "—"} color="text-foreground" />
       </div>
 
+      {impressora.ultimo_erro && (
+        <div className="bg-destructive/5 border border-destructive/30 rounded-xl p-4 mb-6">
+          <p className="text-xs font-bold uppercase tracking-widest text-destructive mb-1">Último erro do agente SNMP</p>
+          <p className="text-sm font-mono">{impressora.ultimo_erro}</p>
+          {impressora.ultimo_erro_em && <p className="text-xs text-muted-foreground mt-1">{new Date(impressora.ultimo_erro_em).toLocaleString("pt-PT")}</p>}
+        </div>
+      )}
+
+
       {last && (
         <div className="bg-card border border-border rounded-xl p-6 shadow-card mb-6">
           <h2 className="font-bold mb-4">Níveis de Toner</h2>
