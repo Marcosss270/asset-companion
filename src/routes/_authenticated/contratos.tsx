@@ -2,7 +2,7 @@ import { useState, useMemo, useRef } from "react";
 import { createFileRoute } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
-import { FileSignature, Plus, Pencil, Trash2, Search, X, Loader2, Upload, Download, FileText, AlertTriangle } from "lucide-react";
+import { FileSignature, Plus, Pencil, Trash2, Search, X, Loader2, Upload, Download, FileText } from "lucide-react";
 import { toast } from "sonner";
 import { formatKZ } from "@/lib/format";
 
