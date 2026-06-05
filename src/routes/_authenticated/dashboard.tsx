@@ -5,7 +5,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { StatusBadge } from "@/components/status-badge";
 import { STATUS_LABELS } from "@/lib/asset-utils";
 import { formatKZ } from "@/lib/format";
-import { AlertTriangle, Clock, Boxes, CheckCircle2, Wrench, PackageX, Building2, Coins, Printer, Wifi, WifiOff, ShoppingCart, Activity, Truck } from "lucide-react";
+import { AlertTriangle, Clock, Boxes, CheckCircle2, Wrench, PackageX, Building2, Coins, Printer, Wifi, WifiOff, ShoppingCart, Activity, Truck, KeyRound, FileSignature } from "lucide-react";
 
 export const Route = createFileRoute("/_authenticated/dashboard")({
   component: DashboardPage,
