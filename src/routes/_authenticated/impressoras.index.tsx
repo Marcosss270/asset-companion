@@ -177,3 +177,16 @@ function Metric({ icon: Icon, label, value, accent }: { icon: typeof Wifi; label
     </div>
   );
 }
+
+function Kpi({ icon: Icon, label, value, color }: { icon: typeof Wifi; label: string; value: number; color: string }) {
+  return (
+    <div className="bg-card border border-border rounded-xl p-4 shadow-card">
+      <div className="flex items-center justify-between mb-2">
+        <p className="text-[10px] uppercase tracking-widest text-muted-foreground font-bold">{label}</p>
+        <Icon className={`size-4 ${color}`} />
+      </div>
+      <p className={`text-2xl font-bold tabular-nums ${color}`}>{value}</p>
+    </div>
+  );
+}
+
