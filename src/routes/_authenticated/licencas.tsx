@@ -315,7 +315,7 @@ function LicencaForm({ licenca, onClose, onSaved }: { licenca: Licenca | null; o
           </div>
         </form>
       </div>
-      <style>{`.input{width:100%;padding:.5rem .75rem;background:hsl(var(--background));border:1px solid hsl(var(--border));border-radius:.5rem;font-size:.875rem;outline:none}.input:focus{box-shadow:0 0 0 2px hsl(var(--accent)/0.3)}`}</style>
+      <style>{`.input{width:100%;padding:.5rem .75rem;background:var(--background);border:1px solid var(--border);border-radius:.5rem;font-size:.875rem;outline:none}.input:focus{box-shadow:0 0 0 2px color-mix(in oklab, var(--accent) 30%, transparent)}`}</style>
     </div>
   );
 }
@@ -439,7 +439,7 @@ function AtribuicoesPanel({ licenca, onClose }: { licenca: Licenca; onClose: () 
           )}
         </div>
       </div>
-      <style>{`.input{width:100%;padding:.5rem .75rem;background:hsl(var(--background));border:1px solid hsl(var(--border));border-radius:.5rem;font-size:.875rem;outline:none}.input:focus{box-shadow:0 0 0 2px hsl(var(--accent)/0.3)}`}</style>
+      <style>{`.input{width:100%;padding:.5rem .75rem;background:var(--background);border:1px solid var(--border);border-radius:.5rem;font-size:.875rem;outline:none}.input:focus{box-shadow:0 0 0 2px color-mix(in oklab, var(--accent) 30%, transparent)}`}</style>
     </div>
   );
 }
