@@ -96,6 +96,20 @@ function DashboardPage() {
     queryFn: async () => (await supabase.from("ativo_garantias").select("ativo_id, data_fim")).data ?? [],
   });
 
+  const { data: licencas = [] } = useQuery({
+    queryKey: ["licencas-dash"],
+    queryFn: async () => (await supabase.from("licencas_software").select("id, nome, data_validade, quantidade_total")).data ?? [],
+  });
+  const { data: atribAtivas = [] } = useQuery({
+    queryKey: ["atrib-ativas-dash"],
+    queryFn: async () => (await supabase.from("licenca_atribuicoes").select("licenca_id").is("revogado_em", null)).data ?? [],
+  });
+  const { data: contratos = [] } = useQuery({
+    queryKey: ["contratos-dash"],
+    queryFn: async () => (await supabase.from("contratos").select("id, nome, data_vencimento, valor, periodicidade")).data ?? [],
+  });
+
+
   const ativosFiltrados = empresaFiltro === "todas" ? ativos : ativos.filter((a) => a.empresa_id === empresaFiltro);
 
   const total = ativosFiltrados.length;
