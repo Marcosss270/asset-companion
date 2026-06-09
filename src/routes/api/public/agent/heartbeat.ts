@@ -51,7 +51,7 @@ export const Route = createFileRoute("/api/public/agent/heartbeat")({
         if (parsed.data.inventario) {
           await supabaseAdmin.from("agente_inventarios").insert({ agente_id: agente.id, ...parsed.data.inventario });
         }
-        await supabaseAdmin.from("agente_eventos").insert({ agente_id: agente.id, tipo: parsed.data.inventario ? "inventario" : "heartbeat", payload: parsed.data as object, ip_origem: ip });
+        await supabaseAdmin.from("agente_eventos").insert({ agente_id: agente.id, tipo: parsed.data.inventario ? "inventario" : "heartbeat", payload: JSON.parse(JSON.stringify(parsed.data)), ip_origem: ip });
         return json(200, { ok: true });
       },
     },

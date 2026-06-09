@@ -63,12 +63,13 @@ export const aprovarDispositivo = createServerFn({ method: "POST" })
       .from("ativos")
       .insert({
         nome: data.nome,
+        codigo_unico: "",
         categoria_id: data.categoria_id,
         empresa_id: data.empresa_id,
         marca: d?.fabricante ?? null,
         modelo: d?.modelo ?? null,
         localizacao: d?.ip ?? null,
-        notas: d?.mac ? `MAC: ${d.mac}` : null,
+        observacoes: d?.mac ? `MAC: ${d.mac}` : null,
         status: "disponivel",
         created_by: context.userId,
       })
