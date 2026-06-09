@@ -34,7 +34,7 @@ export const Route = createFileRoute("/api/public/agent/heartbeat")({
         if (!token) return json(401, { error: "missing token" });
         const hash = await sha256Hex(token);
         const { data: ag } = await supabaseAdmin
-          .from("agentes" as never)
+          .from("agentes")
           .select("id")
           .eq("token_hash", hash)
           .maybeSingle();
@@ -47,11 +47,11 @@ export const Route = createFileRoute("/api/public/agent/heartbeat")({
         if (!parsed.success) return json(400, { error: "invalid body" });
 
         const ip = request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ?? null;
-        await supabaseAdmin.from("agentes" as never).update({ ultimo_contato: new Date().toISOString(), hostname: parsed.data.inventario?.hostname ?? undefined }).eq("id", agente.id);
+        await supabaseAdmin.from("agentes").update({ ultimo_contato: new Date().toISOString(), hostname: parsed.data.inventario?.hostname ?? undefined }).eq("id", agente.id);
         if (parsed.data.inventario) {
-          await supabaseAdmin.from("agente_inventarios" as never).insert({ agente_id: agente.id, ...parsed.data.inventario });
+          await supabaseAdmin.from("agente_inventarios").insert({ agente_id: agente.id, ...parsed.data.inventario });
         }
-        await supabaseAdmin.from("agente_eventos" as never).insert({ agente_id: agente.id, tipo: parsed.data.inventario ? "inventario" : "heartbeat", payload: parsed.data as never, ip_origem: ip });
+        await supabaseAdmin.from("agente_eventos").insert({ agente_id: agente.id, tipo: parsed.data.inventario ? "inventario" : "heartbeat", payload: parsed.data as object, ip_origem: ip });
         return json(200, { ok: true });
       },
     },

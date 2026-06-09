@@ -22,7 +22,7 @@ export const criarAgente = createServerFn({ method: "POST" })
     const token = crypto.randomUUID() + "-" + crypto.randomUUID();
     const token_hash = await sha256Hex(token);
     const { data: ag, error } = await supabaseAdmin
-      .from("agentes" as never)
+      .from("agentes")
       .insert({ nome: data.nome, empresa_id: data.empresa_id ?? null, ativo_id: data.ativo_id ?? null, notas: data.notas ?? null, token_hash })
       .select("id")
       .single();
@@ -36,7 +36,7 @@ export const removerAgente = createServerFn({ method: "POST" })
   .inputValidator((d: { id: string }) => z.object({ id: z.string().uuid() }).parse(d))
   .handler(async ({ data }) => {
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
-    const { error } = await supabaseAdmin.from("agentes" as never).delete().eq("id", data.id);
+    const { error } = await supabaseAdmin.from("agentes").delete().eq("id", data.id);
     if (error) throw new Error(error.message);
     return { ok: true };
   });
@@ -53,14 +53,14 @@ export const aprovarDispositivo = createServerFn({ method: "POST" })
   .handler(async ({ data, context }) => {
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
     const { data: disp, error: e1 } = await supabaseAdmin
-      .from("dispositivos_descobertos" as never)
+      .from("dispositivos_descobertos")
       .select("ip, mac, fabricante, modelo")
       .eq("id", data.id)
       .maybeSingle();
     if (e1) throw new Error(e1.message);
     const d = disp as { ip?: string; mac?: string; fabricante?: string; modelo?: string } | null;
     const { data: ativo, error: e2 } = await supabaseAdmin
-      .from("ativos" as never)
+      .from("ativos")
       .insert({
         nome: data.nome,
         categoria_id: data.categoria_id,
@@ -71,12 +71,12 @@ export const aprovarDispositivo = createServerFn({ method: "POST" })
         notas: d?.mac ? `MAC: ${d.mac}` : null,
         status: "disponivel",
         created_by: context.userId,
-      } as never)
+      })
       .select("id")
       .single();
     if (e2) throw new Error(e2.message);
     await supabaseAdmin
-      .from("dispositivos_descobertos" as never)
+      .from("dispositivos_descobertos")
       .update({ estado: "aprovado", ativo_id: (ativo as { id: string }).id, empresa_id: data.empresa_id, categoria_id: data.categoria_id })
       .eq("id", data.id);
     return { ativo_id: (ativo as { id: string }).id };
@@ -87,7 +87,7 @@ export const ignorarDispositivo = createServerFn({ method: "POST" })
   .inputValidator((d: { id: string }) => z.object({ id: z.string().uuid() }).parse(d))
   .handler(async ({ data }) => {
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
-    const { error } = await supabaseAdmin.from("dispositivos_descobertos" as never).update({ estado: "ignorado" }).eq("id", data.id);
+    const { error } = await supabaseAdmin.from("dispositivos_descobertos").update({ estado: "ignorado" }).eq("id", data.id);
     if (error) throw new Error(error.message);
     return { ok: true };
   });

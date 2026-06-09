@@ -29,7 +29,7 @@ export const Route = createFileRoute("/api/public/agent/discovery")({
         const token = request.headers.get("x-agent-token");
         if (!token) return json(401, { error: "missing token" });
         const hash = await sha256Hex(token);
-        const { data: ag } = await supabaseAdmin.from("agentes" as never).select("id, empresa_id").eq("token_hash", hash).maybeSingle();
+        const { data: ag } = await supabaseAdmin.from("agentes").select("id, empresa_id").eq("token_hash", hash).maybeSingle();
         const agente = ag as { id: string; empresa_id: string | null } | null;
         if (!agente) return json(401, { error: "invalid token" });
 
@@ -41,17 +41,17 @@ export const Route = createFileRoute("/api/public/agent/discovery")({
         let inserted = 0;
         for (const d of parsed.data.dispositivos) {
           if (d.mac) {
-            const { data: existing } = await supabaseAdmin.from("dispositivos_descobertos" as never).select("id, estado").eq("mac", d.mac).maybeSingle();
+            const { data: existing } = await supabaseAdmin.from("dispositivos_descobertos").select("id, estado").eq("mac", d.mac).maybeSingle();
             const ex = existing as { id: string; estado: string } | null;
             if (ex) {
-              await supabaseAdmin.from("dispositivos_descobertos" as never).update({ ...d, agente_id: agente.id, descoberto_em: new Date().toISOString() }).eq("id", ex.id);
+              await supabaseAdmin.from("dispositivos_descobertos").update({ ...d, agente_id: agente.id, descoberto_em: new Date().toISOString() }).eq("id", ex.id);
               continue;
             }
           }
-          await supabaseAdmin.from("dispositivos_descobertos" as never).insert({ ...d, agente_id: agente.id, empresa_id: agente.empresa_id });
+          await supabaseAdmin.from("dispositivos_descobertos").insert({ ...d, agente_id: agente.id, empresa_id: agente.empresa_id });
           inserted++;
         }
-        await supabaseAdmin.from("agente_eventos" as never).insert({ agente_id: agente.id, tipo: "discovery", payload: { count: parsed.data.dispositivos.length, inserted } as never });
+        await supabaseAdmin.from("agente_eventos").insert({ agente_id: agente.id, tipo: "discovery", payload: { count: parsed.data.dispositivos.length, inserted } });
         return json(200, { ok: true, inserted });
       },
     },
