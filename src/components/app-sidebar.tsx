@@ -18,6 +18,9 @@ import {
   Truck,
   KeyRound,
   FileSignature,
+  Server,
+  Radar,
+  History,
   X,
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
@@ -40,8 +43,13 @@ const inventoryNav = [
 const operacoesNav = [
   { to: "/etiquetas", label: "Etiquetas QR", icon: QrCode },
   { to: "/relatorios", label: "Relatórios", icon: FileText },
+  { to: "/auditoria", label: "Auditoria", icon: History },
 ] as const;
 
+const sistemaNav = [
+  { to: "/a3-agent", label: "A3 Agent", icon: Server },
+  { to: "/descoberta", label: "Descoberta de Rede", icon: Radar },
+] as const;
 
 const adminNav = [
   { to: "/empresas", label: "Empresas do Grupo", icon: Building2 },
@@ -90,6 +98,7 @@ export function AppSidebar({ userName, userEmail, mobileOpen, onMobileClose }: A
       <nav className="flex-1 px-4 py-2 space-y-0.5 overflow-y-auto">
         <NavGroup label="Inventário" items={inventoryNav} pathname={pathname} />
         <NavGroup label="Operações" items={operacoesNav} pathname={pathname} />
+        <NavGroup label="Sistema" items={sistemaNav} pathname={pathname} />
         <NavGroup label="Administração" items={adminNav} pathname={pathname} />
       </nav>
 
