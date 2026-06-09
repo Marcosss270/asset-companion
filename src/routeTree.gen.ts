@@ -21,12 +21,15 @@ import { Route as AuthenticatedLicencasRouteImport } from './routes/_authenticat
 import { Route as AuthenticatedFornecedoresRouteImport } from './routes/_authenticated/fornecedores'
 import { Route as AuthenticatedEtiquetasRouteImport } from './routes/_authenticated/etiquetas'
 import { Route as AuthenticatedEmpresasRouteImport } from './routes/_authenticated/empresas'
+import { Route as AuthenticatedDescobertaRouteImport } from './routes/_authenticated/descoberta'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
 import { Route as AuthenticatedContratosRouteImport } from './routes/_authenticated/contratos'
 import { Route as AuthenticatedConsumiveisRouteImport } from './routes/_authenticated/consumiveis'
 import { Route as AuthenticatedConfiguracoesRouteImport } from './routes/_authenticated/configuracoes'
 import { Route as AuthenticatedCategoriasRouteImport } from './routes/_authenticated/categorias'
+import { Route as AuthenticatedAuditoriaRouteImport } from './routes/_authenticated/auditoria'
 import { Route as AuthenticatedAlertasRouteImport } from './routes/_authenticated/alertas'
+import { Route as AuthenticatedA3AgentRouteImport } from './routes/_authenticated/a3-agent'
 import { Route as AuthenticatedImpressorasIndexRouteImport } from './routes/_authenticated/impressoras.index'
 import { Route as AuthenticatedAtivosIndexRouteImport } from './routes/_authenticated/ativos.index'
 import { Route as AuthenticatedImpressorasNovoRouteImport } from './routes/_authenticated/impressoras.novo'
@@ -34,6 +37,8 @@ import { Route as AuthenticatedImpressorasIdRouteImport } from './routes/_authen
 import { Route as AuthenticatedAtivosNovoRouteImport } from './routes/_authenticated/ativos.novo'
 import { Route as AuthenticatedAtivosIdRouteImport } from './routes/_authenticated/ativos.$id'
 import { Route as ApiPublicPrintersIngestRouteImport } from './routes/api/public/printers/ingest'
+import { Route as ApiPublicAgentHeartbeatRouteImport } from './routes/api/public/agent/heartbeat'
+import { Route as ApiPublicAgentDiscoveryRouteImport } from './routes/api/public/agent/discovery'
 
 const LoginRoute = LoginRouteImport.update({
   id: '/login',
@@ -97,6 +102,11 @@ const AuthenticatedEmpresasRoute = AuthenticatedEmpresasRouteImport.update({
   path: '/empresas',
   getParentRoute: () => AuthenticatedRoute,
 } as any)
+const AuthenticatedDescobertaRoute = AuthenticatedDescobertaRouteImport.update({
+  id: '/descoberta',
+  path: '/descoberta',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
 const AuthenticatedDashboardRoute = AuthenticatedDashboardRouteImport.update({
   id: '/dashboard',
   path: '/dashboard',
@@ -124,9 +134,19 @@ const AuthenticatedCategoriasRoute = AuthenticatedCategoriasRouteImport.update({
   path: '/categorias',
   getParentRoute: () => AuthenticatedRoute,
 } as any)
+const AuthenticatedAuditoriaRoute = AuthenticatedAuditoriaRouteImport.update({
+  id: '/auditoria',
+  path: '/auditoria',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
 const AuthenticatedAlertasRoute = AuthenticatedAlertasRouteImport.update({
   id: '/alertas',
   path: '/alertas',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
+const AuthenticatedA3AgentRoute = AuthenticatedA3AgentRouteImport.update({
+  id: '/a3-agent',
+  path: '/a3-agent',
   getParentRoute: () => AuthenticatedRoute,
 } as any)
 const AuthenticatedImpressorasIndexRoute =
@@ -168,16 +188,29 @@ const ApiPublicPrintersIngestRoute = ApiPublicPrintersIngestRouteImport.update({
   path: '/api/public/printers/ingest',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiPublicAgentHeartbeatRoute = ApiPublicAgentHeartbeatRouteImport.update({
+  id: '/api/public/agent/heartbeat',
+  path: '/api/public/agent/heartbeat',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiPublicAgentDiscoveryRoute = ApiPublicAgentDiscoveryRouteImport.update({
+  id: '/api/public/agent/discovery',
+  path: '/api/public/agent/discovery',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/login': typeof LoginRoute
+  '/a3-agent': typeof AuthenticatedA3AgentRoute
   '/alertas': typeof AuthenticatedAlertasRoute
+  '/auditoria': typeof AuthenticatedAuditoriaRoute
   '/categorias': typeof AuthenticatedCategoriasRoute
   '/configuracoes': typeof AuthenticatedConfiguracoesRoute
   '/consumiveis': typeof AuthenticatedConsumiveisRoute
   '/contratos': typeof AuthenticatedContratosRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
+  '/descoberta': typeof AuthenticatedDescobertaRoute
   '/empresas': typeof AuthenticatedEmpresasRoute
   '/etiquetas': typeof AuthenticatedEtiquetasRoute
   '/fornecedores': typeof AuthenticatedFornecedoresRoute
@@ -193,17 +226,22 @@ export interface FileRoutesByFullPath {
   '/impressoras/novo': typeof AuthenticatedImpressorasNovoRoute
   '/ativos/': typeof AuthenticatedAtivosIndexRoute
   '/impressoras/': typeof AuthenticatedImpressorasIndexRoute
+  '/api/public/agent/discovery': typeof ApiPublicAgentDiscoveryRoute
+  '/api/public/agent/heartbeat': typeof ApiPublicAgentHeartbeatRoute
   '/api/public/printers/ingest': typeof ApiPublicPrintersIngestRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/login': typeof LoginRoute
+  '/a3-agent': typeof AuthenticatedA3AgentRoute
   '/alertas': typeof AuthenticatedAlertasRoute
+  '/auditoria': typeof AuthenticatedAuditoriaRoute
   '/categorias': typeof AuthenticatedCategoriasRoute
   '/configuracoes': typeof AuthenticatedConfiguracoesRoute
   '/consumiveis': typeof AuthenticatedConsumiveisRoute
   '/contratos': typeof AuthenticatedContratosRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
+  '/descoberta': typeof AuthenticatedDescobertaRoute
   '/empresas': typeof AuthenticatedEmpresasRoute
   '/etiquetas': typeof AuthenticatedEtiquetasRoute
   '/fornecedores': typeof AuthenticatedFornecedoresRoute
@@ -219,6 +257,8 @@ export interface FileRoutesByTo {
   '/impressoras/novo': typeof AuthenticatedImpressorasNovoRoute
   '/ativos': typeof AuthenticatedAtivosIndexRoute
   '/impressoras': typeof AuthenticatedImpressorasIndexRoute
+  '/api/public/agent/discovery': typeof ApiPublicAgentDiscoveryRoute
+  '/api/public/agent/heartbeat': typeof ApiPublicAgentHeartbeatRoute
   '/api/public/printers/ingest': typeof ApiPublicPrintersIngestRoute
 }
 export interface FileRoutesById {
@@ -226,12 +266,15 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/_authenticated': typeof AuthenticatedRouteWithChildren
   '/login': typeof LoginRoute
+  '/_authenticated/a3-agent': typeof AuthenticatedA3AgentRoute
   '/_authenticated/alertas': typeof AuthenticatedAlertasRoute
+  '/_authenticated/auditoria': typeof AuthenticatedAuditoriaRoute
   '/_authenticated/categorias': typeof AuthenticatedCategoriasRoute
   '/_authenticated/configuracoes': typeof AuthenticatedConfiguracoesRoute
   '/_authenticated/consumiveis': typeof AuthenticatedConsumiveisRoute
   '/_authenticated/contratos': typeof AuthenticatedContratosRoute
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
+  '/_authenticated/descoberta': typeof AuthenticatedDescobertaRoute
   '/_authenticated/empresas': typeof AuthenticatedEmpresasRoute
   '/_authenticated/etiquetas': typeof AuthenticatedEtiquetasRoute
   '/_authenticated/fornecedores': typeof AuthenticatedFornecedoresRoute
@@ -247,6 +290,8 @@ export interface FileRoutesById {
   '/_authenticated/impressoras/novo': typeof AuthenticatedImpressorasNovoRoute
   '/_authenticated/ativos/': typeof AuthenticatedAtivosIndexRoute
   '/_authenticated/impressoras/': typeof AuthenticatedImpressorasIndexRoute
+  '/api/public/agent/discovery': typeof ApiPublicAgentDiscoveryRoute
+  '/api/public/agent/heartbeat': typeof ApiPublicAgentHeartbeatRoute
   '/api/public/printers/ingest': typeof ApiPublicPrintersIngestRoute
 }
 export interface FileRouteTypes {
@@ -254,12 +299,15 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/login'
+    | '/a3-agent'
     | '/alertas'
+    | '/auditoria'
     | '/categorias'
     | '/configuracoes'
     | '/consumiveis'
     | '/contratos'
     | '/dashboard'
+    | '/descoberta'
     | '/empresas'
     | '/etiquetas'
     | '/fornecedores'
@@ -275,17 +323,22 @@ export interface FileRouteTypes {
     | '/impressoras/novo'
     | '/ativos/'
     | '/impressoras/'
+    | '/api/public/agent/discovery'
+    | '/api/public/agent/heartbeat'
     | '/api/public/printers/ingest'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/login'
+    | '/a3-agent'
     | '/alertas'
+    | '/auditoria'
     | '/categorias'
     | '/configuracoes'
     | '/consumiveis'
     | '/contratos'
     | '/dashboard'
+    | '/descoberta'
     | '/empresas'
     | '/etiquetas'
     | '/fornecedores'
@@ -301,18 +354,23 @@ export interface FileRouteTypes {
     | '/impressoras/novo'
     | '/ativos'
     | '/impressoras'
+    | '/api/public/agent/discovery'
+    | '/api/public/agent/heartbeat'
     | '/api/public/printers/ingest'
   id:
     | '__root__'
     | '/'
     | '/_authenticated'
     | '/login'
+    | '/_authenticated/a3-agent'
     | '/_authenticated/alertas'
+    | '/_authenticated/auditoria'
     | '/_authenticated/categorias'
     | '/_authenticated/configuracoes'
     | '/_authenticated/consumiveis'
     | '/_authenticated/contratos'
     | '/_authenticated/dashboard'
+    | '/_authenticated/descoberta'
     | '/_authenticated/empresas'
     | '/_authenticated/etiquetas'
     | '/_authenticated/fornecedores'
@@ -328,6 +386,8 @@ export interface FileRouteTypes {
     | '/_authenticated/impressoras/novo'
     | '/_authenticated/ativos/'
     | '/_authenticated/impressoras/'
+    | '/api/public/agent/discovery'
+    | '/api/public/agent/heartbeat'
     | '/api/public/printers/ingest'
   fileRoutesById: FileRoutesById
 }
@@ -335,6 +395,8 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthenticatedRoute: typeof AuthenticatedRouteWithChildren
   LoginRoute: typeof LoginRoute
+  ApiPublicAgentDiscoveryRoute: typeof ApiPublicAgentDiscoveryRoute
+  ApiPublicAgentHeartbeatRoute: typeof ApiPublicAgentHeartbeatRoute
   ApiPublicPrintersIngestRoute: typeof ApiPublicPrintersIngestRoute
 }
 
@@ -424,6 +486,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedEmpresasRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/_authenticated/descoberta': {
+      id: '/_authenticated/descoberta'
+      path: '/descoberta'
+      fullPath: '/descoberta'
+      preLoaderRoute: typeof AuthenticatedDescobertaRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
     '/_authenticated/dashboard': {
       id: '/_authenticated/dashboard'
       path: '/dashboard'
@@ -459,11 +528,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedCategoriasRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/_authenticated/auditoria': {
+      id: '/_authenticated/auditoria'
+      path: '/auditoria'
+      fullPath: '/auditoria'
+      preLoaderRoute: typeof AuthenticatedAuditoriaRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
     '/_authenticated/alertas': {
       id: '/_authenticated/alertas'
       path: '/alertas'
       fullPath: '/alertas'
       preLoaderRoute: typeof AuthenticatedAlertasRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/a3-agent': {
+      id: '/_authenticated/a3-agent'
+      path: '/a3-agent'
+      fullPath: '/a3-agent'
+      preLoaderRoute: typeof AuthenticatedA3AgentRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
     '/_authenticated/impressoras/': {
@@ -515,16 +598,33 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiPublicPrintersIngestRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/agent/heartbeat': {
+      id: '/api/public/agent/heartbeat'
+      path: '/api/public/agent/heartbeat'
+      fullPath: '/api/public/agent/heartbeat'
+      preLoaderRoute: typeof ApiPublicAgentHeartbeatRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/agent/discovery': {
+      id: '/api/public/agent/discovery'
+      path: '/api/public/agent/discovery'
+      fullPath: '/api/public/agent/discovery'
+      preLoaderRoute: typeof ApiPublicAgentDiscoveryRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 interface AuthenticatedRouteChildren {
+  AuthenticatedA3AgentRoute: typeof AuthenticatedA3AgentRoute
   AuthenticatedAlertasRoute: typeof AuthenticatedAlertasRoute
+  AuthenticatedAuditoriaRoute: typeof AuthenticatedAuditoriaRoute
   AuthenticatedCategoriasRoute: typeof AuthenticatedCategoriasRoute
   AuthenticatedConfiguracoesRoute: typeof AuthenticatedConfiguracoesRoute
   AuthenticatedConsumiveisRoute: typeof AuthenticatedConsumiveisRoute
   AuthenticatedContratosRoute: typeof AuthenticatedContratosRoute
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
+  AuthenticatedDescobertaRoute: typeof AuthenticatedDescobertaRoute
   AuthenticatedEmpresasRoute: typeof AuthenticatedEmpresasRoute
   AuthenticatedEtiquetasRoute: typeof AuthenticatedEtiquetasRoute
   AuthenticatedFornecedoresRoute: typeof AuthenticatedFornecedoresRoute
@@ -543,12 +643,15 @@ interface AuthenticatedRouteChildren {
 }
 
 const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
+  AuthenticatedA3AgentRoute: AuthenticatedA3AgentRoute,
   AuthenticatedAlertasRoute: AuthenticatedAlertasRoute,
+  AuthenticatedAuditoriaRoute: AuthenticatedAuditoriaRoute,
   AuthenticatedCategoriasRoute: AuthenticatedCategoriasRoute,
   AuthenticatedConfiguracoesRoute: AuthenticatedConfiguracoesRoute,
   AuthenticatedConsumiveisRoute: AuthenticatedConsumiveisRoute,
   AuthenticatedContratosRoute: AuthenticatedContratosRoute,
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
+  AuthenticatedDescobertaRoute: AuthenticatedDescobertaRoute,
   AuthenticatedEmpresasRoute: AuthenticatedEmpresasRoute,
   AuthenticatedEtiquetasRoute: AuthenticatedEtiquetasRoute,
   AuthenticatedFornecedoresRoute: AuthenticatedFornecedoresRoute,
@@ -574,6 +677,8 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthenticatedRoute: AuthenticatedRouteWithChildren,
   LoginRoute: LoginRoute,
+  ApiPublicAgentDiscoveryRoute: ApiPublicAgentDiscoveryRoute,
+  ApiPublicAgentHeartbeatRoute: ApiPublicAgentHeartbeatRoute,
   ApiPublicPrintersIngestRoute: ApiPublicPrintersIngestRoute,
 }
 export const routeTree = rootRouteImport
