@@ -14,6 +14,151 @@ export type Database = {
   }
   public: {
     Tables: {
+      agente_eventos: {
+        Row: {
+          agente_id: string
+          created_at: string
+          id: string
+          ip_origem: string | null
+          payload: Json | null
+          tipo: string
+        }
+        Insert: {
+          agente_id: string
+          created_at?: string
+          id?: string
+          ip_origem?: string | null
+          payload?: Json | null
+          tipo: string
+        }
+        Update: {
+          agente_id?: string
+          created_at?: string
+          id?: string
+          ip_origem?: string | null
+          payload?: Json | null
+          tipo?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "agente_eventos_agente_id_fkey"
+            columns: ["agente_id"]
+            isOneToOne: false
+            referencedRelation: "agentes"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      agente_inventarios: {
+        Row: {
+          agente_id: string
+          coletado_em: string
+          cpu: string | null
+          disco_livre_gb: number | null
+          disco_total_gb: number | null
+          hostname: string | null
+          id: string
+          ip: string | null
+          mac: string | null
+          ram_mb: number | null
+          so: string | null
+          so_versao: string | null
+          usuario_atual: string | null
+        }
+        Insert: {
+          agente_id: string
+          coletado_em?: string
+          cpu?: string | null
+          disco_livre_gb?: number | null
+          disco_total_gb?: number | null
+          hostname?: string | null
+          id?: string
+          ip?: string | null
+          mac?: string | null
+          ram_mb?: number | null
+          so?: string | null
+          so_versao?: string | null
+          usuario_atual?: string | null
+        }
+        Update: {
+          agente_id?: string
+          coletado_em?: string
+          cpu?: string | null
+          disco_livre_gb?: number | null
+          disco_total_gb?: number | null
+          hostname?: string | null
+          id?: string
+          ip?: string | null
+          mac?: string | null
+          ram_mb?: number | null
+          so?: string | null
+          so_versao?: string | null
+          usuario_atual?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "agente_inventarios_agente_id_fkey"
+            columns: ["agente_id"]
+            isOneToOne: false
+            referencedRelation: "agentes"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      agentes: {
+        Row: {
+          ativo_id: string | null
+          created_at: string
+          empresa_id: string | null
+          hostname: string | null
+          id: string
+          nome: string | null
+          notas: string | null
+          token_hash: string
+          ultimo_contato: string | null
+          updated_at: string
+        }
+        Insert: {
+          ativo_id?: string | null
+          created_at?: string
+          empresa_id?: string | null
+          hostname?: string | null
+          id?: string
+          nome?: string | null
+          notas?: string | null
+          token_hash: string
+          ultimo_contato?: string | null
+          updated_at?: string
+        }
+        Update: {
+          ativo_id?: string | null
+          created_at?: string
+          empresa_id?: string | null
+          hostname?: string | null
+          id?: string
+          nome?: string | null
+          notas?: string | null
+          token_hash?: string
+          ultimo_contato?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "agentes_ativo_id_fkey"
+            columns: ["ativo_id"]
+            isOneToOne: false
+            referencedRelation: "ativos"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "agentes_empresa_id_fkey"
+            columns: ["empresa_id"]
+            isOneToOne: false
+            referencedRelation: "empresas"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       alertas: {
         Row: {
           ativo_id: string | null
@@ -178,6 +323,39 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      audit_log: {
+        Row: {
+          acao: string
+          created_at: string
+          descricao: string | null
+          diff: Json | null
+          entidade: string
+          entidade_id: string | null
+          id: string
+          usuario_id: string | null
+        }
+        Insert: {
+          acao: string
+          created_at?: string
+          descricao?: string | null
+          diff?: Json | null
+          entidade: string
+          entidade_id?: string | null
+          id?: string
+          usuario_id?: string | null
+        }
+        Update: {
+          acao?: string
+          created_at?: string
+          descricao?: string | null
+          diff?: Json | null
+          entidade?: string
+          entidade_id?: string | null
+          id?: string
+          usuario_id?: string | null
+        }
+        Relationships: []
       }
       categorias: {
         Row: {
@@ -357,6 +535,89 @@ export type Database = {
             columns: ["fornecedor_id"]
             isOneToOne: false
             referencedRelation: "fornecedores"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      dispositivos_descobertos: {
+        Row: {
+          agente_id: string | null
+          ativo_id: string | null
+          categoria_id: string | null
+          descoberto_em: string
+          empresa_id: string | null
+          estado: string
+          fabricante: string | null
+          hostname: string | null
+          id: string
+          ip: string | null
+          mac: string | null
+          modelo: string | null
+          portas_abertas: number[] | null
+          tipo_sugerido: string | null
+          updated_at: string
+        }
+        Insert: {
+          agente_id?: string | null
+          ativo_id?: string | null
+          categoria_id?: string | null
+          descoberto_em?: string
+          empresa_id?: string | null
+          estado?: string
+          fabricante?: string | null
+          hostname?: string | null
+          id?: string
+          ip?: string | null
+          mac?: string | null
+          modelo?: string | null
+          portas_abertas?: number[] | null
+          tipo_sugerido?: string | null
+          updated_at?: string
+        }
+        Update: {
+          agente_id?: string | null
+          ativo_id?: string | null
+          categoria_id?: string | null
+          descoberto_em?: string
+          empresa_id?: string | null
+          estado?: string
+          fabricante?: string | null
+          hostname?: string | null
+          id?: string
+          ip?: string | null
+          mac?: string | null
+          modelo?: string | null
+          portas_abertas?: number[] | null
+          tipo_sugerido?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "dispositivos_descobertos_agente_id_fkey"
+            columns: ["agente_id"]
+            isOneToOne: false
+            referencedRelation: "agentes"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "dispositivos_descobertos_ativo_id_fkey"
+            columns: ["ativo_id"]
+            isOneToOne: false
+            referencedRelation: "ativos"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "dispositivos_descobertos_categoria_id_fkey"
+            columns: ["categoria_id"]
+            isOneToOne: false
+            referencedRelation: "categorias"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "dispositivos_descobertos_empresa_id_fkey"
+            columns: ["empresa_id"]
+            isOneToOne: false
+            referencedRelation: "empresas"
             referencedColumns: ["id"]
           },
         ]
@@ -1022,6 +1283,7 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      agente_online: { Args: { _id: string }; Returns: boolean }
       gerar_alertas_licencas_contratos: { Args: never; Returns: number }
       gerar_codigo_unico: {
         Args: { _categoria_id: string; _empresa_id: string }
