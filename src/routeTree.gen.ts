@@ -15,6 +15,8 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthenticatedUsuariosRouteImport } from './routes/_authenticated/usuarios'
 import { Route as AuthenticatedSugestoesCompraRouteImport } from './routes/_authenticated/sugestoes-compra'
 import { Route as AuthenticatedRelatoriosRouteImport } from './routes/_authenticated/relatorios'
+import { Route as AuthenticatedPlanosRouteImport } from './routes/_authenticated/planos'
+import { Route as AuthenticatedOrganizacoesRouteImport } from './routes/_authenticated/organizacoes'
 import { Route as AuthenticatedMovimentacoesRouteImport } from './routes/_authenticated/movimentacoes'
 import { Route as AuthenticatedManutencaoRouteImport } from './routes/_authenticated/manutencao'
 import { Route as AuthenticatedLicencasRouteImport } from './routes/_authenticated/licencas'
@@ -70,6 +72,17 @@ const AuthenticatedRelatoriosRoute = AuthenticatedRelatoriosRouteImport.update({
   path: '/relatorios',
   getParentRoute: () => AuthenticatedRoute,
 } as any)
+const AuthenticatedPlanosRoute = AuthenticatedPlanosRouteImport.update({
+  id: '/planos',
+  path: '/planos',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
+const AuthenticatedOrganizacoesRoute =
+  AuthenticatedOrganizacoesRouteImport.update({
+    id: '/organizacoes',
+    path: '/organizacoes',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
 const AuthenticatedMovimentacoesRoute =
   AuthenticatedMovimentacoesRouteImport.update({
     id: '/movimentacoes',
@@ -217,6 +230,8 @@ export interface FileRoutesByFullPath {
   '/licencas': typeof AuthenticatedLicencasRoute
   '/manutencao': typeof AuthenticatedManutencaoRoute
   '/movimentacoes': typeof AuthenticatedMovimentacoesRoute
+  '/organizacoes': typeof AuthenticatedOrganizacoesRoute
+  '/planos': typeof AuthenticatedPlanosRoute
   '/relatorios': typeof AuthenticatedRelatoriosRoute
   '/sugestoes-compra': typeof AuthenticatedSugestoesCompraRoute
   '/usuarios': typeof AuthenticatedUsuariosRoute
@@ -248,6 +263,8 @@ export interface FileRoutesByTo {
   '/licencas': typeof AuthenticatedLicencasRoute
   '/manutencao': typeof AuthenticatedManutencaoRoute
   '/movimentacoes': typeof AuthenticatedMovimentacoesRoute
+  '/organizacoes': typeof AuthenticatedOrganizacoesRoute
+  '/planos': typeof AuthenticatedPlanosRoute
   '/relatorios': typeof AuthenticatedRelatoriosRoute
   '/sugestoes-compra': typeof AuthenticatedSugestoesCompraRoute
   '/usuarios': typeof AuthenticatedUsuariosRoute
@@ -281,6 +298,8 @@ export interface FileRoutesById {
   '/_authenticated/licencas': typeof AuthenticatedLicencasRoute
   '/_authenticated/manutencao': typeof AuthenticatedManutencaoRoute
   '/_authenticated/movimentacoes': typeof AuthenticatedMovimentacoesRoute
+  '/_authenticated/organizacoes': typeof AuthenticatedOrganizacoesRoute
+  '/_authenticated/planos': typeof AuthenticatedPlanosRoute
   '/_authenticated/relatorios': typeof AuthenticatedRelatoriosRoute
   '/_authenticated/sugestoes-compra': typeof AuthenticatedSugestoesCompraRoute
   '/_authenticated/usuarios': typeof AuthenticatedUsuariosRoute
@@ -314,6 +333,8 @@ export interface FileRouteTypes {
     | '/licencas'
     | '/manutencao'
     | '/movimentacoes'
+    | '/organizacoes'
+    | '/planos'
     | '/relatorios'
     | '/sugestoes-compra'
     | '/usuarios'
@@ -345,6 +366,8 @@ export interface FileRouteTypes {
     | '/licencas'
     | '/manutencao'
     | '/movimentacoes'
+    | '/organizacoes'
+    | '/planos'
     | '/relatorios'
     | '/sugestoes-compra'
     | '/usuarios'
@@ -377,6 +400,8 @@ export interface FileRouteTypes {
     | '/_authenticated/licencas'
     | '/_authenticated/manutencao'
     | '/_authenticated/movimentacoes'
+    | '/_authenticated/organizacoes'
+    | '/_authenticated/planos'
     | '/_authenticated/relatorios'
     | '/_authenticated/sugestoes-compra'
     | '/_authenticated/usuarios'
@@ -442,6 +467,20 @@ declare module '@tanstack/react-router' {
       path: '/relatorios'
       fullPath: '/relatorios'
       preLoaderRoute: typeof AuthenticatedRelatoriosRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/planos': {
+      id: '/_authenticated/planos'
+      path: '/planos'
+      fullPath: '/planos'
+      preLoaderRoute: typeof AuthenticatedPlanosRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/organizacoes': {
+      id: '/_authenticated/organizacoes'
+      path: '/organizacoes'
+      fullPath: '/organizacoes'
+      preLoaderRoute: typeof AuthenticatedOrganizacoesRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
     '/_authenticated/movimentacoes': {
@@ -631,6 +670,8 @@ interface AuthenticatedRouteChildren {
   AuthenticatedLicencasRoute: typeof AuthenticatedLicencasRoute
   AuthenticatedManutencaoRoute: typeof AuthenticatedManutencaoRoute
   AuthenticatedMovimentacoesRoute: typeof AuthenticatedMovimentacoesRoute
+  AuthenticatedOrganizacoesRoute: typeof AuthenticatedOrganizacoesRoute
+  AuthenticatedPlanosRoute: typeof AuthenticatedPlanosRoute
   AuthenticatedRelatoriosRoute: typeof AuthenticatedRelatoriosRoute
   AuthenticatedSugestoesCompraRoute: typeof AuthenticatedSugestoesCompraRoute
   AuthenticatedUsuariosRoute: typeof AuthenticatedUsuariosRoute
@@ -658,6 +699,8 @@ const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedLicencasRoute: AuthenticatedLicencasRoute,
   AuthenticatedManutencaoRoute: AuthenticatedManutencaoRoute,
   AuthenticatedMovimentacoesRoute: AuthenticatedMovimentacoesRoute,
+  AuthenticatedOrganizacoesRoute: AuthenticatedOrganizacoesRoute,
+  AuthenticatedPlanosRoute: AuthenticatedPlanosRoute,
   AuthenticatedRelatoriosRoute: AuthenticatedRelatoriosRoute,
   AuthenticatedSugestoesCompraRoute: AuthenticatedSugestoesCompraRoute,
   AuthenticatedUsuariosRoute: AuthenticatedUsuariosRoute,
@@ -684,3 +727,13 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
