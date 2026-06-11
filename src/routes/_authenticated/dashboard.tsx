@@ -162,7 +162,9 @@ function DashboardPage() {
   const empresaAtiva = empresas.find((e) => e.id === empresaFiltro);
 
   return (
-    <div className="max-w-[1400px] mx-auto">
+    <div className="max-w-[1400px] mx-auto space-y-6">
+      <OnboardingChecklist />
+      <TrialBanner />
       <div className="flex flex-wrap items-end justify-between mb-6 gap-4">
         <div>
           <h1 className="text-2xl font-bold tracking-tight">Dashboard — GRUPO A3</h1>
@@ -577,3 +579,62 @@ function KPI({ label, value, color }: { label: string; value: number | string; c
   );
 }
 
+
+function OnboardingChecklist() {
+  const { data: checklist } = useQuery({
+    queryKey: ["org-checklist"],
+    queryFn: async () => {
+      const { data: prof } = await supabase.from("profiles").select("organizacao_id").maybeSingle();
+      if (!prof?.organizacao_id) return null;
+      const { data } = await supabase.rpc("org_checklist", { _org: prof.organizacao_id });
+      return data as Record<string, boolean>;
+    },
+  });
+  if (!checklist) return null;
+  const itens = [
+    { key: "empresa", label: "Empresa configurada" },
+    { key: "usuarios", label: "Utilizadores adicionados" },
+    { key: "ativos", label: "Ativos cadastrados" },
+    { key: "fornecedores", label: "Fornecedores cadastrados" },
+    { key: "relatorio", label: "Primeiro relatório gerado" },
+  ];
+  const done = itens.filter((i) => checklist[i.key]).length;
+  if (done === itens.length) return null;
+  const pct = Math.round((done / itens.length) * 100);
+  return (
+    <div className="rounded-lg border border-accent/30 bg-accent/5 p-5">
+      <div className="flex items-center justify-between mb-3">
+        <div>
+          <h3 className="font-semibold text-sm">Checklist de Ativação</h3>
+          <p className="text-xs text-muted-foreground">{done}/{itens.length} concluídos ({pct}%)</p>
+        </div>
+        <Link to="/onboarding" className="text-xs text-accent hover:underline font-medium">Continuar setup →</Link>
+      </div>
+      <div className="h-1.5 bg-muted rounded-full overflow-hidden mb-3">
+        <div className="h-full bg-accent transition-all" style={{ width: `${pct}%` }} />
+      </div>
+      <div className="grid grid-cols-2 md:grid-cols-5 gap-2 text-xs">
+        {itens.map((i) => (
+          <div key={i.key} className={`flex items-center gap-1.5 ${checklist[i.key] ? "text-green-600" : "text-muted-foreground"}`}>
+            <span>{checklist[i.key] ? "✓" : "○"}</span>{i.label}
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function TrialBanner() {
+  const { data: ass } = useQuery({
+    queryKey: ["trial-banner"],
+    queryFn: async () => (await supabase.from("assinaturas").select("estado, trial_fim").eq("estado", "trial").maybeSingle()).data,
+  });
+  if (!ass?.trial_fim) return null;
+  const dias = Math.max(0, Math.ceil((new Date(ass.trial_fim).getTime() - Date.now()) / 86400000));
+  return (
+    <div className="rounded-lg border border-blue-500/30 bg-blue-500/5 px-4 py-3 flex items-center justify-between text-sm">
+      <span>Está em período de avaliação — <strong>{dias} dia{dias !== 1 ? "s" : ""}</strong> restante{dias !== 1 ? "s" : ""}.</span>
+      <Link to="/planos" className="text-blue-600 font-medium hover:underline">Fazer upgrade →</Link>
+    </div>
+  );
+}
