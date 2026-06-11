@@ -57,7 +57,7 @@ function OnboardingWizard() {
     const ops = [];
     if (depto) ops.push(supabase.from("departamentos").insert({ nome: depto }));
     if (cc) ops.push(supabase.from("centros_custo").insert({ nome: cc }));
-    if (forn) ops.push(supabase.from("fornecedores").insert({ nome: forn, tipo: "geral" as any }));
+    if (forn) ops.push(supabase.from("fornecedores").insert({ nome_empresa: forn }));
     await Promise.all(ops);
     return true;
   };
