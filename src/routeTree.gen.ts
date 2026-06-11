@@ -29,6 +29,7 @@ import { Route as AuthenticatedContratosRouteImport } from './routes/_authentica
 import { Route as AuthenticatedConsumiveisRouteImport } from './routes/_authenticated/consumiveis'
 import { Route as AuthenticatedConfiguracoesRouteImport } from './routes/_authenticated/configuracoes'
 import { Route as AuthenticatedCategoriasRouteImport } from './routes/_authenticated/categorias'
+import { Route as AuthenticatedBillingRouteImport } from './routes/_authenticated/billing'
 import { Route as AuthenticatedAuditoriaRouteImport } from './routes/_authenticated/auditoria'
 import { Route as AuthenticatedAlertasRouteImport } from './routes/_authenticated/alertas'
 import { Route as AuthenticatedA3AgentRouteImport } from './routes/_authenticated/a3-agent'
@@ -147,6 +148,11 @@ const AuthenticatedCategoriasRoute = AuthenticatedCategoriasRouteImport.update({
   path: '/categorias',
   getParentRoute: () => AuthenticatedRoute,
 } as any)
+const AuthenticatedBillingRoute = AuthenticatedBillingRouteImport.update({
+  id: '/billing',
+  path: '/billing',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
 const AuthenticatedAuditoriaRoute = AuthenticatedAuditoriaRouteImport.update({
   id: '/auditoria',
   path: '/auditoria',
@@ -218,6 +224,7 @@ export interface FileRoutesByFullPath {
   '/a3-agent': typeof AuthenticatedA3AgentRoute
   '/alertas': typeof AuthenticatedAlertasRoute
   '/auditoria': typeof AuthenticatedAuditoriaRoute
+  '/billing': typeof AuthenticatedBillingRoute
   '/categorias': typeof AuthenticatedCategoriasRoute
   '/configuracoes': typeof AuthenticatedConfiguracoesRoute
   '/consumiveis': typeof AuthenticatedConsumiveisRoute
@@ -251,6 +258,7 @@ export interface FileRoutesByTo {
   '/a3-agent': typeof AuthenticatedA3AgentRoute
   '/alertas': typeof AuthenticatedAlertasRoute
   '/auditoria': typeof AuthenticatedAuditoriaRoute
+  '/billing': typeof AuthenticatedBillingRoute
   '/categorias': typeof AuthenticatedCategoriasRoute
   '/configuracoes': typeof AuthenticatedConfiguracoesRoute
   '/consumiveis': typeof AuthenticatedConsumiveisRoute
@@ -286,6 +294,7 @@ export interface FileRoutesById {
   '/_authenticated/a3-agent': typeof AuthenticatedA3AgentRoute
   '/_authenticated/alertas': typeof AuthenticatedAlertasRoute
   '/_authenticated/auditoria': typeof AuthenticatedAuditoriaRoute
+  '/_authenticated/billing': typeof AuthenticatedBillingRoute
   '/_authenticated/categorias': typeof AuthenticatedCategoriasRoute
   '/_authenticated/configuracoes': typeof AuthenticatedConfiguracoesRoute
   '/_authenticated/consumiveis': typeof AuthenticatedConsumiveisRoute
@@ -321,6 +330,7 @@ export interface FileRouteTypes {
     | '/a3-agent'
     | '/alertas'
     | '/auditoria'
+    | '/billing'
     | '/categorias'
     | '/configuracoes'
     | '/consumiveis'
@@ -354,6 +364,7 @@ export interface FileRouteTypes {
     | '/a3-agent'
     | '/alertas'
     | '/auditoria'
+    | '/billing'
     | '/categorias'
     | '/configuracoes'
     | '/consumiveis'
@@ -388,6 +399,7 @@ export interface FileRouteTypes {
     | '/_authenticated/a3-agent'
     | '/_authenticated/alertas'
     | '/_authenticated/auditoria'
+    | '/_authenticated/billing'
     | '/_authenticated/categorias'
     | '/_authenticated/configuracoes'
     | '/_authenticated/consumiveis'
@@ -567,6 +579,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedCategoriasRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/_authenticated/billing': {
+      id: '/_authenticated/billing'
+      path: '/billing'
+      fullPath: '/billing'
+      preLoaderRoute: typeof AuthenticatedBillingRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
     '/_authenticated/auditoria': {
       id: '/_authenticated/auditoria'
       path: '/auditoria'
@@ -658,6 +677,7 @@ interface AuthenticatedRouteChildren {
   AuthenticatedA3AgentRoute: typeof AuthenticatedA3AgentRoute
   AuthenticatedAlertasRoute: typeof AuthenticatedAlertasRoute
   AuthenticatedAuditoriaRoute: typeof AuthenticatedAuditoriaRoute
+  AuthenticatedBillingRoute: typeof AuthenticatedBillingRoute
   AuthenticatedCategoriasRoute: typeof AuthenticatedCategoriasRoute
   AuthenticatedConfiguracoesRoute: typeof AuthenticatedConfiguracoesRoute
   AuthenticatedConsumiveisRoute: typeof AuthenticatedConsumiveisRoute
@@ -687,6 +707,7 @@ const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedA3AgentRoute: AuthenticatedA3AgentRoute,
   AuthenticatedAlertasRoute: AuthenticatedAlertasRoute,
   AuthenticatedAuditoriaRoute: AuthenticatedAuditoriaRoute,
+  AuthenticatedBillingRoute: AuthenticatedBillingRoute,
   AuthenticatedCategoriasRoute: AuthenticatedCategoriasRoute,
   AuthenticatedConfiguracoesRoute: AuthenticatedConfiguracoesRoute,
   AuthenticatedConsumiveisRoute: AuthenticatedConsumiveisRoute,
