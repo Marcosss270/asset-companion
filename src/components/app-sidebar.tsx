@@ -90,6 +90,7 @@ export function AppSidebar({ userName, userEmail, mobileOpen, onMobileClose }: A
         <NavGroup label="Operações" items={operacoesNav} pathname={pathname} />
         <NavGroup label="Sistema" items={sistemaNav} pathname={pathname} />
         <NavGroup label="Administração" items={adminNav} pathname={pathname} />
+        {isTenantMaster && <NavGroup label="Plataforma" items={plataformaNav} pathname={pathname} />}
       </nav>
 
       <div className="p-4 mt-auto border-t border-sidebar-border">
