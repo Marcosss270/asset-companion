@@ -38,6 +38,7 @@ const ROLE_LABELS: Record<AppRole, string> = {
   admin: "Administrador",
   manager: "Técnico / Gestor",
   viewer: "Visualizador",
+  tenant_master: "Tenant Master",
 };
 
 const ACTION_LABELS: Record<string, string> = {
