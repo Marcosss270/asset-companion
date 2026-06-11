@@ -57,6 +57,7 @@ interface AppSidebarProps {
 export function AppSidebar({ userName, userEmail, mobileOpen, onMobileClose }: AppSidebarProps) {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   const navigate = useNavigate();
+  const { isTenantMaster } = useRole();
 
   const handleLogout = async () => {
     await supabase.auth.signOut();
