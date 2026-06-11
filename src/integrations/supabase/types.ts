@@ -29,7 +29,7 @@ export type Database = {
           created_at?: string
           id?: string
           ip_origem?: string | null
-          organizacao_id: string
+          organizacao_id?: string
           payload?: Json | null
           tipo: string
         }
@@ -86,7 +86,7 @@ export type Database = {
           id?: string
           ip?: string | null
           mac?: string | null
-          organizacao_id: string
+          organizacao_id?: string
           ram_mb?: number | null
           so?: string | null
           so_versao?: string | null
@@ -147,7 +147,7 @@ export type Database = {
           id?: string
           nome?: string | null
           notas?: string | null
-          organizacao_id: string
+          organizacao_id?: string
           token_hash: string
           ultimo_contato?: string | null
           updated_at?: string
@@ -207,7 +207,7 @@ export type Database = {
           created_at?: string
           id?: string
           mensagem?: string | null
-          organizacao_id: string
+          organizacao_id?: string
           status?: Database["public"]["Enums"]["alerta_status"]
           tipo: Database["public"]["Enums"]["alerta_tipo"]
           titulo: string
@@ -326,7 +326,7 @@ export type Database = {
           fornecedor_id?: string | null
           id?: string
           nota?: string | null
-          organizacao_id: string
+          organizacao_id?: string
           tipo?: string
         }
         Update: {
@@ -391,7 +391,7 @@ export type Database = {
           nome: string
           numero_serie?: string | null
           observacoes?: string | null
-          organizacao_id: string
+          organizacao_id?: string
           responsavel?: string | null
           status?: Database["public"]["Enums"]["ativo_status"]
           updated_at?: string
@@ -462,7 +462,7 @@ export type Database = {
           entidade: string
           entidade_id?: string | null
           id?: string
-          organizacao_id: string
+          organizacao_id?: string
           usuario_id?: string | null
         }
         Update: {
@@ -501,7 +501,7 @@ export type Database = {
           descricao?: string | null
           id?: string
           nome: string
-          organizacao_id: string
+          organizacao_id?: string
         }
         Update: {
           codigo_prefixo?: string
@@ -534,7 +534,7 @@ export type Database = {
           created_at?: string
           id?: string
           nome: string
-          organizacao_id: string
+          organizacao_id?: string
         }
         Update: {
           codigo?: string | null
@@ -584,7 +584,7 @@ export type Database = {
         }
         Insert: {
           chave: string
-          organizacao_id: string
+          organizacao_id?: string
           updated_at?: string
           updated_by?: string | null
           valor?: Json
@@ -626,7 +626,7 @@ export type Database = {
           id?: string
           mime?: string | null
           nome_ficheiro: string
-          organizacao_id: string
+          organizacao_id?: string
           path: string
           tamanho?: number | null
           versao: number
@@ -692,7 +692,7 @@ export type Database = {
           moeda?: string
           nome: string
           notas?: string | null
-          organizacao_id: string
+          organizacao_id?: string
           periodicidade?: Database["public"]["Enums"]["contrato_periodicidade"]
           renovacao_automatica?: boolean
           tipo_servico?: string | null
@@ -755,7 +755,7 @@ export type Database = {
           created_at?: string
           id?: string
           nome: string
-          organizacao_id: string
+          organizacao_id?: string
         }
         Update: {
           codigo?: string | null
@@ -806,7 +806,7 @@ export type Database = {
           ip?: string | null
           mac?: string | null
           modelo?: string | null
-          organizacao_id: string
+          organizacao_id?: string
           portas_abertas?: number[] | null
           tipo_sugerido?: string | null
           updated_at?: string
@@ -881,7 +881,7 @@ export type Database = {
           created_at?: string
           id?: string
           nome: string
-          organizacao_id: string
+          organizacao_id?: string
           padrao?: boolean
           sigla: string
           status?: string
@@ -929,7 +929,7 @@ export type Database = {
           localizacao?: string | null
           nome: string
           observacoes?: string | null
-          organizacao_id: string
+          organizacao_id?: string
           quantidade?: number
           unidade?: string
           updated_at?: string
@@ -987,7 +987,7 @@ export type Database = {
           fornecedor_preferencial?: boolean
           id?: string
           observacoes?: string | null
-          organizacao_id: string
+          organizacao_id?: string
           prazo_entrega_dias?: number | null
           preco_medio?: number | null
           updated_at?: string
@@ -1061,7 +1061,7 @@ export type Database = {
           nif?: string | null
           nome_empresa: string
           observacoes?: string | null
-          organizacao_id: string
+          organizacao_id?: string
           pessoa_contacto?: string | null
           status?: string
           telefone?: string | null
@@ -1117,7 +1117,7 @@ export type Database = {
           id?: string
           impressora_id: string
           online?: boolean
-          organizacao_id: string
+          organizacao_id?: string
           papel_pct?: number | null
           toner_amarelo?: number | null
           toner_ciano?: number | null
@@ -1180,7 +1180,7 @@ export type Database = {
           id?: string
           ip: string
           modelo?: string | null
-          organizacao_id: string
+          organizacao_id?: string
           porta_snmp?: number
           status_online?: boolean
           ultima_leitura_em?: string | null
@@ -1238,7 +1238,7 @@ export type Database = {
           id?: string
           licenca_id: string
           notas?: string | null
-          organizacao_id: string
+          organizacao_id?: string
           revogado_em?: string | null
           revogado_por?: string | null
           tipo_alvo: Database["public"]["Enums"]["licenca_alvo"]
@@ -1307,7 +1307,7 @@ export type Database = {
           moeda?: string
           nome: string
           notas?: string | null
-          organizacao_id: string
+          organizacao_id?: string
           quantidade_total?: number
           tipo?: Database["public"]["Enums"]["licenca_tipo"]
           updated_at?: string
@@ -1385,7 +1385,7 @@ export type Database = {
           fornecedor?: string | null
           id?: string
           observacoes?: string | null
-          organizacao_id: string
+          organizacao_id?: string
           status?: string
           tecnico?: string | null
           tipo?: string
@@ -1450,7 +1450,7 @@ export type Database = {
           localizacao_anterior?: string | null
           localizacao_nova?: string | null
           metadata?: Json | null
-          organizacao_id: string
+          organizacao_id?: string
           responsavel_anterior?: string | null
           responsavel_novo?: string | null
           status_anterior?: Database["public"]["Enums"]["ativo_status"] | null
@@ -1736,7 +1736,7 @@ export type Database = {
           id?: string
           item: string
           motivo?: string | null
-          organizacao_id: string
+          organizacao_id?: string
           quantidade?: number
           status?: string
           updated_at?: string
