@@ -1320,7 +1320,7 @@ export type Database = {
         | "contrato_60d"
         | "contrato_30d"
         | "contrato_expirado"
-      app_role: "admin" | "manager" | "viewer"
+      app_role: "admin" | "manager" | "viewer" | "tenant_master"
       ativo_status:
         | "disponivel"
         | "em_uso"
@@ -1507,7 +1507,7 @@ export const Constants = {
         "contrato_30d",
         "contrato_expirado",
       ],
-      app_role: ["admin", "manager", "viewer"],
+      app_role: ["admin", "manager", "viewer", "tenant_master"],
       ativo_status: [
         "disponivel",
         "em_uso",
