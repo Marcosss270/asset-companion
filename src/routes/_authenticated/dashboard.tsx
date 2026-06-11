@@ -162,7 +162,9 @@ function DashboardPage() {
   const empresaAtiva = empresas.find((e) => e.id === empresaFiltro);
 
   return (
-    <div className="max-w-[1400px] mx-auto">
+    <div className="max-w-[1400px] mx-auto space-y-6">
+      <OnboardingChecklist />
+      <TrialBanner />
       <div className="flex flex-wrap items-end justify-between mb-6 gap-4">
         <div>
           <h1 className="text-2xl font-bold tracking-tight">Dashboard — GRUPO A3</h1>
