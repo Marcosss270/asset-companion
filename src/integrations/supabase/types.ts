@@ -1692,7 +1692,7 @@ export type Database = {
           email: string
           id: string
           nome: string
-          organizacao_id: string
+          organizacao_id?: string
           updated_at?: string
         }
         Update: {
@@ -1820,7 +1820,7 @@ export type Database = {
         Insert: {
           created_at?: string
           id?: string
-          organizacao_id: string
+          organizacao_id?: string
           role: Database["public"]["Enums"]["app_role"]
           user_id: string
         }
