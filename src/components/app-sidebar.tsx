@@ -1,29 +1,11 @@
 import { Link, useRouterState, useNavigate } from "@tanstack/react-router";
 import {
-  LayoutDashboard,
-  Boxes,
-  PackageOpen,
-  ArrowLeftRight,
-  Wrench,
-  FileText,
-  Users,
-  LogOut,
-  Settings,
-  QrCode,
-  Bell,
-  Tag,
-  Building2,
-  Printer,
-  ShoppingCart,
-  Truck,
-  KeyRound,
-  FileSignature,
-  Server,
-  Radar,
-  History,
-  X,
+  LayoutDashboard, Boxes, PackageOpen, ArrowLeftRight, Wrench, FileText, Users,
+  LogOut, Settings, QrCode, Bell, Tag, Building2, Printer, ShoppingCart, Truck,
+  KeyRound, FileSignature, Server, Radar, History, X, CreditCard, Sparkles, HelpCircle, Building,
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
+import { useRole } from "@/hooks/use-role";
 import { cn } from "@/lib/utils";
 
 const inventoryNav = [
@@ -55,7 +37,14 @@ const adminNav = [
   { to: "/empresas", label: "Empresas do Grupo", icon: Building2 },
   { to: "/categorias", label: "Categorias", icon: Tag },
   { to: "/usuarios", label: "Usuários", icon: Users },
+  { to: "/planos", label: "Planos", icon: Sparkles },
+  { to: "/ajuda", label: "Ajuda", icon: HelpCircle },
   { to: "/configuracoes", label: "Configurações", icon: Settings },
+] as const;
+
+const plataformaNav = [
+  { to: "/organizacoes", label: "Organizações", icon: Building },
+  { to: "/billing", label: "Billing", icon: CreditCard },
 ] as const;
 
 interface AppSidebarProps {
