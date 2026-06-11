@@ -1,104 +1,101 @@
-# Plano — Sprints 9, 10 e 11
+# Plano — Sprints 12, 13, 14 e 15
 
-Três módulos com escopos bem distintos: auditoria/timeline (puro frontend+SQL), agente local Windows (endpoint público + UI), e descoberta de rede (fila de aprovação alimentada pelo agente).
+Quatro sprints com forte interdependência: multi-tenant é a fundação; planos, billing e onboarding sentam-se em cima dela. Faço numa única migração grande para evitar várias rondas de regen de types.
 
-## Sprint 9 — Auditoria & Timeline Avançada
-
-A maior parte da infra já existe (`movimentacoes`, `manutencoes`, `alertas`, `impressora_leituras`). Falta consolidar, expor e dar pesquisa global.
+## Sprint 12 — Multi-tenant (fundação)
 
 ### Banco
-- Triggers de auditoria adicionais:
-  - `licencas_software`, `licenca_atribuicoes`, `contratos`, `contrato_documentos`, `empresas`, `fornecedores`, `categorias`, `estoque_consumiveis`, `ativo_garantias` → gravar em nova tabela `audit_log` (global, não específica de ativo).
-- Tabela `audit_log`:
-  - `id`, `entidade` (text), `entidade_id` (uuid), `acao` (`create|update|delete|restore`), `usuario_id`, `descricao`, `diff` (jsonb opcional), `created_at`.
-  - RLS: leitura para `manager`/`admin`; insert via trigger SECURITY DEFINER.
-- Função `consumivel_movimentos(_id)` (view) consolidando entradas/saídas a partir de `movimentacoes` tipo `consumivel_entrada|consumivel_saida|consumivel_ajuste` (adicionar novos valores ao enum se faltarem).
-- Triggers em `estoque_consumiveis` para registar delta de `quantidade` como movimento.
+- Nova tabela `organizacoes`: `id`, `nome`, `sigla` (unique), `logo_url`, `estado` (`ativa|inativa|suspensa`), `plano_id` (fk, nullable nesta sprint), `is_tenant_master` (bool), `created_at`, `updated_at`.
+- Seed: cria automaticamente "Grupo A3" com `is_tenant_master=true`, `estado='ativa'`.
+- Novo enum em `app_role`: adicionar `tenant_master` (já existem admin/manager/viewer).
+- Coluna `organizacao_id uuid` (NOT NULL após backfill, FK → organizacoes) adicionada a:
+  - `ativos`, `empresas`, `fornecedores`, `fornecedor_produtos`, `categorias`, `estoque_consumiveis`, `impressoras`, `impressora_leituras`, `contratos`, `contrato_documentos`, `licencas_software`, `licenca_atribuicoes`, `ativo_garantias`, `manutencoes`, `movimentacoes`, `alertas`, `sugestoes_compra`, `agentes`, `agente_inventarios`, `agente_eventos`, `dispositivos_descobertos`, `audit_log`, `configuracoes`.
+  - `profiles` recebe `organizacao_id` (org "atual" do utilizador).
+  - `user_roles` recebe `organizacao_id` (papel é por org; mesmo utilizador pode ter papéis diferentes em orgs distintas).
+- Backfill: tudo existente → org "Grupo A3".
+- Funções helper SECURITY DEFINER:
+  - `current_org_id()` → lê `organizacao_id` do `profiles` do `auth.uid()`.
+  - `is_tenant_master(_uid uuid)` → true se o user tem papel `tenant_master` em qualquer org marcada `is_tenant_master`.
+  - `has_org_access(_uid uuid, _org uuid)` → tenant_master OU `_org = current_org_id(_uid)`.
+- RLS reescrita em todas as tabelas acima: `USING (has_org_access(auth.uid(), organizacao_id))`. Tenant master vê tudo.
+- Triggers `before insert` para auto-preencher `organizacao_id := current_org_id()` quando não fornecido.
+- Tabela `org_access_log` (`usuario_id`, `organizacao_id`, `acao`, `ip`, `user_agent`, `created_at`) — escrita por funções SECURITY DEFINER de troca de org.
 
 ### Frontend
-- `/auditoria` — nova página (admin/manager):
-  - Filtros: utilizador, entidade, período, ação.
-  - Tabela paginada com link para o recurso.
-- `/ativos/$id`: melhorar `<Timeline>` já existente — agrupar por dia, ícone por tipo, badges coloridos, animação suave (framer-motion já não está instalado → usar transições CSS).
-- `/impressoras/$id`: novo bloco **Histórico SNMP & Alertas** lendo `impressora_leituras` + `alertas` da impressora.
-- `/consumiveis/$id` (ou drawer): aba **Movimentos** com entradas/saídas/ajustes.
-- Sidebar: item "Auditoria" sob Configurações (admin/manager).
+- `/organizacoes` (apenas tenant_master): lista, criar, editar, ativar/desativar.
+- Seletor de organização no topbar (apenas tenant_master) → chama `switch_organization(_org_id)` server fn que atualiza `profiles.organizacao_id` e regista log.
+- Hook `useOrg()` devolve org atual + flag `isTenantMaster`.
+- Sidebar: nova secção "Plataforma" (tenant_master only) com "Organizações".
 
-## Sprint 10 — A3 Agent v1
-
-Agente Windows + endpoint público + UI de monitoramento.
+## Sprint 13 — Planos comerciais
 
 ### Banco
-- Tabela `agentes`:
-  - `id`, `nome`, `hostname`, `chave_hash` (text, hash da chave), `ativo_id` (fk opcional), `empresa_id`, `ultimo_contato`, `online` (bool computado), `notas`.
-- Tabela `agente_inventarios`:
-  - `agente_id`, `hostname`, `usuario_atual`, `ip`, `so`, `so_versao`, `cpu`, `ram_mb`, `disco_total_gb`, `disco_livre_gb`, `mac`, `coletado_em`.
-- Tabela `agente_eventos` (registo de comunicação):
-  - `agente_id`, `tipo` (`registro|heartbeat|inventario|erro`), `payload` jsonb, `ip_origem`, `created_at`.
-- RLS: leitura para `authenticated`; escrita só `service_role` (via endpoint).
-- Função `agente_online(_id)` → `ultimo_contato > now() - interval '5 minutes'`.
-
-### Endpoints públicos (`/api/public/agent/*`)
-- `POST /register` — body `{ chave_instalacao, hostname }` → cria/recupera agente, devolve `{ id, token }` (token = chave única hashed).
-- `POST /heartbeat` — header `x-agent-token`, body `{ inventario? }` → atualiza `ultimo_contato`, grava inventário se enviado, log em `agente_eventos`.
-- Validação Zod, rate limiting básico via verificação de token.
-- `INSTALL_KEY` em secrets para `register`.
-
-### Agente local (script PowerShell + serviço)
-- `agent/a3-agent.ps1`:
-  - Instala como Scheduled Task (`Register-ScheduledTask`) a cada 5 min.
-  - Lê config em `C:\ProgramData\A3Agent\config.json` (URL + token).
-  - Coleta `Get-ComputerInfo`, `Get-CimInstance Win32_LogicalDisk`, IP via `Get-NetIPAddress`.
-  - POST heartbeat.
-- `agent/install.ps1` — wizard com chave de instalação.
-- Docs em `docs/a3-agent.md`.
+- Tabela `planos`: `id`, `nome` (`Starter|Pro|Enterprise|custom`), `slug` (unique), `preco_mensal`, `preco_anual`, `limite_ativos` (nullable=ilimitado), `limite_usuarios`, `features` (jsonb: `{snmp, agent, descoberta, contratos, garantias, licencas, relatorios_avancados, suporte_prioritario}`), `ativo` (bool), `ordem`.
+- Seed: Starter (100/2), Pro (1000/20), Enterprise (null/null + tudo).
+- `organizacoes.plano_id` FK → planos (após seed, default = Starter; Grupo A3 = Enterprise).
+- Função `org_pode_recurso(_org uuid, _feature text)` → checa plano.
+- Função `org_dentro_do_limite(_org uuid, _recurso text)` → conta ativos/users vs limite, retorna bool.
+- Triggers em `ativos` (BEFORE INSERT) e em `user_roles` (BEFORE INSERT por org) → bloqueia se exceder, retorna mensagem clara.
 
 ### Frontend
-- `/a3-agent` — lista de agentes (cards):
-  - Estado online/offline (dot verde/cinza), hostname, IP, último contato.
-  - Drawer detalhe: inventário corrente + histórico eventos.
-  - Botão "Gerar chave de instalação" (admin) → mostra script de install pré-preenchido.
-- Sidebar item "A3 Agent" sob Sistema.
+- `/planos` (público dentro do app, tenant_master pode editar): cards comparativos Starter/Pro/Enterprise, checklist de features, badge "Seu plano".
+- `/organizacoes/$id` aba "Plano": trocar plano (tenant_master only).
+- Hook `usePlano()` e componente `<FeatureGate feature="snmp">` que esconde rotas/botões indisponíveis no plano da org.
+- Aplicar `<FeatureGate>` nas entradas de sidebar para A3 Agent, Descoberta, Contratos, Licenças, Garantias conforme features.
+- Banner topo quando limite ≥ 80%: "Você usa 85/100 ativos. Considere upgrade."
 
-## Sprint 11 — Descoberta Automática
-
-Reaproveita o agente: ele faz scan da subnet local e reporta. Sem scanner server-side (Workers não fazem TCP arbitrário).
+## Sprint 14 — Billing & Assinaturas (scaffold, sem gateway)
 
 ### Banco
-- Tabela `dispositivos_descobertos`:
-  - `id`, `agente_id` (quem reportou), `ip`, `mac`, `hostname`, `fabricante`, `modelo`, `tipo_sugerido` (printer/computer/switch/router/ap/unknown), `portas_abertas` int[], `descoberto_em`, `estado` (`novo|ignorado|aprovado`), `ativo_id` (preenchido ao aprovar), `empresa_id`, `categoria_id`.
-- Deduplicação por `(mac)` ou `(agente_id, ip)`.
-
-### Endpoint
-- `POST /api/public/agent/discovery` — body `{ dispositivos: [...] }` (header `x-agent-token`).
-  - Upsert por MAC; mantém `estado='novo'` se ainda não decidido.
-
-### Agente
-- Estende `a3-agent.ps1`:
-  - `arp -a` + ping sweep da subnet.
-  - SNMP get de sysDescr/sysName quando porta 161 aberta (módulo opcional).
-  - Reporta a cada 1h.
+- Tabela `assinaturas`: `id`, `organizacao_id`, `plano_id`, `ciclo` (`mensal|anual`), `estado` (`trial|ativa|suspensa|cancelada|expirada`), `data_inicio`, `data_renovacao`, `valor`, `trial_fim`, `created_at`, `updated_at`. Uma ativa por org (índice único parcial).
+- Tabela `pagamentos`: `id`, `assinatura_id`, `valor`, `estado` (`pendente|pago|falhou|estornado`), `metodo` (`manual|stripe|paypal` — só `manual` por agora), `pago_em`, `referencia`, `created_at`.
+- Função `criar_assinatura_trial(_org uuid, _plano uuid)` → cria com `estado='trial'`, `trial_fim = now()+14d`.
+- Função `expirar_trials()` (chamável via cron futuro) → trial vencido vira `expirada` + suspende org.
+- Trigger atualiza `organizacoes.estado` quando assinatura muda.
 
 ### Frontend
-- `/descoberta` (admin/manager):
-  - Tabela com filtro por estado, agente, tipo.
-  - Ações: **Aprovar** (abre drawer pré-preenchendo cadastro de ativo — categoria/empresa selecionáveis, cria ativo + atualiza `estado='aprovado'`) ou **Ignorar**.
-  - KPIs topo: novos, ignorados, aprovados hoje.
-- Sidebar: "Descoberta".
-- Dashboard: bloco "Descoberta de rede" — novos pendentes.
+- `/billing` (tenant_master): dashboard SaaS com KPIs (orgs ativas, MRR = soma mensal, ARR = MRR×12, trials ativos, expiradas).
+- Tabela de organizações com plano, estado, próxima cobrança, ações (suspender/reativar/trocar plano).
+- `/organizacoes/$id` aba "Assinatura": histórico de pagamentos, próxima cobrança, botão "Marcar pago" (manual).
+- Sidebar tenant_master: "Billing".
+
+## Sprint 15 — Onboarding & Trial
+
+### Banco
+- `organizacoes` ganha: `moeda` (default `EUR`), `pais`, `setor`, `onboarding_completo` (bool), `onboarding_passos` (jsonb com flags).
+- Tabela `departamentos` (`id`, `organizacao_id`, `nome`, `codigo`) e `centros_custo` (`id`, `organizacao_id`, `nome`, `codigo`).
+- Função `org_checklist(_org)` → retorna `{empresa, usuarios, ativos, fornecedores, relatorio}` (cada bool) + percentual.
+
+### Frontend
+- `/onboarding` (full-screen wizard, apenas se `!onboarding_completo`):
+  1. Bem-vindo (logo + intro).
+  2. Conhecer a empresa (nome, sigla, logo upload, moeda, país, setor).
+  3. Configuração inicial (departamentos, centros de custo, categorias-padrão "criar pacote inicial", fornecedores iniciais).
+  4. Importação (upload .xlsx, templates download para ativos/consumíveis/fornecedores, validação + relatório de erros — usa `xlsx` lib client-side).
+  5. Finalização (resumo + "Ir para Dashboard").
+- Botão "Continuar depois" persiste passo atual em `onboarding_passos`.
+- Dashboard: bloco "Checklist de Ativação" com 5 itens e barra de progresso; some quando 100%.
+- Bloco "Trial" no dashboard quando assinatura em trial: dias restantes (`trial_fim - now()`), CTA "Fazer upgrade".
+- `/ajuda`: página estática com guias rápidos, FAQ accordion, placeholders para vídeos.
+- Templates Excel servidos de `public/templates/{ativos,consumiveis,fornecedores}.xlsx` (gerados via skill xlsx no momento da entrega).
 
 ## Ordem de execução
-1. Migração única (Sprints 9+10+11): `audit_log`, triggers, `agentes`, `agente_inventarios`, `agente_eventos`, `dispositivos_descobertos`, enums, funções, RLS, GRANTs.
-2. Aguardar types regen.
-3. Endpoints públicos do agente.
-4. UI Sprint 9 (auditoria, timelines, históricos).
-5. UI Sprint 10 (A3 Agent).
-6. Script PowerShell + docs.
-7. UI Sprint 11 (descoberta).
-8. Atualizar sidebar e dashboard.
+1. Migração única (Sprints 12+13+14+15): tabelas, FKs, backfill, funções, RLS, triggers, seeds.
+2. Aguardar regen de types.
+3. Helpers TS: `useOrg`, `usePlano`, `<FeatureGate>`, server fns `switch_organization`, `org_checklist`.
+4. UI Sprint 12 (Organizações + topbar selector).
+5. UI Sprint 13 (Planos + gates aplicados).
+6. UI Sprint 14 (Billing dashboard + assinaturas).
+7. UI Sprint 15 (Onboarding wizard + checklist + trial banner + /ajuda + templates xlsx).
+8. Sidebar reorganizada (secção "Plataforma" para tenant_master).
 
 ## Fora de escopo (confirmado)
-- Logs técnicos do SO / SIEM.
-- Controle remoto, execução de comandos, gestão de software no agente.
-- Scanner server-side (não viável no runtime Worker; o agente é o único scanner).
-- Alterações automáticas sem aprovação na descoberta.
+- Pagamentos reais (Stripe/PayPal/Paddle) — só estrutura.
+- Cobrança automática, faturas PDF.
+- Chat de suporte, base de conhecimento completa, vídeos reais.
+- Trial estendido / planos pagos negociados / cupões.
+
+## Riscos
+- Migração toca ~25 tabelas: faço backfill cuidadoso e adiciono `organizacao_id` como nullable, backfill, depois `SET NOT NULL`.
+- RLS reescrita pode quebrar queries existentes que assumem dados globais — todas as páginas atuais continuam funcionando porque tudo vai para "Grupo A3" e o user de teste fica admin lá.
+- Volume de código grande; entrego em commits lógicos por sprint dentro da mesma resposta.
