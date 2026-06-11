@@ -33,6 +33,7 @@ import { Route as AuthenticatedCategoriasRouteImport } from './routes/_authentic
 import { Route as AuthenticatedBillingRouteImport } from './routes/_authenticated/billing'
 import { Route as AuthenticatedAuditoriaRouteImport } from './routes/_authenticated/auditoria'
 import { Route as AuthenticatedAlertasRouteImport } from './routes/_authenticated/alertas'
+import { Route as AuthenticatedAjudaRouteImport } from './routes/_authenticated/ajuda'
 import { Route as AuthenticatedA3AgentRouteImport } from './routes/_authenticated/a3-agent'
 import { Route as AuthenticatedImpressorasIndexRouteImport } from './routes/_authenticated/impressoras.index'
 import { Route as AuthenticatedAtivosIndexRouteImport } from './routes/_authenticated/ativos.index'
@@ -169,6 +170,11 @@ const AuthenticatedAlertasRoute = AuthenticatedAlertasRouteImport.update({
   path: '/alertas',
   getParentRoute: () => AuthenticatedRoute,
 } as any)
+const AuthenticatedAjudaRoute = AuthenticatedAjudaRouteImport.update({
+  id: '/ajuda',
+  path: '/ajuda',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
 const AuthenticatedA3AgentRoute = AuthenticatedA3AgentRouteImport.update({
   id: '/a3-agent',
   path: '/a3-agent',
@@ -228,6 +234,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/login': typeof LoginRoute
   '/a3-agent': typeof AuthenticatedA3AgentRoute
+  '/ajuda': typeof AuthenticatedAjudaRoute
   '/alertas': typeof AuthenticatedAlertasRoute
   '/auditoria': typeof AuthenticatedAuditoriaRoute
   '/billing': typeof AuthenticatedBillingRoute
@@ -263,6 +270,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/login': typeof LoginRoute
   '/a3-agent': typeof AuthenticatedA3AgentRoute
+  '/ajuda': typeof AuthenticatedAjudaRoute
   '/alertas': typeof AuthenticatedAlertasRoute
   '/auditoria': typeof AuthenticatedAuditoriaRoute
   '/billing': typeof AuthenticatedBillingRoute
@@ -300,6 +308,7 @@ export interface FileRoutesById {
   '/_authenticated': typeof AuthenticatedRouteWithChildren
   '/login': typeof LoginRoute
   '/_authenticated/a3-agent': typeof AuthenticatedA3AgentRoute
+  '/_authenticated/ajuda': typeof AuthenticatedAjudaRoute
   '/_authenticated/alertas': typeof AuthenticatedAlertasRoute
   '/_authenticated/auditoria': typeof AuthenticatedAuditoriaRoute
   '/_authenticated/billing': typeof AuthenticatedBillingRoute
@@ -337,6 +346,7 @@ export interface FileRouteTypes {
     | '/'
     | '/login'
     | '/a3-agent'
+    | '/ajuda'
     | '/alertas'
     | '/auditoria'
     | '/billing'
@@ -372,6 +382,7 @@ export interface FileRouteTypes {
     | '/'
     | '/login'
     | '/a3-agent'
+    | '/ajuda'
     | '/alertas'
     | '/auditoria'
     | '/billing'
@@ -408,6 +419,7 @@ export interface FileRouteTypes {
     | '/_authenticated'
     | '/login'
     | '/_authenticated/a3-agent'
+    | '/_authenticated/ajuda'
     | '/_authenticated/alertas'
     | '/_authenticated/auditoria'
     | '/_authenticated/billing'
@@ -619,6 +631,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAlertasRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/_authenticated/ajuda': {
+      id: '/_authenticated/ajuda'
+      path: '/ajuda'
+      fullPath: '/ajuda'
+      preLoaderRoute: typeof AuthenticatedAjudaRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
     '/_authenticated/a3-agent': {
       id: '/_authenticated/a3-agent'
       path: '/a3-agent'
@@ -694,6 +713,7 @@ declare module '@tanstack/react-router' {
 
 interface AuthenticatedRouteChildren {
   AuthenticatedA3AgentRoute: typeof AuthenticatedA3AgentRoute
+  AuthenticatedAjudaRoute: typeof AuthenticatedAjudaRoute
   AuthenticatedAlertasRoute: typeof AuthenticatedAlertasRoute
   AuthenticatedAuditoriaRoute: typeof AuthenticatedAuditoriaRoute
   AuthenticatedBillingRoute: typeof AuthenticatedBillingRoute
@@ -725,6 +745,7 @@ interface AuthenticatedRouteChildren {
 
 const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedA3AgentRoute: AuthenticatedA3AgentRoute,
+  AuthenticatedAjudaRoute: AuthenticatedAjudaRoute,
   AuthenticatedAlertasRoute: AuthenticatedAlertasRoute,
   AuthenticatedAuditoriaRoute: AuthenticatedAuditoriaRoute,
   AuthenticatedBillingRoute: AuthenticatedBillingRoute,
@@ -769,3 +790,13 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
