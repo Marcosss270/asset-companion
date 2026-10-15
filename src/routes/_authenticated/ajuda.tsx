@@ -12,8 +12,6 @@ export const Route = createFileRoute("/_authenticated/ajuda")({
 const FAQS = [
   { q: "Como adicionar um novo ativo?", a: "Vá em Ativos → Novo Ativo. Preencha os campos e o código único é gerado automaticamente." },
   { q: "Como funciona a importação Excel?", a: "Durante o onboarding ou em Configurações, faça download do template, preencha e carregue o ficheiro. O sistema valida os dados antes de importar." },
-  { q: "Quais planos estão disponíveis?", a: "Starter (até 100 ativos), Pro (até 1000) e Enterprise (ilimitado, com SNMP, Agent e Descoberta de rede)." },
-  { q: "Como funciona o trial?", a: "Tem 14 dias gratuitos para experimentar todas as funcionalidades do plano selecionado." },
   { q: "Os meus dados estão isolados?", a: "Sim. Cada organização tem isolamento total. Apenas o Tenant Master pode aceder a múltiplas organizações." },
 ];
 
