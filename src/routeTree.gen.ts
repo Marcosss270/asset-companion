@@ -15,9 +15,6 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthenticatedUsuariosRouteImport } from './routes/_authenticated/usuarios'
 import { Route as AuthenticatedSugestoesCompraRouteImport } from './routes/_authenticated/sugestoes-compra'
 import { Route as AuthenticatedRelatoriosRouteImport } from './routes/_authenticated/relatorios'
-import { Route as AuthenticatedPlanosRouteImport } from './routes/_authenticated/planos'
-import { Route as AuthenticatedOrganizacoesRouteImport } from './routes/_authenticated/organizacoes'
-import { Route as AuthenticatedOnboardingRouteImport } from './routes/_authenticated/onboarding'
 import { Route as AuthenticatedMovimentacoesRouteImport } from './routes/_authenticated/movimentacoes'
 import { Route as AuthenticatedManutencaoRouteImport } from './routes/_authenticated/manutencao'
 import { Route as AuthenticatedLicencasRouteImport } from './routes/_authenticated/licencas'
@@ -30,7 +27,6 @@ import { Route as AuthenticatedContratosRouteImport } from './routes/_authentica
 import { Route as AuthenticatedConsumiveisRouteImport } from './routes/_authenticated/consumiveis'
 import { Route as AuthenticatedConfiguracoesRouteImport } from './routes/_authenticated/configuracoes'
 import { Route as AuthenticatedCategoriasRouteImport } from './routes/_authenticated/categorias'
-import { Route as AuthenticatedBillingRouteImport } from './routes/_authenticated/billing'
 import { Route as AuthenticatedAuditoriaRouteImport } from './routes/_authenticated/auditoria'
 import { Route as AuthenticatedAlertasRouteImport } from './routes/_authenticated/alertas'
 import { Route as AuthenticatedAjudaRouteImport } from './routes/_authenticated/ajuda'
@@ -73,22 +69,6 @@ const AuthenticatedSugestoesCompraRoute =
 const AuthenticatedRelatoriosRoute = AuthenticatedRelatoriosRouteImport.update({
   id: '/relatorios',
   path: '/relatorios',
-  getParentRoute: () => AuthenticatedRoute,
-} as any)
-const AuthenticatedPlanosRoute = AuthenticatedPlanosRouteImport.update({
-  id: '/planos',
-  path: '/planos',
-  getParentRoute: () => AuthenticatedRoute,
-} as any)
-const AuthenticatedOrganizacoesRoute =
-  AuthenticatedOrganizacoesRouteImport.update({
-    id: '/organizacoes',
-    path: '/organizacoes',
-    getParentRoute: () => AuthenticatedRoute,
-  } as any)
-const AuthenticatedOnboardingRoute = AuthenticatedOnboardingRouteImport.update({
-  id: '/onboarding',
-  path: '/onboarding',
   getParentRoute: () => AuthenticatedRoute,
 } as any)
 const AuthenticatedMovimentacoesRoute =
@@ -153,11 +133,6 @@ const AuthenticatedConfiguracoesRoute =
 const AuthenticatedCategoriasRoute = AuthenticatedCategoriasRouteImport.update({
   id: '/categorias',
   path: '/categorias',
-  getParentRoute: () => AuthenticatedRoute,
-} as any)
-const AuthenticatedBillingRoute = AuthenticatedBillingRouteImport.update({
-  id: '/billing',
-  path: '/billing',
   getParentRoute: () => AuthenticatedRoute,
 } as any)
 const AuthenticatedAuditoriaRoute = AuthenticatedAuditoriaRouteImport.update({
@@ -237,7 +212,6 @@ export interface FileRoutesByFullPath {
   '/ajuda': typeof AuthenticatedAjudaRoute
   '/alertas': typeof AuthenticatedAlertasRoute
   '/auditoria': typeof AuthenticatedAuditoriaRoute
-  '/billing': typeof AuthenticatedBillingRoute
   '/categorias': typeof AuthenticatedCategoriasRoute
   '/configuracoes': typeof AuthenticatedConfiguracoesRoute
   '/consumiveis': typeof AuthenticatedConsumiveisRoute
@@ -250,9 +224,6 @@ export interface FileRoutesByFullPath {
   '/licencas': typeof AuthenticatedLicencasRoute
   '/manutencao': typeof AuthenticatedManutencaoRoute
   '/movimentacoes': typeof AuthenticatedMovimentacoesRoute
-  '/onboarding': typeof AuthenticatedOnboardingRoute
-  '/organizacoes': typeof AuthenticatedOrganizacoesRoute
-  '/planos': typeof AuthenticatedPlanosRoute
   '/relatorios': typeof AuthenticatedRelatoriosRoute
   '/sugestoes-compra': typeof AuthenticatedSugestoesCompraRoute
   '/usuarios': typeof AuthenticatedUsuariosRoute
@@ -273,7 +244,6 @@ export interface FileRoutesByTo {
   '/ajuda': typeof AuthenticatedAjudaRoute
   '/alertas': typeof AuthenticatedAlertasRoute
   '/auditoria': typeof AuthenticatedAuditoriaRoute
-  '/billing': typeof AuthenticatedBillingRoute
   '/categorias': typeof AuthenticatedCategoriasRoute
   '/configuracoes': typeof AuthenticatedConfiguracoesRoute
   '/consumiveis': typeof AuthenticatedConsumiveisRoute
@@ -286,9 +256,6 @@ export interface FileRoutesByTo {
   '/licencas': typeof AuthenticatedLicencasRoute
   '/manutencao': typeof AuthenticatedManutencaoRoute
   '/movimentacoes': typeof AuthenticatedMovimentacoesRoute
-  '/onboarding': typeof AuthenticatedOnboardingRoute
-  '/organizacoes': typeof AuthenticatedOrganizacoesRoute
-  '/planos': typeof AuthenticatedPlanosRoute
   '/relatorios': typeof AuthenticatedRelatoriosRoute
   '/sugestoes-compra': typeof AuthenticatedSugestoesCompraRoute
   '/usuarios': typeof AuthenticatedUsuariosRoute
@@ -311,7 +278,6 @@ export interface FileRoutesById {
   '/_authenticated/ajuda': typeof AuthenticatedAjudaRoute
   '/_authenticated/alertas': typeof AuthenticatedAlertasRoute
   '/_authenticated/auditoria': typeof AuthenticatedAuditoriaRoute
-  '/_authenticated/billing': typeof AuthenticatedBillingRoute
   '/_authenticated/categorias': typeof AuthenticatedCategoriasRoute
   '/_authenticated/configuracoes': typeof AuthenticatedConfiguracoesRoute
   '/_authenticated/consumiveis': typeof AuthenticatedConsumiveisRoute
@@ -324,9 +290,6 @@ export interface FileRoutesById {
   '/_authenticated/licencas': typeof AuthenticatedLicencasRoute
   '/_authenticated/manutencao': typeof AuthenticatedManutencaoRoute
   '/_authenticated/movimentacoes': typeof AuthenticatedMovimentacoesRoute
-  '/_authenticated/onboarding': typeof AuthenticatedOnboardingRoute
-  '/_authenticated/organizacoes': typeof AuthenticatedOrganizacoesRoute
-  '/_authenticated/planos': typeof AuthenticatedPlanosRoute
   '/_authenticated/relatorios': typeof AuthenticatedRelatoriosRoute
   '/_authenticated/sugestoes-compra': typeof AuthenticatedSugestoesCompraRoute
   '/_authenticated/usuarios': typeof AuthenticatedUsuariosRoute
@@ -349,7 +312,6 @@ export interface FileRouteTypes {
     | '/ajuda'
     | '/alertas'
     | '/auditoria'
-    | '/billing'
     | '/categorias'
     | '/configuracoes'
     | '/consumiveis'
@@ -362,9 +324,6 @@ export interface FileRouteTypes {
     | '/licencas'
     | '/manutencao'
     | '/movimentacoes'
-    | '/onboarding'
-    | '/organizacoes'
-    | '/planos'
     | '/relatorios'
     | '/sugestoes-compra'
     | '/usuarios'
@@ -385,7 +344,6 @@ export interface FileRouteTypes {
     | '/ajuda'
     | '/alertas'
     | '/auditoria'
-    | '/billing'
     | '/categorias'
     | '/configuracoes'
     | '/consumiveis'
@@ -398,9 +356,6 @@ export interface FileRouteTypes {
     | '/licencas'
     | '/manutencao'
     | '/movimentacoes'
-    | '/onboarding'
-    | '/organizacoes'
-    | '/planos'
     | '/relatorios'
     | '/sugestoes-compra'
     | '/usuarios'
@@ -422,7 +377,6 @@ export interface FileRouteTypes {
     | '/_authenticated/ajuda'
     | '/_authenticated/alertas'
     | '/_authenticated/auditoria'
-    | '/_authenticated/billing'
     | '/_authenticated/categorias'
     | '/_authenticated/configuracoes'
     | '/_authenticated/consumiveis'
@@ -435,9 +389,6 @@ export interface FileRouteTypes {
     | '/_authenticated/licencas'
     | '/_authenticated/manutencao'
     | '/_authenticated/movimentacoes'
-    | '/_authenticated/onboarding'
-    | '/_authenticated/organizacoes'
-    | '/_authenticated/planos'
     | '/_authenticated/relatorios'
     | '/_authenticated/sugestoes-compra'
     | '/_authenticated/usuarios'
@@ -503,27 +454,6 @@ declare module '@tanstack/react-router' {
       path: '/relatorios'
       fullPath: '/relatorios'
       preLoaderRoute: typeof AuthenticatedRelatoriosRouteImport
-      parentRoute: typeof AuthenticatedRoute
-    }
-    '/_authenticated/planos': {
-      id: '/_authenticated/planos'
-      path: '/planos'
-      fullPath: '/planos'
-      preLoaderRoute: typeof AuthenticatedPlanosRouteImport
-      parentRoute: typeof AuthenticatedRoute
-    }
-    '/_authenticated/organizacoes': {
-      id: '/_authenticated/organizacoes'
-      path: '/organizacoes'
-      fullPath: '/organizacoes'
-      preLoaderRoute: typeof AuthenticatedOrganizacoesRouteImport
-      parentRoute: typeof AuthenticatedRoute
-    }
-    '/_authenticated/onboarding': {
-      id: '/_authenticated/onboarding'
-      path: '/onboarding'
-      fullPath: '/onboarding'
-      preLoaderRoute: typeof AuthenticatedOnboardingRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
     '/_authenticated/movimentacoes': {
@@ -608,13 +538,6 @@ declare module '@tanstack/react-router' {
       path: '/categorias'
       fullPath: '/categorias'
       preLoaderRoute: typeof AuthenticatedCategoriasRouteImport
-      parentRoute: typeof AuthenticatedRoute
-    }
-    '/_authenticated/billing': {
-      id: '/_authenticated/billing'
-      path: '/billing'
-      fullPath: '/billing'
-      preLoaderRoute: typeof AuthenticatedBillingRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
     '/_authenticated/auditoria': {
@@ -716,7 +639,6 @@ interface AuthenticatedRouteChildren {
   AuthenticatedAjudaRoute: typeof AuthenticatedAjudaRoute
   AuthenticatedAlertasRoute: typeof AuthenticatedAlertasRoute
   AuthenticatedAuditoriaRoute: typeof AuthenticatedAuditoriaRoute
-  AuthenticatedBillingRoute: typeof AuthenticatedBillingRoute
   AuthenticatedCategoriasRoute: typeof AuthenticatedCategoriasRoute
   AuthenticatedConfiguracoesRoute: typeof AuthenticatedConfiguracoesRoute
   AuthenticatedConsumiveisRoute: typeof AuthenticatedConsumiveisRoute
@@ -729,9 +651,6 @@ interface AuthenticatedRouteChildren {
   AuthenticatedLicencasRoute: typeof AuthenticatedLicencasRoute
   AuthenticatedManutencaoRoute: typeof AuthenticatedManutencaoRoute
   AuthenticatedMovimentacoesRoute: typeof AuthenticatedMovimentacoesRoute
-  AuthenticatedOnboardingRoute: typeof AuthenticatedOnboardingRoute
-  AuthenticatedOrganizacoesRoute: typeof AuthenticatedOrganizacoesRoute
-  AuthenticatedPlanosRoute: typeof AuthenticatedPlanosRoute
   AuthenticatedRelatoriosRoute: typeof AuthenticatedRelatoriosRoute
   AuthenticatedSugestoesCompraRoute: typeof AuthenticatedSugestoesCompraRoute
   AuthenticatedUsuariosRoute: typeof AuthenticatedUsuariosRoute
@@ -748,7 +667,6 @@ const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedAjudaRoute: AuthenticatedAjudaRoute,
   AuthenticatedAlertasRoute: AuthenticatedAlertasRoute,
   AuthenticatedAuditoriaRoute: AuthenticatedAuditoriaRoute,
-  AuthenticatedBillingRoute: AuthenticatedBillingRoute,
   AuthenticatedCategoriasRoute: AuthenticatedCategoriasRoute,
   AuthenticatedConfiguracoesRoute: AuthenticatedConfiguracoesRoute,
   AuthenticatedConsumiveisRoute: AuthenticatedConsumiveisRoute,
@@ -761,9 +679,6 @@ const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedLicencasRoute: AuthenticatedLicencasRoute,
   AuthenticatedManutencaoRoute: AuthenticatedManutencaoRoute,
   AuthenticatedMovimentacoesRoute: AuthenticatedMovimentacoesRoute,
-  AuthenticatedOnboardingRoute: AuthenticatedOnboardingRoute,
-  AuthenticatedOrganizacoesRoute: AuthenticatedOrganizacoesRoute,
-  AuthenticatedPlanosRoute: AuthenticatedPlanosRoute,
   AuthenticatedRelatoriosRoute: AuthenticatedRelatoriosRoute,
   AuthenticatedSugestoesCompraRoute: AuthenticatedSugestoesCompraRoute,
   AuthenticatedUsuariosRoute: AuthenticatedUsuariosRoute,
