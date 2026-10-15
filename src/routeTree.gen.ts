@@ -9,82 +9,112 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as LoginRouteImport } from './routes/login'
-import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as AuthenticatedUsuariosRouteImport } from './routes/_authenticated/usuarios'
-import { Route as AuthenticatedSugestoesCompraRouteImport } from './routes/_authenticated/sugestoes-compra'
-import { Route as AuthenticatedRelatoriosRouteImport } from './routes/_authenticated/relatorios'
-import { Route as AuthenticatedMovimentacoesRouteImport } from './routes/_authenticated/movimentacoes'
-import { Route as AuthenticatedManutencaoRouteImport } from './routes/_authenticated/manutencao'
-import { Route as AuthenticatedLicencasRouteImport } from './routes/_authenticated/licencas'
-import { Route as AuthenticatedFornecedoresRouteImport } from './routes/_authenticated/fornecedores'
-import { Route as AuthenticatedEtiquetasRouteImport } from './routes/_authenticated/etiquetas'
-import { Route as AuthenticatedEmpresasRouteImport } from './routes/_authenticated/empresas'
-import { Route as AuthenticatedDescobertaRouteImport } from './routes/_authenticated/descoberta'
-import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
-import { Route as AuthenticatedContratosRouteImport } from './routes/_authenticated/contratos'
-import { Route as AuthenticatedConsumiveisRouteImport } from './routes/_authenticated/consumiveis'
-import { Route as AuthenticatedConfiguracoesRouteImport } from './routes/_authenticated/configuracoes'
-import { Route as AuthenticatedCategoriasRouteImport } from './routes/_authenticated/categorias'
-import { Route as AuthenticatedAuditoriaRouteImport } from './routes/_authenticated/auditoria'
-import { Route as AuthenticatedAlertasRouteImport } from './routes/_authenticated/alertas'
-import { Route as AuthenticatedAjudaRouteImport } from './routes/_authenticated/ajuda'
+import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
+import { Route as LoginRouteImport } from './routes/login'
 import { Route as AuthenticatedA3AgentRouteImport } from './routes/_authenticated/a3-agent'
-import { Route as AuthenticatedImpressorasIndexRouteImport } from './routes/_authenticated/impressoras.index'
+import { Route as AuthenticatedAjudaRouteImport } from './routes/_authenticated/ajuda'
+import { Route as AuthenticatedAlertasRouteImport } from './routes/_authenticated/alertas'
+import { Route as AuthenticatedAuditoriaRouteImport } from './routes/_authenticated/auditoria'
+import { Route as AuthenticatedCategoriasRouteImport } from './routes/_authenticated/categorias'
+import { Route as AuthenticatedConfiguracoesRouteImport } from './routes/_authenticated/configuracoes'
+import { Route as AuthenticatedConsumiveisRouteImport } from './routes/_authenticated/consumiveis'
+import { Route as AuthenticatedContratosRouteImport } from './routes/_authenticated/contratos'
+import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
+import { Route as AuthenticatedDescobertaRouteImport } from './routes/_authenticated/descoberta'
+import { Route as AuthenticatedEmpresasRouteImport } from './routes/_authenticated/empresas'
+import { Route as AuthenticatedEtiquetasRouteImport } from './routes/_authenticated/etiquetas'
+import { Route as AuthenticatedFornecedoresRouteImport } from './routes/_authenticated/fornecedores'
+import { Route as AuthenticatedLicencasRouteImport } from './routes/_authenticated/licencas'
+import { Route as AuthenticatedManutencaoRouteImport } from './routes/_authenticated/manutencao'
+import { Route as AuthenticatedMovimentacoesRouteImport } from './routes/_authenticated/movimentacoes'
+import { Route as AuthenticatedRelatoriosRouteImport } from './routes/_authenticated/relatorios'
+import { Route as AuthenticatedSugestoesCompraRouteImport } from './routes/_authenticated/sugestoes-compra'
+import { Route as AuthenticatedUsuariosRouteImport } from './routes/_authenticated/usuarios'
 import { Route as AuthenticatedAtivosIndexRouteImport } from './routes/_authenticated/ativos.index'
-import { Route as AuthenticatedImpressorasNovoRouteImport } from './routes/_authenticated/impressoras.novo'
-import { Route as AuthenticatedImpressorasIdRouteImport } from './routes/_authenticated/impressoras.$id'
-import { Route as AuthenticatedAtivosNovoRouteImport } from './routes/_authenticated/ativos.novo'
 import { Route as AuthenticatedAtivosIdRouteImport } from './routes/_authenticated/ativos.$id'
-import { Route as ApiPublicPrintersIngestRouteImport } from './routes/api/public/printers/ingest'
-import { Route as ApiPublicAgentHeartbeatRouteImport } from './routes/api/public/agent/heartbeat'
+import { Route as AuthenticatedAtivosNovoRouteImport } from './routes/_authenticated/ativos.novo'
+import { Route as AuthenticatedImpressorasIndexRouteImport } from './routes/_authenticated/impressoras.index'
+import { Route as AuthenticatedImpressorasIdRouteImport } from './routes/_authenticated/impressoras.$id'
+import { Route as AuthenticatedImpressorasNovoRouteImport } from './routes/_authenticated/impressoras.novo'
 import { Route as ApiPublicAgentDiscoveryRouteImport } from './routes/api/public/agent/discovery'
+import { Route as ApiPublicAgentHeartbeatRouteImport } from './routes/api/public/agent/heartbeat'
+import { Route as ApiPublicPrintersIngestRouteImport } from './routes/api/public/printers/ingest'
 
-const LoginRoute = LoginRouteImport.update({
-  id: '/login',
-  path: '/login',
+const IndexRoute = IndexRouteImport.update({
+  id: '/',
+  path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AuthenticatedRoute = AuthenticatedRouteImport.update({
   id: '/_authenticated',
   getParentRoute: () => rootRouteImport,
 } as any)
-const IndexRoute = IndexRouteImport.update({
-  id: '/',
-  path: '/',
+const LoginRoute = LoginRouteImport.update({
+  id: '/login',
+  path: '/login',
   getParentRoute: () => rootRouteImport,
 } as any)
-const AuthenticatedUsuariosRoute = AuthenticatedUsuariosRouteImport.update({
-  id: '/usuarios',
-  path: '/usuarios',
+const AuthenticatedA3AgentRoute = AuthenticatedA3AgentRouteImport.update({
+  id: '/a3-agent',
+  path: '/a3-agent',
   getParentRoute: () => AuthenticatedRoute,
 } as any)
-const AuthenticatedSugestoesCompraRoute =
-  AuthenticatedSugestoesCompraRouteImport.update({
-    id: '/sugestoes-compra',
-    path: '/sugestoes-compra',
+const AuthenticatedAjudaRoute = AuthenticatedAjudaRouteImport.update({
+  id: '/ajuda',
+  path: '/ajuda',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
+const AuthenticatedAlertasRoute = AuthenticatedAlertasRouteImport.update({
+  id: '/alertas',
+  path: '/alertas',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
+const AuthenticatedAuditoriaRoute = AuthenticatedAuditoriaRouteImport.update({
+  id: '/auditoria',
+  path: '/auditoria',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
+const AuthenticatedCategoriasRoute = AuthenticatedCategoriasRouteImport.update({
+  id: '/categorias',
+  path: '/categorias',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
+const AuthenticatedConfiguracoesRoute =
+  AuthenticatedConfiguracoesRouteImport.update({
+    id: '/configuracoes',
+    path: '/configuracoes',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
-const AuthenticatedRelatoriosRoute = AuthenticatedRelatoriosRouteImport.update({
-  id: '/relatorios',
-  path: '/relatorios',
-  getParentRoute: () => AuthenticatedRoute,
-} as any)
-const AuthenticatedMovimentacoesRoute =
-  AuthenticatedMovimentacoesRouteImport.update({
-    id: '/movimentacoes',
-    path: '/movimentacoes',
+const AuthenticatedConsumiveisRoute =
+  AuthenticatedConsumiveisRouteImport.update({
+    id: '/consumiveis',
+    path: '/consumiveis',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
-const AuthenticatedManutencaoRoute = AuthenticatedManutencaoRouteImport.update({
-  id: '/manutencao',
-  path: '/manutencao',
+const AuthenticatedContratosRoute = AuthenticatedContratosRouteImport.update({
+  id: '/contratos',
+  path: '/contratos',
   getParentRoute: () => AuthenticatedRoute,
 } as any)
-const AuthenticatedLicencasRoute = AuthenticatedLicencasRouteImport.update({
-  id: '/licencas',
-  path: '/licencas',
+const AuthenticatedDashboardRoute = AuthenticatedDashboardRouteImport.update({
+  id: '/dashboard',
+  path: '/dashboard',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
+const AuthenticatedDescobertaRoute = AuthenticatedDescobertaRouteImport.update({
+  id: '/descoberta',
+  path: '/descoberta',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
+const AuthenticatedEmpresasRoute = AuthenticatedEmpresasRouteImport.update({
+  id: '/empresas',
+  path: '/empresas',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
+const AuthenticatedEtiquetasRoute = AuthenticatedEtiquetasRouteImport.update({
+  id: '/etiquetas',
+  path: '/etiquetas',
   getParentRoute: () => AuthenticatedRoute,
 } as any)
 const AuthenticatedFornecedoresRoute =
@@ -93,66 +123,52 @@ const AuthenticatedFornecedoresRoute =
     path: '/fornecedores',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
-const AuthenticatedEtiquetasRoute = AuthenticatedEtiquetasRouteImport.update({
-  id: '/etiquetas',
-  path: '/etiquetas',
+const AuthenticatedLicencasRoute = AuthenticatedLicencasRouteImport.update({
+  id: '/licencas',
+  path: '/licencas',
   getParentRoute: () => AuthenticatedRoute,
 } as any)
-const AuthenticatedEmpresasRoute = AuthenticatedEmpresasRouteImport.update({
-  id: '/empresas',
-  path: '/empresas',
+const AuthenticatedManutencaoRoute = AuthenticatedManutencaoRouteImport.update({
+  id: '/manutencao',
+  path: '/manutencao',
   getParentRoute: () => AuthenticatedRoute,
 } as any)
-const AuthenticatedDescobertaRoute = AuthenticatedDescobertaRouteImport.update({
-  id: '/descoberta',
-  path: '/descoberta',
-  getParentRoute: () => AuthenticatedRoute,
-} as any)
-const AuthenticatedDashboardRoute = AuthenticatedDashboardRouteImport.update({
-  id: '/dashboard',
-  path: '/dashboard',
-  getParentRoute: () => AuthenticatedRoute,
-} as any)
-const AuthenticatedContratosRoute = AuthenticatedContratosRouteImport.update({
-  id: '/contratos',
-  path: '/contratos',
-  getParentRoute: () => AuthenticatedRoute,
-} as any)
-const AuthenticatedConsumiveisRoute =
-  AuthenticatedConsumiveisRouteImport.update({
-    id: '/consumiveis',
-    path: '/consumiveis',
+const AuthenticatedMovimentacoesRoute =
+  AuthenticatedMovimentacoesRouteImport.update({
+    id: '/movimentacoes',
+    path: '/movimentacoes',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
-const AuthenticatedConfiguracoesRoute =
-  AuthenticatedConfiguracoesRouteImport.update({
-    id: '/configuracoes',
-    path: '/configuracoes',
+const AuthenticatedRelatoriosRoute = AuthenticatedRelatoriosRouteImport.update({
+  id: '/relatorios',
+  path: '/relatorios',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
+const AuthenticatedSugestoesCompraRoute =
+  AuthenticatedSugestoesCompraRouteImport.update({
+    id: '/sugestoes-compra',
+    path: '/sugestoes-compra',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
-const AuthenticatedCategoriasRoute = AuthenticatedCategoriasRouteImport.update({
-  id: '/categorias',
-  path: '/categorias',
+const AuthenticatedUsuariosRoute = AuthenticatedUsuariosRouteImport.update({
+  id: '/usuarios',
+  path: '/usuarios',
   getParentRoute: () => AuthenticatedRoute,
 } as any)
-const AuthenticatedAuditoriaRoute = AuthenticatedAuditoriaRouteImport.update({
-  id: '/auditoria',
-  path: '/auditoria',
+const AuthenticatedAtivosIndexRoute =
+  AuthenticatedAtivosIndexRouteImport.update({
+    id: '/ativos/',
+    path: '/ativos/',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedAtivosIdRoute = AuthenticatedAtivosIdRouteImport.update({
+  id: '/ativos/$id',
+  path: '/ativos/$id',
   getParentRoute: () => AuthenticatedRoute,
 } as any)
-const AuthenticatedAlertasRoute = AuthenticatedAlertasRouteImport.update({
-  id: '/alertas',
-  path: '/alertas',
-  getParentRoute: () => AuthenticatedRoute,
-} as any)
-const AuthenticatedAjudaRoute = AuthenticatedAjudaRouteImport.update({
-  id: '/ajuda',
-  path: '/ajuda',
-  getParentRoute: () => AuthenticatedRoute,
-} as any)
-const AuthenticatedA3AgentRoute = AuthenticatedA3AgentRouteImport.update({
-  id: '/a3-agent',
-  path: '/a3-agent',
+const AuthenticatedAtivosNovoRoute = AuthenticatedAtivosNovoRouteImport.update({
+  id: '/ativos/novo',
+  path: '/ativos/novo',
   getParentRoute: () => AuthenticatedRoute,
 } as any)
 const AuthenticatedImpressorasIndexRoute =
@@ -161,10 +177,10 @@ const AuthenticatedImpressorasIndexRoute =
     path: '/impressoras/',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
-const AuthenticatedAtivosIndexRoute =
-  AuthenticatedAtivosIndexRouteImport.update({
-    id: '/ativos/',
-    path: '/ativos/',
+const AuthenticatedImpressorasIdRoute =
+  AuthenticatedImpressorasIdRouteImport.update({
+    id: '/impressoras/$id',
+    path: '/impressoras/$id',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
 const AuthenticatedImpressorasNovoRoute =
@@ -173,25 +189,9 @@ const AuthenticatedImpressorasNovoRoute =
     path: '/impressoras/novo',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
-const AuthenticatedImpressorasIdRoute =
-  AuthenticatedImpressorasIdRouteImport.update({
-    id: '/impressoras/$id',
-    path: '/impressoras/$id',
-    getParentRoute: () => AuthenticatedRoute,
-  } as any)
-const AuthenticatedAtivosNovoRoute = AuthenticatedAtivosNovoRouteImport.update({
-  id: '/ativos/novo',
-  path: '/ativos/novo',
-  getParentRoute: () => AuthenticatedRoute,
-} as any)
-const AuthenticatedAtivosIdRoute = AuthenticatedAtivosIdRouteImport.update({
-  id: '/ativos/$id',
-  path: '/ativos/$id',
-  getParentRoute: () => AuthenticatedRoute,
-} as any)
-const ApiPublicPrintersIngestRoute = ApiPublicPrintersIngestRouteImport.update({
-  id: '/api/public/printers/ingest',
-  path: '/api/public/printers/ingest',
+const ApiPublicAgentDiscoveryRoute = ApiPublicAgentDiscoveryRouteImport.update({
+  id: '/api/public/agent/discovery',
+  path: '/api/public/agent/discovery',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ApiPublicAgentHeartbeatRoute = ApiPublicAgentHeartbeatRouteImport.update({
@@ -199,9 +199,9 @@ const ApiPublicAgentHeartbeatRoute = ApiPublicAgentHeartbeatRouteImport.update({
   path: '/api/public/agent/heartbeat',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ApiPublicAgentDiscoveryRoute = ApiPublicAgentDiscoveryRouteImport.update({
-  id: '/api/public/agent/discovery',
-  path: '/api/public/agent/discovery',
+const ApiPublicPrintersIngestRoute = ApiPublicPrintersIngestRouteImport.update({
+  id: '/api/public/printers/ingest',
+  path: '/api/public/printers/ingest',
   getParentRoute: () => rootRouteImport,
 } as any)
 
@@ -414,11 +414,11 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/login': {
-      id: '/login'
-      path: '/login'
-      fullPath: '/login'
-      preLoaderRoute: typeof LoginRouteImport
+    '/': {
+      id: '/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_authenticated': {
@@ -428,130 +428,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/': {
-      id: '/'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
+    '/login': {
+      id: '/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof LoginRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/_authenticated/usuarios': {
-      id: '/_authenticated/usuarios'
-      path: '/usuarios'
-      fullPath: '/usuarios'
-      preLoaderRoute: typeof AuthenticatedUsuariosRouteImport
-      parentRoute: typeof AuthenticatedRoute
-    }
-    '/_authenticated/sugestoes-compra': {
-      id: '/_authenticated/sugestoes-compra'
-      path: '/sugestoes-compra'
-      fullPath: '/sugestoes-compra'
-      preLoaderRoute: typeof AuthenticatedSugestoesCompraRouteImport
-      parentRoute: typeof AuthenticatedRoute
-    }
-    '/_authenticated/relatorios': {
-      id: '/_authenticated/relatorios'
-      path: '/relatorios'
-      fullPath: '/relatorios'
-      preLoaderRoute: typeof AuthenticatedRelatoriosRouteImport
-      parentRoute: typeof AuthenticatedRoute
-    }
-    '/_authenticated/movimentacoes': {
-      id: '/_authenticated/movimentacoes'
-      path: '/movimentacoes'
-      fullPath: '/movimentacoes'
-      preLoaderRoute: typeof AuthenticatedMovimentacoesRouteImport
-      parentRoute: typeof AuthenticatedRoute
-    }
-    '/_authenticated/manutencao': {
-      id: '/_authenticated/manutencao'
-      path: '/manutencao'
-      fullPath: '/manutencao'
-      preLoaderRoute: typeof AuthenticatedManutencaoRouteImport
-      parentRoute: typeof AuthenticatedRoute
-    }
-    '/_authenticated/licencas': {
-      id: '/_authenticated/licencas'
-      path: '/licencas'
-      fullPath: '/licencas'
-      preLoaderRoute: typeof AuthenticatedLicencasRouteImport
-      parentRoute: typeof AuthenticatedRoute
-    }
-    '/_authenticated/fornecedores': {
-      id: '/_authenticated/fornecedores'
-      path: '/fornecedores'
-      fullPath: '/fornecedores'
-      preLoaderRoute: typeof AuthenticatedFornecedoresRouteImport
-      parentRoute: typeof AuthenticatedRoute
-    }
-    '/_authenticated/etiquetas': {
-      id: '/_authenticated/etiquetas'
-      path: '/etiquetas'
-      fullPath: '/etiquetas'
-      preLoaderRoute: typeof AuthenticatedEtiquetasRouteImport
-      parentRoute: typeof AuthenticatedRoute
-    }
-    '/_authenticated/empresas': {
-      id: '/_authenticated/empresas'
-      path: '/empresas'
-      fullPath: '/empresas'
-      preLoaderRoute: typeof AuthenticatedEmpresasRouteImport
-      parentRoute: typeof AuthenticatedRoute
-    }
-    '/_authenticated/descoberta': {
-      id: '/_authenticated/descoberta'
-      path: '/descoberta'
-      fullPath: '/descoberta'
-      preLoaderRoute: typeof AuthenticatedDescobertaRouteImport
-      parentRoute: typeof AuthenticatedRoute
-    }
-    '/_authenticated/dashboard': {
-      id: '/_authenticated/dashboard'
-      path: '/dashboard'
-      fullPath: '/dashboard'
-      preLoaderRoute: typeof AuthenticatedDashboardRouteImport
-      parentRoute: typeof AuthenticatedRoute
-    }
-    '/_authenticated/contratos': {
-      id: '/_authenticated/contratos'
-      path: '/contratos'
-      fullPath: '/contratos'
-      preLoaderRoute: typeof AuthenticatedContratosRouteImport
-      parentRoute: typeof AuthenticatedRoute
-    }
-    '/_authenticated/consumiveis': {
-      id: '/_authenticated/consumiveis'
-      path: '/consumiveis'
-      fullPath: '/consumiveis'
-      preLoaderRoute: typeof AuthenticatedConsumiveisRouteImport
-      parentRoute: typeof AuthenticatedRoute
-    }
-    '/_authenticated/configuracoes': {
-      id: '/_authenticated/configuracoes'
-      path: '/configuracoes'
-      fullPath: '/configuracoes'
-      preLoaderRoute: typeof AuthenticatedConfiguracoesRouteImport
-      parentRoute: typeof AuthenticatedRoute
-    }
-    '/_authenticated/categorias': {
-      id: '/_authenticated/categorias'
-      path: '/categorias'
-      fullPath: '/categorias'
-      preLoaderRoute: typeof AuthenticatedCategoriasRouteImport
-      parentRoute: typeof AuthenticatedRoute
-    }
-    '/_authenticated/auditoria': {
-      id: '/_authenticated/auditoria'
-      path: '/auditoria'
-      fullPath: '/auditoria'
-      preLoaderRoute: typeof AuthenticatedAuditoriaRouteImport
-      parentRoute: typeof AuthenticatedRoute
-    }
-    '/_authenticated/alertas': {
-      id: '/_authenticated/alertas'
-      path: '/alertas'
-      fullPath: '/alertas'
-      preLoaderRoute: typeof AuthenticatedAlertasRouteImport
+    '/_authenticated/a3-agent': {
+      id: '/_authenticated/a3-agent'
+      path: '/a3-agent'
+      fullPath: '/a3-agent'
+      preLoaderRoute: typeof AuthenticatedA3AgentRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
     '/_authenticated/ajuda': {
@@ -561,18 +449,123 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAjudaRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
-    '/_authenticated/a3-agent': {
-      id: '/_authenticated/a3-agent'
-      path: '/a3-agent'
-      fullPath: '/a3-agent'
-      preLoaderRoute: typeof AuthenticatedA3AgentRouteImport
+    '/_authenticated/alertas': {
+      id: '/_authenticated/alertas'
+      path: '/alertas'
+      fullPath: '/alertas'
+      preLoaderRoute: typeof AuthenticatedAlertasRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
-    '/_authenticated/impressoras/': {
-      id: '/_authenticated/impressoras/'
-      path: '/impressoras'
-      fullPath: '/impressoras/'
-      preLoaderRoute: typeof AuthenticatedImpressorasIndexRouteImport
+    '/_authenticated/auditoria': {
+      id: '/_authenticated/auditoria'
+      path: '/auditoria'
+      fullPath: '/auditoria'
+      preLoaderRoute: typeof AuthenticatedAuditoriaRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/categorias': {
+      id: '/_authenticated/categorias'
+      path: '/categorias'
+      fullPath: '/categorias'
+      preLoaderRoute: typeof AuthenticatedCategoriasRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/configuracoes': {
+      id: '/_authenticated/configuracoes'
+      path: '/configuracoes'
+      fullPath: '/configuracoes'
+      preLoaderRoute: typeof AuthenticatedConfiguracoesRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/consumiveis': {
+      id: '/_authenticated/consumiveis'
+      path: '/consumiveis'
+      fullPath: '/consumiveis'
+      preLoaderRoute: typeof AuthenticatedConsumiveisRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/contratos': {
+      id: '/_authenticated/contratos'
+      path: '/contratos'
+      fullPath: '/contratos'
+      preLoaderRoute: typeof AuthenticatedContratosRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/dashboard': {
+      id: '/_authenticated/dashboard'
+      path: '/dashboard'
+      fullPath: '/dashboard'
+      preLoaderRoute: typeof AuthenticatedDashboardRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/descoberta': {
+      id: '/_authenticated/descoberta'
+      path: '/descoberta'
+      fullPath: '/descoberta'
+      preLoaderRoute: typeof AuthenticatedDescobertaRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/empresas': {
+      id: '/_authenticated/empresas'
+      path: '/empresas'
+      fullPath: '/empresas'
+      preLoaderRoute: typeof AuthenticatedEmpresasRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/etiquetas': {
+      id: '/_authenticated/etiquetas'
+      path: '/etiquetas'
+      fullPath: '/etiquetas'
+      preLoaderRoute: typeof AuthenticatedEtiquetasRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/fornecedores': {
+      id: '/_authenticated/fornecedores'
+      path: '/fornecedores'
+      fullPath: '/fornecedores'
+      preLoaderRoute: typeof AuthenticatedFornecedoresRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/licencas': {
+      id: '/_authenticated/licencas'
+      path: '/licencas'
+      fullPath: '/licencas'
+      preLoaderRoute: typeof AuthenticatedLicencasRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/manutencao': {
+      id: '/_authenticated/manutencao'
+      path: '/manutencao'
+      fullPath: '/manutencao'
+      preLoaderRoute: typeof AuthenticatedManutencaoRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/movimentacoes': {
+      id: '/_authenticated/movimentacoes'
+      path: '/movimentacoes'
+      fullPath: '/movimentacoes'
+      preLoaderRoute: typeof AuthenticatedMovimentacoesRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/relatorios': {
+      id: '/_authenticated/relatorios'
+      path: '/relatorios'
+      fullPath: '/relatorios'
+      preLoaderRoute: typeof AuthenticatedRelatoriosRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/sugestoes-compra': {
+      id: '/_authenticated/sugestoes-compra'
+      path: '/sugestoes-compra'
+      fullPath: '/sugestoes-compra'
+      preLoaderRoute: typeof AuthenticatedSugestoesCompraRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/usuarios': {
+      id: '/_authenticated/usuarios'
+      path: '/usuarios'
+      fullPath: '/usuarios'
+      preLoaderRoute: typeof AuthenticatedUsuariosRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
     '/_authenticated/ativos/': {
@@ -582,18 +575,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAtivosIndexRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
-    '/_authenticated/impressoras/novo': {
-      id: '/_authenticated/impressoras/novo'
-      path: '/impressoras/novo'
-      fullPath: '/impressoras/novo'
-      preLoaderRoute: typeof AuthenticatedImpressorasNovoRouteImport
-      parentRoute: typeof AuthenticatedRoute
-    }
-    '/_authenticated/impressoras/$id': {
-      id: '/_authenticated/impressoras/$id'
-      path: '/impressoras/$id'
-      fullPath: '/impressoras/$id'
-      preLoaderRoute: typeof AuthenticatedImpressorasIdRouteImport
+    '/_authenticated/ativos/$id': {
+      id: '/_authenticated/ativos/$id'
+      path: '/ativos/$id'
+      fullPath: '/ativos/$id'
+      preLoaderRoute: typeof AuthenticatedAtivosIdRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
     '/_authenticated/ativos/novo': {
@@ -603,18 +589,32 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAtivosNovoRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
-    '/_authenticated/ativos/$id': {
-      id: '/_authenticated/ativos/$id'
-      path: '/ativos/$id'
-      fullPath: '/ativos/$id'
-      preLoaderRoute: typeof AuthenticatedAtivosIdRouteImport
+    '/_authenticated/impressoras/': {
+      id: '/_authenticated/impressoras/'
+      path: '/impressoras'
+      fullPath: '/impressoras/'
+      preLoaderRoute: typeof AuthenticatedImpressorasIndexRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
-    '/api/public/printers/ingest': {
-      id: '/api/public/printers/ingest'
-      path: '/api/public/printers/ingest'
-      fullPath: '/api/public/printers/ingest'
-      preLoaderRoute: typeof ApiPublicPrintersIngestRouteImport
+    '/_authenticated/impressoras/$id': {
+      id: '/_authenticated/impressoras/$id'
+      path: '/impressoras/$id'
+      fullPath: '/impressoras/$id'
+      preLoaderRoute: typeof AuthenticatedImpressorasIdRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/impressoras/novo': {
+      id: '/_authenticated/impressoras/novo'
+      path: '/impressoras/novo'
+      fullPath: '/impressoras/novo'
+      preLoaderRoute: typeof AuthenticatedImpressorasNovoRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/api/public/agent/discovery': {
+      id: '/api/public/agent/discovery'
+      path: '/api/public/agent/discovery'
+      fullPath: '/api/public/agent/discovery'
+      preLoaderRoute: typeof ApiPublicAgentDiscoveryRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/api/public/agent/heartbeat': {
@@ -624,11 +624,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiPublicAgentHeartbeatRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/api/public/agent/discovery': {
-      id: '/api/public/agent/discovery'
-      path: '/api/public/agent/discovery'
-      fullPath: '/api/public/agent/discovery'
-      preLoaderRoute: typeof ApiPublicAgentDiscoveryRouteImport
+    '/api/public/printers/ingest': {
+      id: '/api/public/printers/ingest'
+      path: '/api/public/printers/ingest'
+      fullPath: '/api/public/printers/ingest'
+      preLoaderRoute: typeof ApiPublicPrintersIngestRouteImport
       parentRoute: typeof rootRouteImport
     }
   }
